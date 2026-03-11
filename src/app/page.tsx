@@ -198,6 +198,17 @@ export default function Home() {
               </svg>
               <span>{cargaHabilCodes ? 'Cambiar PDF' : 'Subir Carga Hábil'}</span>
             </button>
+            <div className="hidden sm:block relative group">
+              <button
+                type="button"
+                className="flex items-center justify-center w-6 h-6 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/40 rounded-full border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-800/60 transition-colors cursor-default"
+              >
+                ?
+              </button>
+              <div className="absolute right-0 top-full mt-2 w-64 p-3 text-xs text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                Sube tu PDF de Carga Hábil para filtrar y mostrar solo los cursos que debes llevar. Puedes remover el filtro con el botón <strong>&quot;Remover filtro Carga Hábil&quot;</strong> en la sección de búsqueda.
+              </div>
+            </div>
             <ThemeToggle />
           </div>
         </div>
