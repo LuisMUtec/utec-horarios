@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { toBlob } from 'html-to-image';
 import coursesData from '@/data/courses.json';
 import { Course, SelectedCourse } from '@/types';
 import { getCalendarEvents, getPreviewEvents, checkNewCourseConflict } from '@/lib/schedule-utils';
@@ -11,7 +12,6 @@ import SelectedCoursesList from '@/components/SelectedCoursesList';
 import WeeklyCalendar from '@/components/WeeklyCalendar';
 import ThemeToggle from '@/components/ThemeToggle';
 import ToastAlert from '@/components/ToastAlert';
-import { useRef } from 'react';
 
 const courses = coursesData as Course[];
 
@@ -38,6 +38,8 @@ export default function Home() {
   
   const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' | 'info'; id: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const calendarRef = useRef<HTMLDivElement>(null);
+  const [capturing, setCapturing] = useState(false);
 
   const showToast = useCallback((message: string, type: 'error' | 'success' | 'info' = 'error') => {
     setToast({ message, type, id: Date.now() });
@@ -168,6 +170,45 @@ export default function Home() {
       fileInputRef.current.value = '';
     }
   };
+
+  const handleCapture = useCallback(async () => {
+    if (!calendarRef.current || capturing) return;
+    setCapturing(true);
+
+    try {
+      const blob = await toBlob(calendarRef.current, {
+        backgroundColor: document.documentElement.classList.contains('dark') ? '#030712' : '#ffffff',
+        pixelRatio: 2,
+      });
+
+      if (!blob) {
+        showToast('Error al generar la imagen.', 'error');
+        setCapturing(false);
+        return;
+      }
+
+      // Try clipboard first
+      if (navigator.clipboard && typeof ClipboardItem !== 'undefined') {
+        await navigator.clipboard.write([
+          new ClipboardItem({ 'image/png': blob }),
+        ]);
+        showToast('Horario copiado al portapapeles.', 'success');
+      } else {
+        // Fallback: download the image
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'horario-utec.png';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Imagen descargada (tu navegador no soporta copiar al portapapeles).', 'info');
+      }
+    } catch {
+      showToast('Error al capturar el horario.', 'error');
+    } finally {
+      setCapturing(false);
+    }
+  }, [capturing, showToast]);
 
   const displayedCourses = useMemo(() => {
     const filtered = cargaHabilCodes

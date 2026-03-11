@@ -1,5 +1,6 @@
 'use client';
 
+import { RefObject } from 'react';
 import { CalendarEvent } from '@/types';
 import {
   DAYS,
@@ -14,18 +15,19 @@ import CalendarBlock from './CalendarBlock';
 interface Props {
   events: CalendarEvent[];
   previewEvents?: CalendarEvent[];
+  calendarRef?: RefObject<HTMLDivElement | null>;
 }
 
 const HOUR_HEIGHT = 48; // px per hour
 const TOTAL_HOURS = END_HOUR - START_HOUR;
 
-export default function WeeklyCalendar({ events, previewEvents = [] }: Props) {
+export default function WeeklyCalendar({ events, previewEvents = [], calendarRef }: Props) {
   const conflicts = findConflicts(events);
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => START_HOUR + i);
 
   return (
     <div className="overflow-x-auto">
-      <div className="min-w-[700px]">
+      <div ref={calendarRef} className="min-w-[700px]">
         {/* Header */}
         <div className="grid grid-cols-[60px_repeat(6,1fr)] border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
           <div className="p-2 text-xs text-gray-400 dark:text-gray-500 text-center">Hora</div>

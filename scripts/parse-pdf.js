@@ -8,7 +8,7 @@ const DAY_MAP = {
 
 async function parsePDF() {
   const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
-  const pdfPath = path.join(__dirname, '..', '264056dc-5fa6-4bc2-934f-6dc8650f4bd2_copia.pdf');
+  const pdfPath = path.join(__dirname, '..', 'consultahorario.pdf');
   const dataBuffer = new Uint8Array(fs.readFileSync(pdfPath));
   const doc = await pdfjsLib.getDocument({ data: dataBuffer }).promise;
   console.log(`PDF has ${doc.numPages} pages`);

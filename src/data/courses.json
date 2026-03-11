@@ -209,7 +209,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Obispo Sotomayor, Lester Alberto",
-            "email": "lobispo@utec.edu.pe"
+            "email": "lobispo@utec.edu.pe 57"
           }
         ]
       }
@@ -369,7 +369,7 @@
             "capacity": 25,
             "enrolled": 0,
             "professor": "Perez Quineche, Pablo Andres",
-            "email": "pperezq@utec.edu.pe"
+            "email": "pperezq@utec.edu.pe 40"
           },
           {
             "type": "LABORATORIO 11",
@@ -585,7 +585,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Gomez Bustamante, Luis",
-            "email": "lgomez@utec.edu.pe"
+            "email": "lgomez@utec.edu.pe 63"
           },
           {
             "type": "LABORATORIO 11",
@@ -598,7 +598,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Gomez Bustamante, Luis",
-            "email": "lgomez@utec.edu.pe 63"
+            "email": "lgomez@utec.edu.pe"
           }
         ]
       },
@@ -656,7 +656,7 @@
             "email": "rhospina@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 2.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "18:00",
@@ -666,7 +666,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Hospina Ossio, Rafael",
-            "email": "rhospina@utec.edu.pe 30"
+            "email": "rhospina@utec.edu.pe"
           }
         ]
       }
@@ -690,7 +690,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Morante Ponce, Alan Victor Raul",
-            "email": "amorantep@utec.edu.p e 48"
+            "email": "amorantep@utec.edu.p e"
           },
           {
             "type": "LABORATORIO 11",
@@ -730,7 +730,7 @@
             "email": "lgomez@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 2.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "11:00",
@@ -980,7 +980,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "",
-            "email": ""
+            "email": "38"
           },
           {
             "type": "LABORATORIO 11",
@@ -1221,7 +1221,7 @@
             "capacity": 10,
             "enrolled": 0,
             "professor": "Neira Neira, Kenny",
-            "email": "kneira@utec.edu.pe"
+            "email": "kneira@utec.edu.pe 39"
           },
           {
             "type": "LABORATORIO 21",
@@ -1372,7 +1372,7 @@
             "email": "flache@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 2.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "20:00",
@@ -1409,7 +1409,7 @@
             "email": "lnarro@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 2.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "21:00",
@@ -1446,7 +1446,7 @@
             "email": "jaguilar@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 2.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Lun",
             "startTime": "11:00",
@@ -1483,7 +1483,7 @@
             "email": "iorbegoso@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 2.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "11:00",
@@ -1520,7 +1520,7 @@
             "email": "kneira@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 2.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "11:00",
@@ -1531,6 +1531,30 @@
             "enrolled": 0,
             "professor": "Neira Neira, Kenny",
             "email": "kneira@utec.edu.pe"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "AD4403",
+    "name": "Ecommerce",
+    "sections": [
+      {
+        "number": 1,
+        "sessions": [
+          {
+            "type": "TEORÍA VIRTUAL 1",
+            "modality": "Sincronico",
+            "day": "Jue",
+            "startTime": "19:00",
+            "endTime": "22:00",
+            "frequency": "Semana General",
+            "location": "UTEC-BA Virtual 107",
+            "capacity": 30,
+            "enrolled": 0,
+            "professor": "Espinoza Matos, José Francisco",
+            "email": "jespinozam@utec.edu. pe"
           }
         ]
       }
@@ -1557,7 +1581,7 @@
             "email": "ehernandez@utec.edu. pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 2.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "14:00",
@@ -1567,7 +1591,7 @@
             "capacity": 25,
             "enrolled": 0,
             "professor": "Hernández Pacheco, Edgar Javier",
-            "email": "ehernandez@utec.edu. pe"
+            "email": "ehernandez@utec.edu. pe 34"
           }
         ]
       }
@@ -1594,7 +1618,7 @@
             "email": "owong@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 3.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "11:00",
@@ -1625,7 +1649,7 @@
             "email": "owong@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 3.01",
+            "type": "TEORÍA VIRTUAL 21",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "17:00",
@@ -1662,7 +1686,7 @@
             "email": "kgranda@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 2.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "17:00",
@@ -1709,7 +1733,7 @@
             "capacity": 25,
             "enrolled": 0,
             "professor": "Arevalo Ventocilla, Silvanna",
-            "email": "sarevalo@utec.edu.pe"
+            "email": "sarevalo@utec.edu.pe 56"
           }
         ]
       }
@@ -1810,7 +1834,7 @@
             "email": "ttijero@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 2.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "20:00",
@@ -1842,7 +1866,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A706",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Hernández Pacheco, Edgar Javier",
             "email": "ehernandez@utec.edu. pe"
           },
@@ -1855,7 +1879,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A701",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Hernández Pacheco, Edgar Javier",
             "email": "ehernandez@utec.edu. pe"
           }
@@ -1879,7 +1903,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A802",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Obispo Sotomayor, Lester Alberto",
             "email": "lobispo@utec.edu.pe"
           },
@@ -1892,7 +1916,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A703",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Obispo Sotomayor, Lester Alberto",
             "email": "lobispo@utec.edu.pe"
           }
@@ -1916,7 +1940,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A708",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Centty Gutierrez, Yessica Maria",
             "email": "ycentty@utec.edu.pe"
           }
@@ -1958,7 +1982,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A702",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -1971,7 +1995,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A702",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           }
@@ -2108,7 +2132,7 @@
             "capacity": 14,
             "enrolled": 0,
             "professor": "Flores Flores, Myra",
-            "email": "mfloresf@utec.edu.pe"
+            "email": "mfloresf@utec.edu.pe 91"
           }
         ]
       }
@@ -2148,7 +2172,7 @@
             "email": "evereau@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 1.01",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Vie",
             "startTime": "17:00",
@@ -2182,7 +2206,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Guerra LLANOS, Renzo Alejandro",
-            "email": "rguerra@utec.edu.pe 37"
+            "email": "rguerra@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -2318,7 +2342,7 @@
             "capacity": 18,
             "enrolled": 0,
             "professor": "Delgado Villanueva, Kiko Alexi",
-            "email": "kdelgado@utec.edu.pe 41"
+            "email": "kdelgado@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -2352,7 +2376,7 @@
             "email": "kdelgado@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 3.01",
+            "type": "LABORATORIO 21",
             "modality": "Presencial",
             "day": "Vie",
             "startTime": "11:00",
@@ -2473,7 +2497,7 @@
             "capacity": 24,
             "enrolled": 0,
             "professor": "Zafra Cordova, Jorge Valdermar",
-            "email": "jzafra@utec.edu.pe"
+            "email": "jzafra@utec.edu.pe 41"
           },
           {
             "type": "TEORÍA 1",
@@ -2536,7 +2560,7 @@
             "capacity": 12,
             "enrolled": 0,
             "professor": "Porlles Arteaga, Mirjana Alice",
-            "email": "mporlles@utec.edu.pe 27"
+            "email": "mporlles@utec.edu.pe"
           }
         ]
       }
@@ -2708,7 +2732,7 @@
             "capacity": 35,
             "enrolled": 0,
             "professor": "",
-            "email": "38"
+            "email": ""
           }
         ]
       }
@@ -2893,7 +2917,7 @@
             "capacity": 21,
             "enrolled": 0,
             "professor": "Monge Talavera, Gladys Elena",
-            "email": "gmonge@utec.edu.pe"
+            "email": "gmonge@utec.edu.pe 94"
           }
         ]
       }
@@ -2967,7 +2991,7 @@
             "capacity": 24,
             "enrolled": 0,
             "professor": "Flores Flores, Myra",
-            "email": "mfloresf@utec.edu.pe 91"
+            "email": "mfloresf@utec.edu.pe"
           }
         ]
       }
@@ -3065,7 +3089,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Delgado Villanueva, Kiko Alexi",
-            "email": "kdelgado@utec.edu.pe 95"
+            "email": "kdelgado@utec.edu.pe"
           }
         ]
       }
@@ -3184,7 +3208,7 @@
             "email": "kdelgado@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 1.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "16:00",
@@ -3197,7 +3221,7 @@
             "email": "kdelgado@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 1.02",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "14:00",
@@ -3229,7 +3253,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A404",
             "capacity": 18,
-            "enrolled": 0,
+            "enrolled": 3,
             "professor": "Delgado Villanueva, Kiko Alexi",
             "email": "kdelgado@utec.edu.pe"
           }
@@ -3414,7 +3438,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "",
-            "email": "101"
+            "email": ""
           }
         ]
       }
@@ -3438,7 +3462,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "SAAVEDRA ESPINOZA, HARRY GUSTAVO",
-            "email": "hsaavedra@utec.edu.p e 34"
+            "email": "hsaavedra@utec.edu.p e"
           },
           {
             "type": "LABORATORIO 11",
@@ -3525,7 +3549,7 @@
             "capacity": 47,
             "enrolled": 0,
             "professor": "Ratti Parandelli, Alejandra",
-            "email": "aratti@utec.edu.pe 57"
+            "email": "aratti@utec.edu.pe"
           }
         ]
       }
@@ -3864,7 +3888,7 @@
             "modality": "Presencial",
             "day": "Vie",
             "startTime": "20:00",
-            "endTime": "20:30",
+            "endTime": "22:00",
             "frequency": "Semana General",
             "location": "UTEC-BA A601",
             "capacity": 24,
@@ -4113,7 +4137,7 @@
             "capacity": 6,
             "enrolled": 0,
             "professor": "Donayre Torres, Alberto Jesus",
-            "email": "adonayre@utec.edu.pe"
+            "email": "adonayre@utec.edu.pe 74"
           },
           {
             "type": "TEORÍA VIRTUAL 3",
@@ -4187,7 +4211,7 @@
             "capacity": 24,
             "enrolled": 0,
             "professor": "Donayre Torres, Alberto Jesus",
-            "email": "adonayre@utec.edu.pe 96"
+            "email": "adonayre@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -4227,7 +4251,7 @@
             "email": "hsaavedra@utec.edu.p e"
           },
           {
-            "type": "TEORÍA VIRTUAL 1.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "19:00",
@@ -4240,7 +4264,7 @@
             "email": "pcrisostomo@utec.edu .pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 1.02",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "19:00",
@@ -4253,7 +4277,7 @@
             "email": "hsaavedra@utec.edu.p e"
           },
           {
-            "type": "TEORÍA VIRTUAL 1.03",
+            "type": "TEORÍA VIRTUAL 13",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "19:00",
@@ -4472,7 +4496,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "PEREZ TULICH, LUZ NARCIZA MERCEDES",
-            "email": "lperez@utec.edu.pe 68"
+            "email": "lperez@utec.edu.pe"
           },
           {
             "type": "TEORÍA 1",
@@ -4544,7 +4568,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A705",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 32,
             "professor": "",
             "email": ""
           },
@@ -4557,7 +4581,7 @@
             "frequency": "Semana A",
             "location": "UTEC-BA A202",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 15,
             "professor": "CAJAHUANCA HUACCHO, TITO MARTIN",
             "email": "tcajahuanca@utec.edu. pe"
           },
@@ -4570,7 +4594,7 @@
             "frequency": "Semana B",
             "location": "UTEC-BA A403",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 17,
             "professor": "CONGRAINS CASTILLO, ADA",
             "email": "acongrains@utec.edu.p e"
           }
@@ -4588,7 +4612,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A202",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "CONGRAINS CASTILLO, ADA",
             "email": "acongrains@utec.edu.p e"
           },
@@ -4601,7 +4625,7 @@
             "frequency": "Semana A",
             "location": "UTEC-BA A501",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "CONGRAINS CASTILLO, ADA",
             "email": "acongrains@utec.edu.p e"
           }
@@ -4766,7 +4790,7 @@
             "capacity": 165,
             "enrolled": 0,
             "professor": "Anco Blas, Edith Chavely",
-            "email": "eanco@utec.edu.pe 104"
+            "email": "eanco@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -5071,7 +5095,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Gamero Paredes, Antonio Alejandro",
-            "email": "agamero@utec.edu.pe"
+            "email": "agamero@utec.edu.pe 29"
           }
         ]
       },
@@ -5102,7 +5126,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Renom Andara, Jose Miguel",
-            "email": "jrenom@utec.edu.pe 29"
+            "email": "jrenom@utec.edu.pe"
           }
         ]
       },
@@ -5340,7 +5364,7 @@
             "email": "stanay@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 10.01",
+            "type": "LABORATORIO VIRTUAL 100",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "18:00",
@@ -5437,7 +5461,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Zegarra Sierra, Katia",
-            "email": "kzegarras@utec.edu.pe"
+            "email": "kzegarras@utec.edu.pe 52"
           },
           {
             "type": "TEORÍA 13",
@@ -5481,7 +5505,7 @@
             "capacity": 135,
             "enrolled": 0,
             "professor": "Zegarra Sierra, Katia",
-            "email": "kzegarras@utec.edu.pe 52"
+            "email": "kzegarras@utec.edu.pe"
           },
           {
             "type": "TEORÍA 21",
@@ -5646,7 +5670,7 @@
             "capacity": 120,
             "enrolled": 0,
             "professor": "Cuyubamba Espinoza, Marco Antonio",
-            "email": "mcuyubamba@utec.edu .pe 106"
+            "email": "mcuyubamba@utec.edu .pe"
           },
           {
             "type": "TEORÍA 11",
@@ -6010,7 +6034,7 @@
             "email": "jbarraza@utec.edu.pe"
           },
           {
-            "type": "TEORÍA 23.01",
+            "type": "TEORÍA 24",
             "modality": "Presencial",
             "day": "Jue",
             "startTime": "13:00",
@@ -6020,7 +6044,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Navarro Flores, Cristina",
-            "email": "cnavarro@utec.edu.pe"
+            "email": "cnavarro@utec.edu.pe 27"
           }
         ]
       }
@@ -6057,7 +6081,7 @@
             "capacity": 17,
             "enrolled": 0,
             "professor": "Galarza Geronimo, Orlando Alfredo",
-            "email": "ogalarza@utec.edu.pe"
+            "email": "ogalarza@utec.edu.pe 30"
           }
         ]
       }
@@ -6224,7 +6248,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Cuyubamba Espinoza, Marco Antonio",
-            "email": "mcuyubamba@utec.edu .pe"
+            "email": "mcuyubamba@utec.edu .pe 64"
           }
         ]
       },
@@ -6242,7 +6266,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Barraza Bernaola, Julio Cesar",
-            "email": "jbarraza@utec.edu.pe 64"
+            "email": "jbarraza@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 51",
@@ -6508,7 +6532,7 @@
             "email": "nsanchezr@utec.edu.p e"
           },
           {
-            "type": "LABORATORIO 22.01",
+            "type": "LABORATORIO 23",
             "modality": "Presencial",
             "day": "Mie",
             "startTime": "09:00",
@@ -6521,7 +6545,7 @@
             "email": "nsanchezr@utec.edu.p e"
           },
           {
-            "type": "LABORATORIO 22.02",
+            "type": "LABORATORIO 24",
             "modality": "Presencial",
             "day": "Jue",
             "startTime": "07:00",
@@ -6553,7 +6577,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A906",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Cuyubamba Espinoza, Marco Antonio",
             "email": "mcuyubamba@utec.edu .pe"
           }
@@ -6571,7 +6595,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A902",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 4,
             "professor": "Olivera Oliva, Davy Alonso",
             "email": "volivera@utec.edu.pe"
           }
@@ -6589,7 +6613,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A703",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Khouri De Arciniegas, Cordelia",
             "email": "ckhouri@utec.edu.pe"
           }
@@ -6607,9 +6631,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A707",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 21,
             "professor": "Khouri De Arciniegas, Cordelia",
-            "email": "ckhouri@utec.edu.pe"
+            "email": "ckhouri@utec.edu.pe 36"
           }
         ]
       },
@@ -6625,7 +6649,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A704",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 31,
             "professor": "Torres Fernandez, Carlos Enrique",
             "email": "ctorresf@utec.edu.pe"
           }
@@ -6661,7 +6685,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A706",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "Chavez Pacheco, Xyoby",
             "email": "xchavez@utec.edu.pe"
           }
@@ -6679,7 +6703,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A804",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Anco Blas, Edith Chavely",
             "email": "eanco@utec.edu.pe"
           }
@@ -6697,7 +6721,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A703",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 32,
             "professor": "Khouri De Arciniegas, Cordelia",
             "email": "ckhouri@utec.edu.pe"
           }
@@ -6715,7 +6739,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A702",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 14,
             "professor": "Quispe Rodriguez, Sergio",
             "email": "squispe@utec.edu.pe"
           }
@@ -6733,9 +6757,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A905",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Rojas Huamán, Cristian Felix",
-            "email": "crojas@utec.edu.pe 36"
+            "email": "crojas@utec.edu.pe"
           }
         ]
       },
@@ -6751,7 +6775,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A803",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Rojas Huamán, Cristian Felix",
             "email": "crojas@utec.edu.pe"
           }
@@ -6769,7 +6793,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A706",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Rojas Huamán, Cristian Felix",
             "email": "crojas@utec.edu.pe"
           }
@@ -6787,7 +6811,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A707",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 23,
             "professor": "Chiroque Calderon, Jorge Luis",
             "email": "jchiroque@utec.edu.pe"
           }
@@ -6805,9 +6829,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A703",
             "capacity": 31,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Olivera Oliva, Davy Alonso",
-            "email": "volivera@utec.edu.pe"
+            "email": "volivera@utec.edu.pe 37"
           }
         ]
       },
@@ -6823,7 +6847,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A801",
             "capacity": 30,
-            "enrolled": 0,
+            "enrolled": 17,
             "professor": "Quispe Rodriguez, Sergio",
             "email": "squispe@utec.edu.pe"
           }
@@ -6841,7 +6865,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A704",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "Rojas Huamán, Cristian Felix",
             "email": "crojas@utec.edu.pe"
           }
@@ -6859,7 +6883,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A702",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 12,
             "professor": "Chavez Pacheco, Xyoby",
             "email": "xchavez@utec.edu.pe"
           }
@@ -6877,7 +6901,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A708",
             "capacity": 38,
-            "enrolled": 0,
+            "enrolled": 3,
             "professor": "Rojas Huamán, Cristian Felix",
             "email": "crojas@utec.edu.pe"
           }
@@ -6895,7 +6919,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A403",
             "capacity": 33,
-            "enrolled": 0,
+            "enrolled": 5,
             "professor": "Khouri De Arciniegas, Cordelia",
             "email": "ckhouri@utec.edu.pe"
           }
@@ -6919,7 +6943,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A801",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Nieves Diaz, Jose Ignacio",
             "email": "jnieves@utec.edu.pe"
           }
@@ -6943,12 +6967,12 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AULA MAGNA",
             "capacity": 286,
-            "enrolled": 0,
+            "enrolled": 192,
             "professor": "",
             "email": ""
           },
           {
-            "type": "LABORATORIO 111",
+            "type": "LABORATORIO 110",
             "modality": "Presencial",
             "day": "Mar",
             "startTime": "09:00",
@@ -6956,7 +6980,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L212",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -6969,7 +6993,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L212",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 4,
             "professor": "",
             "email": ""
           },
@@ -6982,7 +7006,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L211",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 17,
             "professor": "",
             "email": ""
           },
@@ -6995,7 +7019,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L211",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -7008,7 +7032,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L211",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -7021,7 +7045,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L211",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 14,
             "professor": "",
             "email": ""
           },
@@ -7034,7 +7058,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L211",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -7060,9 +7084,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L211",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 15,
             "professor": "",
-            "email": ""
+            "email": "92"
           },
           {
             "type": "LABORATORIO 119",
@@ -7073,7 +7097,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L212",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -7086,9 +7110,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L212",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
-            "email": "92"
+            "email": ""
           },
           {
             "type": "LABORATORIO 121",
@@ -7104,7 +7128,7 @@
             "email": ""
           },
           {
-            "type": "LABORATORIO 121",
+            "type": "LABORATORIO 122",
             "modality": "Presencial",
             "day": "Jue",
             "startTime": "15:00",
@@ -7112,7 +7136,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L211",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "",
             "email": ""
           }
@@ -7130,7 +7154,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AULA MAGNA",
             "capacity": 222,
-            "enrolled": 0,
+            "enrolled": 94,
             "professor": "",
             "email": ""
           },
@@ -7143,7 +7167,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L212",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "",
             "email": ""
           },
@@ -7156,7 +7180,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L211",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -7169,7 +7193,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L211",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 16,
             "professor": "",
             "email": ""
           },
@@ -7182,7 +7206,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L212",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -7208,7 +7232,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L212",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 9,
             "professor": "",
             "email": ""
           },
@@ -7234,7 +7258,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L212",
             "capacity": 18,
-            "enrolled": 0,
+            "enrolled": 3,
             "professor": "",
             "email": ""
           },
@@ -7247,7 +7271,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L211",
             "capacity": 17,
-            "enrolled": 0,
+            "enrolled": 5,
             "professor": "",
             "email": ""
           },
@@ -7273,7 +7297,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA L211",
             "capacity": 19,
-            "enrolled": 0,
+            "enrolled": 7,
             "professor": "",
             "email": ""
           }
@@ -7520,7 +7544,7 @@
             "email": "psantillan@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 3.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Lun",
             "startTime": "19:00",
@@ -7551,7 +7575,7 @@
             "email": "hpineda@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 3.01",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "10:00",
@@ -7722,7 +7746,7 @@
             "capacity": 34,
             "enrolled": 0,
             "professor": "Salas Paulet, Manuel Jesus",
-            "email": "msalas@utec.edu.pe"
+            "email": "msalas@utec.edu.pe 99"
           },
           {
             "type": "LABORATORIO 11",
@@ -7748,7 +7772,7 @@
             "capacity": 17,
             "enrolled": 0,
             "professor": "Salas Paulet, Manuel Jesus",
-            "email": "msalas@utec.edu.pe 99"
+            "email": "msalas@utec.edu.pe"
           }
         ]
       },
@@ -7816,7 +7840,7 @@
             "capacity": 44,
             "enrolled": 0,
             "professor": "Arones Villavicencio, Alvaro Paulo",
-            "email": "aarones@utec.edu.pe 61"
+            "email": "aarones@utec.edu.pe"
           },
           {
             "type": "TEORÍA 1",
@@ -7956,7 +7980,7 @@
             "capacity": 22,
             "enrolled": 0,
             "professor": "Arones Villavicencio, Alvaro Paulo",
-            "email": "aarones@utec.edu.pe"
+            "email": "aarones@utec.edu.pe 61"
           }
         ]
       }
@@ -7980,7 +8004,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Ramos Orlandino, Carmela Cristhy",
-            "email": "cramos@utec.edu.pe 60"
+            "email": "cramos@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -8017,8 +8041,8 @@
             "type": "TEORÍA 2",
             "modality": "Presencial",
             "day": "Mie",
-            "startTime": "11:00",
-            "endTime": "14:00",
+            "startTime": "12:00",
+            "endTime": "15:00",
             "frequency": "Semana General",
             "location": "UTEC-BA A803",
             "capacity": 40,
@@ -8050,7 +8074,7 @@
             "capacity": 20,
             "enrolled": 0,
             "professor": "Ramos Orlandino, Carmela Cristhy",
-            "email": "cramos@utec.edu.pe"
+            "email": "cramos@utec.edu.pe 60"
           }
         ]
       }
@@ -8153,7 +8177,7 @@
             "capacity": 35,
             "enrolled": 0,
             "professor": "Pineda Vallejo, Hugo Esteban",
-            "email": "hpineda@utec.edu.pe 39"
+            "email": "hpineda@utec.edu.pe"
           }
         ]
       }
@@ -8217,7 +8241,7 @@
             "email": "eguzman@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 11.01",
+            "type": "LABORATORIO 12",
             "modality": "Presencial",
             "day": "Vie",
             "startTime": "08:00",
@@ -8301,7 +8325,7 @@
             "capacity": 7,
             "enrolled": 0,
             "professor": "Suarez Torres, Harold Alberto",
-            "email": "hsuarezt@utec.edu.pe"
+            "email": "hsuarezt@utec.edu.pe 78"
           }
         ]
       },
@@ -8332,7 +8356,7 @@
             "capacity": 7,
             "enrolled": 0,
             "professor": "Sanchez Navarro, Alex Manuel",
-            "email": "asanchezn@utec.edu.p e 78"
+            "email": "asanchezn@utec.edu.p e"
           }
         ]
       },
@@ -8381,7 +8405,7 @@
             "capacity": 7,
             "enrolled": 0,
             "professor": "Benedetty Torres, Carlos Alberto",
-            "email": "cbenedetty@utec.edu.p e"
+            "email": "cbenedetty@utec.edu.p e 77"
           },
           {
             "type": "TEORÍA VIRTUAL 4",
@@ -8598,7 +8622,7 @@
             "capacity": 7,
             "enrolled": 0,
             "professor": "",
-            "email": "77"
+            "email": ""
           },
           {
             "type": "TEORÍA VIRTUAL 11",
@@ -8791,7 +8815,7 @@
             "email": "ejuarez@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "17:00",
@@ -8801,10 +8825,10 @@
             "capacity": 8,
             "enrolled": 0,
             "professor": "Pineda Vallejo, Hugo Esteban",
-            "email": "hpineda@utec.edu.pe"
+            "email": "hpineda@utec.edu.pe 76"
           },
           {
-            "type": "LABORATORIO VIRTUAL 12",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "07:00",
@@ -8817,7 +8841,7 @@
             "email": "jorccosupa@utec.edu.p e"
           },
           {
-            "type": "LABORATORIO VIRTUAL 13",
+            "type": "TEORÍA VIRTUAL 13",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "19:00",
@@ -8827,10 +8851,10 @@
             "capacity": 8,
             "enrolled": 0,
             "professor": "Fernandez Choquepuma, Miguel Angel",
-            "email": "mfernandezch@utec.ed u.pe 76"
+            "email": "mfernandezch@utec.ed u.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 14",
+            "type": "TEORÍA VIRTUAL 14",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "16:00",
@@ -8843,7 +8867,7 @@
             "email": "gsotoc@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 15",
+            "type": "TEORÍA VIRTUAL 15",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "17:00",
@@ -8856,7 +8880,7 @@
             "email": "avilcapoma@utec.edu. pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 15.01",
+            "type": "TEORÍA VIRTUAL 16",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "16:00",
@@ -8869,7 +8893,7 @@
             "email": "ejuarez@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 15.02",
+            "type": "TEORÍA VIRTUAL 17",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "14:00",
@@ -8882,7 +8906,7 @@
             "email": "cdiaze@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 15.03",
+            "type": "TEORÍA VIRTUAL 18",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "13:00",
@@ -8895,7 +8919,7 @@
             "email": "aostolaza@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 15.04",
+            "type": "TEORÍA VIRTUAL 19",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "16:00",
@@ -8908,7 +8932,7 @@
             "email": "lbedrinana@utec.edu.p e"
           },
           {
-            "type": "LABORATORIO VIRTUAL 15.05",
+            "type": "TEORÍA VIRTUAL 20",
             "modality": "Sincronico",
             "day": "Lun",
             "startTime": "15:00",
@@ -9444,10 +9468,10 @@
             "capacity": 24,
             "enrolled": 0,
             "professor": "Samaniego Barja, Walter",
-            "email": "wsamaniego@utec.edu .pe"
+            "email": "wsamaniego@utec.edu .pe 62"
           },
           {
-            "type": "LABORATORIO 2.01",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Vie",
             "startTime": "15:00",
@@ -9457,7 +9481,7 @@
             "capacity": 24,
             "enrolled": 0,
             "professor": "Samaniego Barja, Walter",
-            "email": "wsamaniego@utec.edu .pe 62"
+            "email": "wsamaniego@utec.edu .pe"
           }
         ]
       }
@@ -9553,7 +9577,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A703",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "Suarez Torres, Harold Alberto",
             "email": "hsuarezt@utec.edu.pe"
           }
@@ -9571,7 +9595,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A601",
             "capacity": 21,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "Suarez Torres, Harold Alberto",
             "email": "hsuarezt@utec.edu.pe"
           }
@@ -9597,7 +9621,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Sanchez Ruiz, David",
-            "email": "dsanchezr@utec.edu.p e 59"
+            "email": "dsanchezr@utec.edu.p e"
           },
           {
             "type": "LABORATORIO 11",
@@ -9755,7 +9779,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Tipe Villanueva, Jorge",
-            "email": "jtipe@utec.edu.pe"
+            "email": "jtipe@utec.edu.pe 59"
           }
         ]
       }
@@ -9831,7 +9855,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Gallegos Velgara, Henry Giovanny",
-            "email": "hgallegos@utec.edu.pe"
+            "email": "hgallegos@utec.edu.pe 72"
           },
           {
             "type": "LABORATORIO 13",
@@ -9870,7 +9894,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Nina Choquehuayta, Wilder",
-            "email": "wnina@utec.edu.pe 72"
+            "email": "wnina@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 14",
@@ -9921,8 +9945,8 @@
             "location": "UTEC-BA M602",
             "capacity": 30,
             "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "professor": "Abisrror Zarate, Marvin",
+            "email": "mabisrror@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 16",
@@ -9934,8 +9958,8 @@
             "location": "UTEC-BA M602",
             "capacity": 30,
             "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "professor": "Abisrror Zarate, Marvin",
+            "email": "mabisrror@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 17",
@@ -9998,7 +10022,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Mandujano Cornejo, Vittorino",
-            "email": "vmandujano@utec.edu. pe 73"
+            "email": "vmandujano@utec.edu. pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -10014,7 +10038,7 @@
             "email": "vmandujano@utec.edu. pe"
           },
           {
-            "type": "LABORATORIO 11.01",
+            "type": "LABORATORIO 12",
             "modality": "Presencial",
             "day": "Mar",
             "startTime": "15:00",
@@ -10027,7 +10051,7 @@
             "email": "vmandujano@utec.edu. pe"
           },
           {
-            "type": "LABORATORIO 11.01",
+            "type": "LABORATORIO 12",
             "modality": "Presencial",
             "day": "Mie",
             "startTime": "13:00",
@@ -10165,7 +10189,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Chavez Alvarez, Jose Armando",
-            "email": "jchaveza@utec.edu.pe"
+            "email": "jchaveza@utec.edu.pe 73"
           }
         ]
       }
@@ -10280,7 +10304,7 @@
             "email": "bojeda@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 3.01",
+            "type": "LABORATORIO 31",
             "modality": "Presencial",
             "day": "Jue",
             "startTime": "11:00",
@@ -10293,7 +10317,7 @@
             "email": "bojeda@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 3.01",
+            "type": "LABORATORIO 31",
             "modality": "Presencial",
             "day": "Vie",
             "startTime": "09:00",
@@ -10327,7 +10351,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Napa Bernuy, Angel Gerardo",
-            "email": "anapa@utec.edu.pe"
+            "email": "anapa@utec.edu.pe 100"
           },
           {
             "type": "LABORATORIO 11",
@@ -10353,7 +10377,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Napa Bernuy, Angel Gerardo",
-            "email": "anapa@utec.edu.pe 100"
+            "email": "anapa@utec.edu.pe"
           }
         ]
       },
@@ -10457,9 +10481,9 @@
           {
             "type": "TEORÍA 1",
             "modality": "Presencial",
-            "day": "Mie",
-            "startTime": "20:00",
-            "endTime": "22:00",
+            "day": "Lun",
+            "startTime": "18:00",
+            "endTime": "20:00",
             "frequency": "Semana General",
             "location": "UTEC-BA AULA MAGNA",
             "capacity": 144,
@@ -10598,28 +10622,28 @@
           {
             "type": "LABORATORIO 11",
             "modality": "Presencial",
-            "day": "Vie",
+            "day": "Mie",
             "startTime": "07:00",
             "endTime": "09:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA M801",
+            "location": "UTEC-BA M603",
             "capacity": 30,
             "enrolled": 0,
-            "professor": "Barrero Ortiz, Giovanni",
-            "email": "gbarrero@utec.edu.pe"
+            "professor": "Mejia Fernandez, Oscar Rodolfo",
+            "email": "omejia@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
             "modality": "Presencial",
-            "day": "Sab",
-            "startTime": "14:00",
-            "endTime": "16:00",
+            "day": "Vie",
+            "startTime": "07:00",
+            "endTime": "09:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA M801",
+            "location": "UTEC-BA M603",
             "capacity": 30,
             "enrolled": 0,
-            "professor": "Barrero Ortiz, Giovanni",
-            "email": "gbarrero@utec.edu.pe"
+            "professor": "Mejia Fernandez, Oscar Rodolfo",
+            "email": "omejia@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 12",
@@ -10650,28 +10674,28 @@
           {
             "type": "LABORATORIO 13",
             "modality": "Presencial",
-            "day": "Jue",
-            "startTime": "14:00",
-            "endTime": "16:00",
+            "day": "Mie",
+            "startTime": "19:00",
+            "endTime": "21:00",
             "frequency": "Semana General",
             "location": "UTEC-BA M601",
             "capacity": 30,
             "enrolled": 0,
-            "professor": "Barrero Ortiz, Giovanni",
-            "email": "gbarrero@utec.edu.pe"
+            "professor": "Mejia Fernandez, Oscar Rodolfo",
+            "email": "omejia@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 13",
             "modality": "Presencial",
             "day": "Vie",
-            "startTime": "16:00",
-            "endTime": "18:00",
+            "startTime": "20:00",
+            "endTime": "22:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA M1001",
+            "location": "UTEC-BA M804",
             "capacity": 30,
             "enrolled": 0,
-            "professor": "Barrero Ortiz, Giovanni",
-            "email": "gbarrero@utec.edu.pe"
+            "professor": "Mejia Fernandez, Oscar Rodolfo",
+            "email": "omejia@utec.edu.pe"
           }
         ]
       }
@@ -10707,21 +10731,21 @@
             "location": "UTEC-BA M804",
             "capacity": 45,
             "enrolled": 0,
-            "professor": "Sanchez Enriquez, Heider Ysaias",
-            "email": "hsanchez@utec.edu.pe"
+            "professor": "Chambilla Aquino, Teófilo",
+            "email": "tchambilla@utec.edu.p e"
           },
           {
             "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Vie",
-            "startTime": "20:00",
-            "endTime": "22:00",
+            "startTime": "18:00",
+            "endTime": "20:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA M804",
+            "location": "UTEC-BA M803",
             "capacity": 45,
             "enrolled": 0,
-            "professor": "Sanchez Enriquez, Heider Ysaias",
-            "email": "hsanchez@utec.edu.pe"
+            "professor": "Chambilla Aquino, Teófilo",
+            "email": "tchambilla@utec.edu.p e"
           },
           {
             "type": "LABORATORIO 12",
@@ -10815,41 +10839,41 @@
           {
             "type": "TEORÍA 1",
             "modality": "Presencial",
-            "day": "Mar",
-            "startTime": "15:00",
-            "endTime": "16:00",
+            "day": "Lun",
+            "startTime": "16:00",
+            "endTime": "17:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA A802",
+            "location": "UTEC-BA A703",
             "capacity": 30,
             "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "professor": "Sanchez Enriquez, Heider Ysaias",
+            "email": "hsanchez@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Mie",
-            "startTime": "09:00",
-            "endTime": "11:00",
+            "startTime": "18:00",
+            "endTime": "20:00",
             "frequency": "Semana General",
             "location": "UTEC-BA M603",
             "capacity": 30,
             "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "professor": "Sanchez Enriquez, Heider Ysaias",
+            "email": "hsanchez@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Jue",
-            "startTime": "07:00",
-            "endTime": "09:00",
+            "startTime": "16:00",
+            "endTime": "18:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA M603",
+            "location": "UTEC-BA M301",
             "capacity": 30,
             "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "professor": "Sanchez Enriquez, Heider Ysaias",
+            "email": "hsanchez@utec.edu.pe"
           }
         ]
       },
@@ -10967,7 +10991,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Gonzalez Reaño, Jorge Luis",
-            "email": "jgonzalez@utec.edu.pe"
+            "email": "jgonzalez@utec.edu.pe 97"
           },
           {
             "type": "LABORATORIO 11",
@@ -10993,7 +11017,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Pinto Larrea, Mauricio Jorge",
-            "email": "mpinto@utec.edu.pe 97"
+            "email": "mpinto@utec.edu.pe"
           }
         ]
       },
@@ -11335,11 +11359,11 @@
           {
             "type": "TEORÍA 1",
             "modality": "Presencial",
-            "day": "Mar",
-            "startTime": "17:00",
-            "endTime": "19:00",
+            "day": "Lun",
+            "startTime": "07:00",
+            "endTime": "09:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA A1002",
+            "location": "UTEC-BA A501",
             "capacity": 30,
             "enrolled": 0,
             "professor": "Gonzalez Reaño, Jorge Luis",
@@ -11348,9 +11372,9 @@
           {
             "type": "LABORATORIO 11",
             "modality": "Presencial",
-            "day": "Jue",
-            "startTime": "11:00",
-            "endTime": "13:00",
+            "day": "Mar",
+            "startTime": "15:00",
+            "endTime": "17:00",
             "frequency": "Semana General",
             "location": "UTEC-BA M301",
             "capacity": 30,
@@ -11361,9 +11385,9 @@
           {
             "type": "LABORATORIO 11",
             "modality": "Presencial",
-            "day": "Vie",
-            "startTime": "09:00",
-            "endTime": "11:00",
+            "day": "Mie",
+            "startTime": "12:00",
+            "endTime": "14:00",
             "frequency": "Semana General",
             "location": "UTEC-BA M301",
             "capacity": 30,
@@ -11733,7 +11757,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Chambilla Aquino, Teófilo",
-            "email": "tchambilla@utec.edu.p e 44"
+            "email": "tchambilla@utec.edu.p e"
           }
         ]
       }
@@ -11949,25 +11973,12 @@
           {
             "type": "TEORÍA VIRTUAL 1",
             "modality": "Sincronico",
-            "day": "Mar",
-            "startTime": "11:00",
-            "endTime": "13:00",
+            "day": "Mie",
+            "startTime": "16:00",
+            "endTime": "19:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA Virtual",
-            "capacity": 45,
-            "enrolled": 0,
-            "professor": "Fiestas Iquira, Jose Antonio",
-            "email": "jfiestas@utec.edu.pe"
-          },
-          {
-            "type": "TEORÍA VIRTUAL 1",
-            "modality": "Sincronico",
-            "day": "Vie",
-            "startTime": "13:00",
-            "endTime": "15:00",
-            "frequency": "Semana General",
-            "location": "UTEC-BA Virtual",
-            "capacity": 45,
+            "location": "UTEC-BA Virtual 114",
+            "capacity": 75,
             "enrolled": 0,
             "professor": "Fiestas Iquira, Jose Antonio",
             "email": "jfiestas@utec.edu.pe"
@@ -11980,25 +11991,12 @@
           {
             "type": "TEORÍA VIRTUAL 2",
             "modality": "Sincronico",
-            "day": "Lun",
-            "startTime": "20:00",
-            "endTime": "22:00",
+            "day": "Jue",
+            "startTime": "16:00",
+            "endTime": "19:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA Virtual",
-            "capacity": 28,
-            "enrolled": 0,
-            "professor": "Fiestas Iquira, Jose Antonio",
-            "email": "jfiestas@utec.edu.pe"
-          },
-          {
-            "type": "TEORÍA VIRTUAL 2",
-            "modality": "Sincronico",
-            "day": "Sab",
-            "startTime": "11:00",
-            "endTime": "13:00",
-            "frequency": "Semana General",
-            "location": "UTEC-BA Virtual",
-            "capacity": 28,
+            "location": "UTEC-BA Virtual 11",
+            "capacity": 75,
             "enrolled": 0,
             "professor": "Fiestas Iquira, Jose Antonio",
             "email": "jfiestas@utec.edu.pe"
@@ -12025,7 +12023,7 @@
             "capacity": 10,
             "enrolled": 0,
             "professor": "",
-            "email": ""
+            "email": "75"
           },
           {
             "type": "TEORÍA VIRTUAL 1",
@@ -12118,7 +12116,7 @@
             "capacity": 10,
             "enrolled": 0,
             "professor": "",
-            "email": "75"
+            "email": ""
           },
           {
             "type": "TEORÍA VIRTUAL 4",
@@ -12181,7 +12179,7 @@
             "capacity": 24,
             "enrolled": 0,
             "professor": "Arias Obregon, Gabriel Andres",
-            "email": "garias@utec.edu.pe"
+            "email": "garias@utec.edu.pe 47"
           }
         ]
       }
@@ -12445,7 +12443,7 @@
             "email": "rmora@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 11.01",
+            "type": "LABORATORIO 12",
             "modality": "Presencial",
             "day": "Mar",
             "startTime": "09:00",
@@ -12458,7 +12456,7 @@
             "email": "rmora@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 11.01",
+            "type": "LABORATORIO 12",
             "modality": "Presencial",
             "day": "Mie",
             "startTime": "09:00",
@@ -12492,7 +12490,7 @@
             "capacity": 27,
             "enrolled": 0,
             "professor": "Soriano Vargas, Aurea Rossy",
-            "email": "asoriano@utec.edu.pe 67"
+            "email": "asoriano@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -13064,7 +13062,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AULA MAGNA",
             "capacity": 206,
-            "enrolled": 0,
+            "enrolled": 104,
             "professor": "Brossard Nuñez, Ian Paul",
             "email": "ibrossard@utec.edu.pe"
           },
@@ -13077,7 +13075,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M801",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Brossard Nuñez, Ian Paul",
             "email": "ibrossard@utec.edu.pe"
           },
@@ -13090,7 +13088,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M803",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Brossard Nuñez, Ian Paul",
             "email": "ibrossard@utec.edu.pe"
           },
@@ -13103,7 +13101,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M804",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 21,
             "professor": "Brossard Nuñez, Ian Paul",
             "email": "ibrossard@utec.edu.pe"
           },
@@ -13116,7 +13114,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M401",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Brossard Nuñez, Ian Paul",
             "email": "ibrossard@utec.edu.pe"
           },
@@ -13129,9 +13127,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M601",
             "capacity": 30,
-            "enrolled": 0,
+            "enrolled": 17,
             "professor": "",
-            "email": ""
+            "email": "48"
           }
         ]
       }
@@ -13153,7 +13151,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AULA MAGNA",
             "capacity": 287,
-            "enrolled": 0,
+            "enrolled": 189,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           },
@@ -13166,9 +13164,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M1001",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Gallegos Velgara, Henry Giovanny",
-            "email": "hgallegos@utec.edu.pe"
+            "email": "hgallegos@utec.edu.pe 71"
           },
           {
             "type": "LABORATORIO 11",
@@ -13179,7 +13177,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M1001",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Gallegos Velgara, Henry Giovanny",
             "email": "hgallegos@utec.edu.pe"
           },
@@ -13192,9 +13190,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M1001",
             "capacity": 45,
-            "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "enrolled": 4,
+            "professor": "Mandujano Cornejo, Vittorino",
+            "email": "vmandujano@utec.edu. pe"
           },
           {
             "type": "LABORATORIO 12",
@@ -13205,9 +13203,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M401",
             "capacity": 45,
-            "enrolled": 0,
-            "professor": "",
-            "email": "71"
+            "enrolled": 4,
+            "professor": "Mandujano Cornejo, Vittorino",
+            "email": "vmandujano@utec.edu. pe"
           },
           {
             "type": "LABORATORIO 13",
@@ -13218,7 +13216,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 21,
             "professor": "Nina Choquehuayta, Wilder",
             "email": "wnina@utec.edu.pe"
           },
@@ -13231,7 +13229,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M802",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 21,
             "professor": "Nina Choquehuayta, Wilder",
             "email": "wnina@utec.edu.pe"
           },
@@ -13244,7 +13242,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M401",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           },
@@ -13257,7 +13255,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M801",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           },
@@ -13270,7 +13268,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Cumpa Torres, Jose Moises",
             "email": "jcumpa@utec.edu.pe"
           },
@@ -13283,7 +13281,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M401",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Cumpa Torres, Jose Moises",
             "email": "jcumpa@utec.edu.pe"
           },
@@ -13296,7 +13294,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Gallegos Velgara, Henry Giovanny",
             "email": "hgallegos@utec.edu.pe"
           },
@@ -13309,7 +13307,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M801",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Gallegos Velgara, Henry Giovanny",
             "email": "hgallegos@utec.edu.pe"
           },
@@ -13322,7 +13320,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M1001",
             "capacity": 21,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           },
@@ -13335,7 +13333,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M1001",
             "capacity": 21,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           }
@@ -13353,7 +13351,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AULA MAGNA",
             "capacity": 288,
-            "enrolled": 0,
+            "enrolled": 109,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           },
@@ -13366,9 +13364,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 14,
             "professor": "Gallegos Velgara, Henry Giovanny",
-            "email": "hgallegos@utec.edu.pe 70"
+            "email": "hgallegos@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 21",
@@ -13377,9 +13375,9 @@
             "startTime": "09:00",
             "endTime": "11:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA M1001",
+            "location": "UTEC-BA M401",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 14,
             "professor": "Gallegos Velgara, Henry Giovanny",
             "email": "hgallegos@utec.edu.pe"
           },
@@ -13392,9 +13390,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M1001",
             "capacity": 44,
-            "enrolled": 0,
-            "professor": "Brossard Nuñez, Ian Paul",
-            "email": "ibrossard@utec.edu.pe"
+            "enrolled": 32,
+            "professor": "",
+            "email": ""
           },
           {
             "type": "LABORATORIO 22",
@@ -13405,9 +13403,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M801",
             "capacity": 44,
-            "enrolled": 0,
-            "professor": "Brossard Nuñez, Ian Paul",
-            "email": "ibrossard@utec.edu.pe"
+            "enrolled": 32,
+            "professor": "",
+            "email": ""
           },
           {
             "type": "LABORATORIO 23",
@@ -13418,7 +13416,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M401",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Nina Choquehuayta, Wilder",
             "email": "wnina@utec.edu.pe"
           },
@@ -13431,7 +13429,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M802",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Nina Choquehuayta, Wilder",
             "email": "wnina@utec.edu.pe"
           },
@@ -13444,7 +13442,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           },
@@ -13457,7 +13455,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M802",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           },
@@ -13496,7 +13494,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M401",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 31,
             "professor": "",
             "email": ""
           },
@@ -13509,7 +13507,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M803",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 31,
             "professor": "",
             "email": ""
           },
@@ -13553,7 +13551,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AULA MAGNA",
             "capacity": 253,
-            "enrolled": 0,
+            "enrolled": 104,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           },
@@ -13566,7 +13564,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M801",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Brossard Nuñez, Ian Paul",
             "email": "ibrossard@utec.edu.pe"
           },
@@ -13579,7 +13577,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M804",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Brossard Nuñez, Ian Paul",
             "email": "ibrossard@utec.edu.pe"
           },
@@ -13592,7 +13590,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M802",
             "capacity": 32,
-            "enrolled": 0,
+            "enrolled": 23,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           },
@@ -13605,7 +13603,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M401",
             "capacity": 32,
-            "enrolled": 0,
+            "enrolled": 23,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           },
@@ -13618,7 +13616,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M803",
             "capacity": 31,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           },
@@ -13631,7 +13629,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M401",
             "capacity": 31,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Bermejo Rios, Maria Hilda",
             "email": "mbermejo@utec.edu.p e"
           },
@@ -13644,7 +13642,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M301",
             "capacity": 30,
-            "enrolled": 0,
+            "enrolled": 17,
             "professor": "",
             "email": ""
           },
@@ -13657,7 +13655,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M601",
             "capacity": 30,
-            "enrolled": 0,
+            "enrolled": 17,
             "professor": "",
             "email": ""
           },
@@ -13670,7 +13668,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M801",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 12,
             "professor": "Gallegos Velgara, Henry Giovanny",
             "email": "hgallegos@utec.edu.pe"
           },
@@ -13683,7 +13681,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M401",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 12,
             "professor": "Gallegos Velgara, Henry Giovanny",
             "email": "hgallegos@utec.edu.pe"
           },
@@ -13696,7 +13694,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M801",
             "capacity": 38,
-            "enrolled": 0,
+            "enrolled": 3,
             "professor": "Brossard Nuñez, Ian Paul",
             "email": "ibrossard@utec.edu.pe"
           },
@@ -13709,7 +13707,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M801",
             "capacity": 38,
-            "enrolled": 0,
+            "enrolled": 3,
             "professor": "Brossard Nuñez, Ian Paul",
             "email": "ibrossard@utec.edu.pe"
           },
@@ -13722,9 +13720,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M401",
             "capacity": 33,
-            "enrolled": 0,
+            "enrolled": 5,
             "professor": "",
-            "email": ""
+            "email": "70"
           },
           {
             "type": "LABORATORIO 37",
@@ -13735,7 +13733,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M802",
             "capacity": 33,
-            "enrolled": 0,
+            "enrolled": 5,
             "professor": "",
             "email": ""
           }
@@ -13759,7 +13757,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A705",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Tipe Villanueva, Jorge",
             "email": "jtipe@utec.edu.pe"
           },
@@ -13772,7 +13770,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A704",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Tipe Villanueva, Jorge",
             "email": "jtipe@utec.edu.pe"
           },
@@ -13785,7 +13783,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Tipe Villanueva, Jorge",
             "email": "jtipe@utec.edu.pe"
           }
@@ -13803,7 +13801,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A706",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Tipe Villanueva, Jorge",
             "email": "jtipe@utec.edu.pe"
           },
@@ -13816,7 +13814,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Tipe Villanueva, Jorge",
             "email": "jtipe@utec.edu.pe"
           },
@@ -13829,7 +13827,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Tipe Villanueva, Jorge",
             "email": "jtipe@utec.edu.pe"
           }
@@ -13847,7 +13845,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A704",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 21,
             "professor": "Peres Malarin, Luis Miguel",
             "email": "lperes@utec.edu.pe"
           },
@@ -13860,7 +13858,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 21,
             "professor": "Peres Malarin, Luis Miguel",
             "email": "lperes@utec.edu.pe"
           },
@@ -13873,7 +13871,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 21,
             "professor": "Peres Malarin, Luis Miguel",
             "email": "lperes@utec.edu.pe"
           }
@@ -13891,9 +13889,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A707",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Sanchez Ruiz, David",
-            "email": "dsanchezr@utec.edu.p e"
+            "email": "dsanchezr@utec.edu.p e 58"
           },
           {
             "type": "LABORATORIO 41",
@@ -13904,9 +13902,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A705",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Sanchez Ruiz, David",
-            "email": "dsanchezr@utec.edu.p e 58"
+            "email": "dsanchezr@utec.edu.p e"
           },
           {
             "type": "LABORATORIO 41",
@@ -13917,7 +13915,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Sanchez Ruiz, David",
             "email": "dsanchezr@utec.edu.p e"
           }
@@ -13979,7 +13977,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A202",
             "capacity": 30,
-            "enrolled": 0,
+            "enrolled": 17,
             "professor": "Peres Malarin, Luis Miguel",
             "email": "lperes@utec.edu.pe"
           },
@@ -13992,7 +13990,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A202",
             "capacity": 30,
-            "enrolled": 0,
+            "enrolled": 17,
             "professor": "Peres Malarin, Luis Miguel",
             "email": "lperes@utec.edu.pe"
           },
@@ -14005,7 +14003,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A202",
             "capacity": 30,
-            "enrolled": 0,
+            "enrolled": 17,
             "professor": "Peres Malarin, Luis Miguel",
             "email": "lperes@utec.edu.pe"
           }
@@ -14023,7 +14021,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A702",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 12,
             "professor": "Sanchez Ruiz, David",
             "email": "dsanchezr@utec.edu.p e"
           },
@@ -14036,7 +14034,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A701",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 12,
             "professor": "Sanchez Ruiz, David",
             "email": "dsanchezr@utec.edu.p e"
           },
@@ -14049,7 +14047,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A701",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 12,
             "professor": "Sanchez Ruiz, David",
             "email": "dsanchezr@utec.edu.p e"
           }
@@ -14138,7 +14136,7 @@
             "capacity": 27,
             "enrolled": 0,
             "professor": "Torres Castillo, Victor Antonio",
-            "email": "vtorres@utec.edu.pe"
+            "email": "vtorres@utec.edu.pe 65"
           }
         ]
       }
@@ -14425,7 +14423,7 @@
             "capacity": 10,
             "enrolled": 0,
             "professor": "Chira Siaden, David Gustavo",
-            "email": "dchira@utec.edu.pe"
+            "email": "dchira@utec.edu.pe 98"
           }
         ]
       }
@@ -14469,7 +14467,7 @@
             "modality": "Presencial",
             "day": "Vie",
             "startTime": "20:00",
-            "endTime": "20:30",
+            "endTime": "22:00",
             "frequency": "Semana General",
             "location": "UTEC-BA M301",
             "capacity": 25,
@@ -14649,7 +14647,7 @@
             "capacity": 3,
             "enrolled": 0,
             "professor": "",
-            "email": "74"
+            "email": ""
           }
         ]
       }
@@ -14736,7 +14734,7 @@
             "capacity": 19,
             "enrolled": 0,
             "professor": "Garcia Zanabria, Germain",
-            "email": "ggarciaz@utec.edu.pe"
+            "email": "ggarciaz@utec.edu.pe 104"
           },
           {
             "type": "LABORATORIO 11",
@@ -14773,7 +14771,7 @@
             "capacity": 24,
             "enrolled": 0,
             "professor": "Garcia Tenorio, Maryori Flor De Jazmin",
-            "email": "mgarciat@utec.edu.pe 103"
+            "email": "mgarciat@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -14876,7 +14874,7 @@
             "email": "vflores@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 1.01",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Mie",
             "startTime": "20:00",
@@ -14889,7 +14887,7 @@
             "email": "vflores@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 1.01",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Vie",
             "startTime": "20:00",
@@ -15934,7 +15932,7 @@
             "capacity": 38,
             "enrolled": 0,
             "professor": "Camacho Jiménez, Francisco José",
-            "email": "fcamacho@utec.edu.pe"
+            "email": "fcamacho@utec.edu.pe 49"
           },
           {
             "type": "TEORÍA 2",
@@ -15960,7 +15958,7 @@
             "capacity": 21,
             "enrolled": 0,
             "professor": "Nuñovero Cisneros, Nicolas Jose (Asistente de Enseñanza Senior)",
-            "email": "nnunovero@utec.edu.p e 49"
+            "email": "nnunovero@utec.edu.p e"
           },
           {
             "type": "LABORATORIO 22",
@@ -16010,7 +16008,7 @@
             "capacity": 20,
             "enrolled": 0,
             "professor": "Nuñez Ochoa, Moises",
-            "email": "mnunez@utec.edu.pe"
+            "email": "mnunez@utec.edu.pe 53"
           },
           {
             "type": "LABORATORIO 11",
@@ -16097,7 +16095,7 @@
             "capacity": 36,
             "enrolled": 0,
             "professor": "Aranda Egusquiza, Sergio Rafael",
-            "email": "saranda@utec.edu.pe 46"
+            "email": "saranda@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -16423,7 +16421,7 @@
             "capacity": 16,
             "enrolled": 0,
             "professor": "Ramirez Horna, Flavio Cesar",
-            "email": "framirez@utec.edu.pe 53"
+            "email": "framirez@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -16460,7 +16458,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Volodina Egorovna de Denegri, Ludmila",
-            "email": "lvolodina@utec.edu.pe"
+            "email": "lvolodina@utec.edu.pe 95"
           }
         ]
       }
@@ -16654,7 +16652,7 @@
             "capacity": 10,
             "enrolled": 0,
             "professor": "Nuñez Ochoa, Moises",
-            "email": "mnunez@utec.edu.pe 79"
+            "email": "mnunez@utec.edu.pe"
           },
           {
             "type": "TEORÍA VIRTUAL 2",
@@ -16685,7 +16683,7 @@
             "capacity": 10,
             "enrolled": 0,
             "professor": "Aranda Egusquiza, Sergio Rafael",
-            "email": "saranda@utec.edu.pe"
+            "email": "saranda@utec.edu.pe 79"
           },
           {
             "type": "TEORÍA VIRTUAL 3",
@@ -16759,10 +16757,10 @@
             "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mar",
-            "startTime": "09:00",
-            "endTime": "12:00",
+            "startTime": "08:00",
+            "endTime": "11:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA Virtual 107",
+            "location": "UTEC-BA Virtual",
             "capacity": 6,
             "enrolled": 0,
             "professor": "Tarrillo Olano, Jimmy Fernando",
@@ -16795,7 +16793,7 @@
             "email": "cflores@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 13.01",
+            "type": "TEORÍA VIRTUAL 14",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "09:00",
@@ -16808,7 +16806,7 @@
             "email": "mlozano@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 13.01",
+            "type": "TEORÍA VIRTUAL 14",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "13:00",
@@ -16821,7 +16819,7 @@
             "email": "mlozano@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 13.02",
+            "type": "TEORÍA VIRTUAL 15",
             "modality": "Sincronico",
             "day": "Lun",
             "startTime": "09:00",
@@ -16834,7 +16832,7 @@
             "email": "saranda@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 13.02",
+            "type": "TEORÍA VIRTUAL 15",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "09:00",
@@ -16881,7 +16879,7 @@
             "capacity": 16,
             "enrolled": 0,
             "professor": "Michhue Vela, Gabriel Percy",
-            "email": "gmichhue@utec.edu.pe"
+            "email": "gmichhue@utec.edu.pe 43"
           },
           {
             "type": "LABORATORIO 11",
@@ -16992,7 +16990,7 @@
             "capacity": 36,
             "enrolled": 0,
             "professor": "Diaz Pozzuoli, Carlos Francisco",
-            "email": "cdiazp@utec.edu.pe 98"
+            "email": "cdiazp@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -17179,7 +17177,7 @@
             "capacity": 12,
             "enrolled": 0,
             "professor": "Nuñez Ochoa, Moises",
-            "email": "mnunez@utec.edu.pe"
+            "email": "mnunez@utec.edu.pe 103"
           },
           {
             "type": "LABORATORIO 11",
@@ -17325,9 +17323,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A702",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 14,
             "professor": "Lozano Bravo, Miguel Angel",
-            "email": "mlozano@utec.edu.pe"
+            "email": "mlozano@utec.edu.pe 50"
           },
           {
             "type": "LABORATORIO 11",
@@ -17338,7 +17336,7 @@
             "frequency": "Semana A",
             "location": "UTEC-BA L209",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 14,
             "professor": "Camacho Jiménez, Francisco José",
             "email": "fcamacho@utec.edu.pe"
           },
@@ -17353,7 +17351,7 @@
             "capacity": 22,
             "enrolled": 0,
             "professor": "Camacho Jiménez, Francisco José",
-            "email": "fcamacho@utec.edu.pe 50"
+            "email": "fcamacho@utec.edu.pe"
           }
         ]
       }
@@ -17403,7 +17401,7 @@
             "capacity": 24,
             "enrolled": 0,
             "professor": "Vera Pomalaza, Rafael Ivan",
-            "email": "rvera@utec.edu.pe"
+            "email": "rvera@utec.edu.pe 45"
           }
         ]
       }
@@ -17971,7 +17969,7 @@
             "capacity": 20,
             "enrolled": 0,
             "professor": "Araujo Pantoja, Patricia",
-            "email": "paraujo@utec.edu.pe"
+            "email": "paraujo@utec.edu.pe 85"
           },
           {
             "type": "TEORÍA VIRTUAL 11",
@@ -17997,7 +17995,7 @@
             "capacity": 5,
             "enrolled": 0,
             "professor": "Ramirez Quiroz, Elmer Hernán",
-            "email": "eramirez@utec.edu.pe 85"
+            "email": "eramirez@utec.edu.pe"
           },
           {
             "type": "TEORÍA VIRTUAL 13",
@@ -18341,7 +18339,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1003",
             "capacity": 17,
-            "enrolled": 0,
+            "enrolled": 5,
             "professor": "Chiroque Calderon, Jorge Luis",
             "email": "jchiroque@utec.edu.pe"
           }
@@ -18456,7 +18454,7 @@
             "capacity": 0,
             "enrolled": 0,
             "professor": "",
-            "email": "45"
+            "email": ""
           },
           {
             "type": "TEORÍA 1",
@@ -18545,7 +18543,7 @@
             "capacity": 0,
             "enrolled": 0,
             "professor": "",
-            "email": ""
+            "email": "102"
           },
           {
             "type": "TEORÍA 1",
@@ -18558,7 +18556,7 @@
             "capacity": 0,
             "enrolled": 0,
             "professor": "",
-            "email": "102"
+            "email": ""
           },
           {
             "type": "TEORÍA 1",
@@ -18739,7 +18737,7 @@
             "capacity": 130,
             "enrolled": 0,
             "professor": "Valencia Zapata, Julian",
-            "email": "jvalencia@utec.edu.pe 28"
+            "email": "jvalencia@utec.edu.pe"
           },
           {
             "type": "TEORÍA 11",
@@ -18913,7 +18911,7 @@
             "capacity": 25,
             "enrolled": 0,
             "professor": "Centty Gutierrez, Yessica Maria",
-            "email": "ycentty@utec.edu.pe"
+            "email": "ycentty@utec.edu.pe 28"
           },
           {
             "type": "TEORÍA 28",
@@ -19120,7 +19118,7 @@
             "email": "cgutierrezz@utec.edu.p e"
           },
           {
-            "type": "TEORÍA VIRTUAL 4.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "17:00",
@@ -19130,7 +19128,7 @@
             "capacity": 25,
             "enrolled": 0,
             "professor": "Gutierrez Zevallos, Cristian",
-            "email": "cgutierrezz@utec.edu.p e"
+            "email": "cgutierrezz@utec.edu.p e 46"
           }
         ]
       },
@@ -19151,7 +19149,7 @@
             "email": "cgutierrezz@utec.edu.p e"
           },
           {
-            "type": "TEORÍA VIRTUAL 4.01",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "11:00",
@@ -19182,7 +19180,7 @@
             "email": "cgutierrezz@utec.edu.p e"
           },
           {
-            "type": "TEORÍA VIRTUAL 4.01",
+            "type": "TEORÍA VIRTUAL 13",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "16:00",
@@ -19378,7 +19376,7 @@
             "capacity": 25,
             "enrolled": 0,
             "professor": "Sanchez Paredes, Juan Magno",
-            "email": "jsanchez@utec.edu.pe 32"
+            "email": "jsanchez@utec.edu.pe"
           }
         ]
       },
@@ -19492,7 +19490,7 @@
             "capacity": 25,
             "enrolled": 0,
             "professor": "Espinoza Matos, José Francisco",
-            "email": "jespinozam@utec.edu. pe 31"
+            "email": "jespinozam@utec.edu. pe"
           }
         ]
       },
@@ -19600,7 +19598,7 @@
             "capacity": 25,
             "enrolled": 0,
             "professor": "Centty Gutierrez, Yessica Maria",
-            "email": "ycentty@utec.edu.pe"
+            "email": "ycentty@utec.edu.pe 31"
           }
         ]
       },
@@ -19843,7 +19841,7 @@
             "capacity": 40,
             "enrolled": 0,
             "professor": "Caballero Reynoso, Veronica",
-            "email": "vcaballero@utec.edu.p e 55"
+            "email": "vcaballero@utec.edu.p e"
           },
           {
             "type": "LABORATORIO 41",
@@ -19967,7 +19965,7 @@
             "capacity": 53,
             "enrolled": 0,
             "professor": "Hidalgo Wuest, Oscar",
-            "email": "ohidalgo@utec.edu.pe"
+            "email": "ohidalgo@utec.edu.pe 55"
           },
           {
             "type": "LABORATORIO 81",
@@ -20252,7 +20250,7 @@
             "capacity": 42,
             "enrolled": 0,
             "professor": "Watson Jimenez, Lucia",
-            "email": "lwatson@utec.edu.pe"
+            "email": "lwatson@utec.edu.pe 66"
           },
           {
             "type": "TEORÍA 9",
@@ -20265,7 +20263,7 @@
             "capacity": 42,
             "enrolled": 0,
             "professor": "Watson Jimenez, Lucia",
-            "email": "lwatson@utec.edu.pe 66"
+            "email": "lwatson@utec.edu.pe"
           }
         ]
       },
@@ -20297,6 +20295,37 @@
             "enrolled": 0,
             "professor": "Nuñez Del Prado Tavara, Aaron",
             "email": "anunezd@utec.edu.pe"
+          }
+        ]
+      },
+      {
+        "number": 11,
+        "sessions": [
+          {
+            "type": "TEORÍA 11",
+            "modality": "Presencial",
+            "day": "Lun",
+            "startTime": "17:00",
+            "endTime": "18:00",
+            "frequency": "Semana General",
+            "location": "UTEC-BA A902",
+            "capacity": 20,
+            "enrolled": 0,
+            "professor": "",
+            "email": ""
+          },
+          {
+            "type": "TEORÍA 11",
+            "modality": "Presencial",
+            "day": "Vie",
+            "startTime": "09:00",
+            "endTime": "11:00",
+            "frequency": "Semana General",
+            "location": "UTEC-BA A1003",
+            "capacity": 20,
+            "enrolled": 0,
+            "professor": "",
+            "email": ""
           }
         ]
       }
@@ -20351,7 +20380,7 @@
             "capacity": 0,
             "enrolled": 0,
             "professor": "",
-            "email": ""
+            "email": "25"
           },
           {
             "type": "TEORÍA 2",
@@ -20364,7 +20393,7 @@
             "capacity": 0,
             "enrolled": 0,
             "professor": "",
-            "email": "25"
+            "email": ""
           }
         ]
       },
@@ -20422,7 +20451,7 @@
             "startTime": "15:00",
             "endTime": "17:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA A701",
+            "location": "UTEC-BA A705",
             "capacity": 45,
             "enrolled": 0,
             "professor": "",
@@ -20444,7 +20473,7 @@
             "capacity": 43,
             "enrolled": 0,
             "professor": "",
-            "email": ""
+            "email": "26"
           },
           {
             "type": "TEORÍA 5",
@@ -20457,7 +20486,7 @@
             "capacity": 43,
             "enrolled": 0,
             "professor": "",
-            "email": "26"
+            "email": ""
           }
         ]
       },
@@ -20515,7 +20544,7 @@
             "startTime": "17:00",
             "endTime": "19:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA A802",
+            "location": "UTEC-BA A906",
             "capacity": 43,
             "enrolled": 0,
             "professor": "",
@@ -20638,7 +20667,7 @@
             "startTime": "10:00",
             "endTime": "11:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA A707",
+            "location": "UTEC-BA A908",
             "capacity": 40,
             "enrolled": 0,
             "professor": "De La Flor Basterrechea, Antuané",
@@ -20666,7 +20695,7 @@
             "capacity": 40,
             "enrolled": 0,
             "professor": "Marquez Abad, Carla Alejandra",
-            "email": "cmarquez@utec.edu.pe 65"
+            "email": "cmarquez@utec.edu.pe"
           }
         ]
       }
@@ -21245,7 +21274,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Arana Alencastre, Jean Luis",
-            "email": "jarana@utec.edu.pe"
+            "email": "jarana@utec.edu.pe 106"
           }
         ]
       },
@@ -21431,7 +21460,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Millán Falconí, Armando",
-            "email": "amillan@utec.edu.pe 105"
+            "email": "amillan@utec.edu.pe"
           }
         ]
       },
@@ -21462,7 +21491,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Arana Alencastre, Jean Luis",
-            "email": "jarana@utec.edu.pe"
+            "email": "jarana@utec.edu.pe 105"
           }
         ]
       },
@@ -21577,7 +21606,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AUDITORIO",
             "capacity": 287,
-            "enrolled": 0,
+            "enrolled": 188,
             "professor": "",
             "email": ""
           },
@@ -21590,7 +21619,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1001",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "",
             "email": ""
           },
@@ -21603,7 +21632,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A701",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 4,
             "professor": "",
             "email": ""
           },
@@ -21616,7 +21645,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A704",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "",
             "email": ""
           },
@@ -21629,7 +21658,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A801",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "",
             "email": "16"
           },
@@ -21642,7 +21671,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A701",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "",
             "email": ""
           },
@@ -21655,7 +21684,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A704",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 32,
             "professor": "",
             "email": ""
           },
@@ -21668,7 +21697,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1003",
             "capacity": 21,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "",
             "email": ""
           }
@@ -21686,7 +21715,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AUDITORIO",
             "capacity": 288,
-            "enrolled": 0,
+            "enrolled": 102,
             "professor": "",
             "email": ""
           },
@@ -21699,7 +21728,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A702",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -21712,7 +21741,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A703",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -21725,7 +21754,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A702",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -21738,18 +21767,18 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 14,
             "professor": "",
             "email": ""
           },
           {
             "type": "LABORATORIO 25",
             "modality": "Presencial",
-            "day": "Jue",
-            "startTime": "12:00",
-            "endTime": "14:00",
+            "day": "Vie",
+            "startTime": "14:00",
+            "endTime": "16:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA A908",
+            "location": "UTEC-BA A704",
             "capacity": 44,
             "enrolled": 0,
             "professor": "",
@@ -21764,7 +21793,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A701",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -21795,7 +21824,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AUDITORIO",
             "capacity": 276,
-            "enrolled": 0,
+            "enrolled": 126,
             "professor": "",
             "email": ""
           },
@@ -21808,7 +21837,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A701",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 31,
             "professor": "",
             "email": ""
           },
@@ -21821,7 +21850,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A704",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 21,
             "professor": "",
             "email": ""
           },
@@ -21834,7 +21863,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1002",
             "capacity": 32,
-            "enrolled": 0,
+            "enrolled": 23,
             "professor": "",
             "email": ""
           },
@@ -21847,7 +21876,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1002",
             "capacity": 31,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": "15"
           },
@@ -21873,7 +21902,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1003",
             "capacity": 30,
-            "enrolled": 0,
+            "enrolled": 17,
             "professor": "",
             "email": ""
           },
@@ -21886,7 +21915,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A901",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 12,
             "professor": "",
             "email": ""
           },
@@ -21917,20 +21946,20 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AUDITORIO",
             "capacity": 51,
-            "enrolled": 0,
+            "enrolled": 8,
             "professor": "",
             "email": ""
           },
           {
             "type": "LABORATORIO 41",
             "modality": "Presencial",
-            "day": "Jue",
+            "day": "Mie",
             "startTime": "15:00",
             "endTime": "17:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA A705",
+            "location": "UTEC-BA A803",
             "capacity": 35,
-            "enrolled": 0,
+            "enrolled": 8,
             "professor": "",
             "email": ""
           },
@@ -22000,7 +22029,7 @@
             "capacity": 12,
             "enrolled": 0,
             "professor": "Cornillier, Fabien Yves Paul",
-            "email": "fcornillier@utec.edu.pe"
+            "email": "fcornillier@utec.edu.pe 54"
           },
           {
             "type": "TEORÍA 2",
@@ -22264,11 +22293,11 @@
           {
             "type": "TEORÍA 2",
             "modality": "Presencial",
-            "day": "Mar",
-            "startTime": "07:00",
-            "endTime": "09:00",
+            "day": "Mie",
+            "startTime": "20:00",
+            "endTime": "22:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA A1003",
+            "location": "UTEC-BA A801",
             "capacity": 30,
             "enrolled": 0,
             "professor": "Camacho Jiménez, Francisco José",
@@ -22277,24 +22306,24 @@
           {
             "type": "TEORÍA 2",
             "modality": "Presencial",
-            "day": "Mie",
-            "startTime": "17:00",
-            "endTime": "18:00",
+            "day": "Vie",
+            "startTime": "19:00",
+            "endTime": "20:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA A1003",
+            "location": "UTEC-BA A802",
             "capacity": 30,
             "enrolled": 0,
             "professor": "Camacho Jiménez, Francisco José",
-            "email": "fcamacho@utec.edu.pe"
+            "email": "fcamacho@utec.edu.pe 68"
           },
           {
-            "type": "LABORATORIO 2.01",
+            "type": "LABORATORIO 21",
             "modality": "Presencial",
             "day": "Vie",
-            "startTime": "07:00",
-            "endTime": "09:00",
+            "startTime": "20:00",
+            "endTime": "22:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA A403",
+            "location": "UTEC-BA A802",
             "capacity": 30,
             "enrolled": 0,
             "professor": "Camacho Jiménez, Francisco José",
@@ -22395,7 +22424,7 @@
             "capacity": 37,
             "enrolled": 0,
             "professor": "Cornillier, Fabien Yves Paul",
-            "email": "fcornillier@utec.edu.pe 43"
+            "email": "fcornillier@utec.edu.pe"
           },
           {
             "type": "TEORÍA 2",
@@ -22531,7 +22560,7 @@
             "capacity": 40,
             "enrolled": 0,
             "professor": "Meza Huallpa, Quemer Luis",
-            "email": "qmeza@utec.edu.pe"
+            "email": "qmeza@utec.edu.pe 96"
           },
           {
             "type": "TEORÍA 2",
@@ -22679,7 +22708,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Antonini Bova, Claudia Fausta Maura",
-            "email": "cantonini@utec.edu.pe 54"
+            "email": "cantonini@utec.edu.pe"
           },
           {
             "type": "TEORÍA 1",
@@ -22791,7 +22820,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Gonzalez Carpio, George Jessus",
-            "email": "ggonzales@utec.edu.p e"
+            "email": "ggonzales@utec.edu.p e 67"
           }
         ]
       }
@@ -23295,7 +23324,7 @@
             "capacity": 10,
             "enrolled": 0,
             "professor": "Arriz Jorquiera, Mariana",
-            "email": "marriz@utec.edu.pe"
+            "email": "marriz@utec.edu.pe 80"
           },
           {
             "type": "TEORÍA VIRTUAL 2",
@@ -23357,7 +23386,7 @@
             "capacity": 10,
             "enrolled": 0,
             "professor": "Larco Martinelli, Jose Antonio",
-            "email": "jlarco@utec.edu.pe 80"
+            "email": "jlarco@utec.edu.pe"
           },
           {
             "type": "TEORÍA VIRTUAL 4",
@@ -23432,7 +23461,7 @@
             "capacity": 10,
             "enrolled": 0,
             "professor": "Inga Samaniego, Jean Carlos",
-            "email": "jinga@utec.edu.pe 81"
+            "email": "jinga@utec.edu.pe"
           }
         ]
       },
@@ -23494,7 +23523,7 @@
             "capacity": 6,
             "enrolled": 0,
             "professor": "Pella Fernandez, Gabriela",
-            "email": "gpella@utec.edu.pe"
+            "email": "gpella@utec.edu.pe 81"
           }
         ]
       },
@@ -23753,7 +23782,7 @@
             "capacity": 23,
             "enrolled": 0,
             "professor": "",
-            "email": "40"
+            "email": ""
           }
         ]
       }
@@ -23886,7 +23915,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A803",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 31,
             "professor": "Meza Huallpa, Quemer Luis",
             "email": "qmeza@utec.edu.pe"
           }
@@ -23946,7 +23975,7 @@
             "email": "aflores@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 1.01",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Mie",
             "startTime": "15:00",
@@ -23993,7 +24022,7 @@
             "capacity": 16,
             "enrolled": 0,
             "professor": "Flores Lima, Artemio",
-            "email": "aflores@utec.edu.pe"
+            "email": "aflores@utec.edu.pe 93"
           },
           {
             "type": "LABORATORIO 12",
@@ -24006,7 +24035,7 @@
             "capacity": 16,
             "enrolled": 0,
             "professor": "Flores Lima, Artemio",
-            "email": "aflores@utec.edu.pe 93"
+            "email": "aflores@utec.edu.pe"
           }
         ]
       }
@@ -24156,7 +24185,7 @@
             "capacity": 12,
             "enrolled": 0,
             "professor": "Chuman Lopez, Margeo Javier",
-            "email": "mchuman@utec.edu.pe"
+            "email": "mchuman@utec.edu.pe 33"
           },
           {
             "type": "LABORATORIO 12",
@@ -24169,7 +24198,7 @@
             "capacity": 12,
             "enrolled": 0,
             "professor": "Chuman Lopez, Margeo Javier",
-            "email": "mchuman@utec.edu.pe 33"
+            "email": "mchuman@utec.edu.pe"
           }
         ]
       }
@@ -24196,7 +24225,7 @@
             "email": "wramosv@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 1.01",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Vie",
             "startTime": "09:00",
@@ -24206,10 +24235,10 @@
             "capacity": 12,
             "enrolled": 0,
             "professor": "Ramos Vasquez, Williams Javier",
-            "email": "wramosv@utec.edu.pe"
+            "email": "wramosv@utec.edu.pe 101"
           },
           {
-            "type": "LABORATORIO 1.02",
+            "type": "LABORATORIO 12",
             "modality": "Presencial",
             "day": "Vie",
             "startTime": "09:00",
@@ -24396,7 +24425,7 @@
             "email": "urodriguez@utec.edu.p e"
           },
           {
-            "type": "LABORATORIO 1.01",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Sab",
             "startTime": "12:00",
@@ -24409,7 +24438,7 @@
             "email": "kgonzales@utec.edu.p e"
           },
           {
-            "type": "LABORATORIO 1.02",
+            "type": "LABORATORIO 12",
             "modality": "Presencial",
             "day": "Sab",
             "startTime": "12:00",
@@ -24483,7 +24512,7 @@
             "email": "vfigueroa@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 1.01",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Sab",
             "startTime": "08:00",
@@ -24496,7 +24525,7 @@
             "email": "vfigueroa@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 1.02",
+            "type": "LABORATORIO 12",
             "modality": "Presencial",
             "day": "Jue",
             "startTime": "08:00",
@@ -24630,7 +24659,7 @@
             "capacity": 12,
             "enrolled": 0,
             "professor": "Flores Lima, Artemio",
-            "email": "aflores@utec.edu.pe"
+            "email": "aflores@utec.edu.pe 69"
           },
           {
             "type": "TEORÍA 1",
@@ -24804,7 +24833,7 @@
             "capacity": 25,
             "enrolled": 0,
             "professor": "TEJADA GUTIERREZ, EBERTH SANDRO",
-            "email": "etejada@utec.edu.pe"
+            "email": "etejada@utec.edu.pe 44"
           },
           {
             "type": "LABORATORIO VIRTUAL 11",
@@ -24891,7 +24920,7 @@
             "capacity": 11,
             "enrolled": 0,
             "professor": "Guerrero Guevara, Jose Luis",
-            "email": "jguerrero@utec.edu.pe"
+            "email": "jguerrero@utec.edu.pe 35"
           },
           {
             "type": "LABORATORIO 11",
@@ -24904,7 +24933,7 @@
             "capacity": 11,
             "enrolled": 0,
             "professor": "Guerrero Guevara, Jose Luis",
-            "email": "jguerrero@utec.edu.pe 35"
+            "email": "jguerrero@utec.edu.pe"
           }
         ]
       }
@@ -24926,7 +24955,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A708",
             "capacity": 32,
-            "enrolled": 0,
+            "enrolled": 23,
             "professor": "Vargas Figueroa, Luis Cesar",
             "email": "lvargas@utec.edu.pe"
           },
@@ -24939,7 +24968,7 @@
             "frequency": "Semana A",
             "location": "UTEC-BA L405",
             "capacity": 16,
-            "enrolled": 0,
+            "enrolled": 16,
             "professor": "Vargas Figueroa, Luis Cesar",
             "email": "lvargas@utec.edu.pe"
           },
@@ -24952,7 +24981,7 @@
             "frequency": "Semana B",
             "location": "UTEC-BA L405",
             "capacity": 16,
-            "enrolled": 0,
+            "enrolled": 7,
             "professor": "Vargas Figueroa, Luis Cesar",
             "email": "lvargas@utec.edu.pe"
           }
@@ -25102,17 +25131,17 @@
             "type": "TEORÍA 1",
             "modality": "Presencial",
             "day": "Mie",
-            "startTime": "19:00",
-            "endTime": "21:00",
+            "startTime": "20:00",
+            "endTime": "22:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA A801",
+            "location": "UTEC-BA A1003",
             "capacity": 10,
             "enrolled": 0,
             "professor": "Celis Osores, Karla Soledad",
-            "email": "kcelis@utec.edu.pe 56"
+            "email": "kcelis@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 2.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "19:00",
@@ -25199,7 +25228,7 @@
             "email": "kruiz@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 2.01",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "18:00",
@@ -25233,7 +25262,7 @@
             "capacity": 20,
             "enrolled": 0,
             "professor": "Cardenas Maita, Ana Rocio",
-            "email": "acardenasm@utec.edu. pe 47"
+            "email": "acardenasm@utec.edu. pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -25281,7 +25310,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A501",
             "capacity": 21,
-            "enrolled": 0,
+            "enrolled": 12,
             "professor": "TENORIO GONZALES, CANDY VERONICA",
             "email": "ctenorio@utec.edu.pe"
           },
@@ -25294,7 +25323,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA M602",
             "capacity": 21,
-            "enrolled": 0,
+            "enrolled": 12,
             "professor": "TENORIO GONZALES, CANDY VERONICA",
             "email": "ctenorio@utec.edu.pe"
           }
@@ -25343,12 +25372,12 @@
           {
             "type": "TEORÍA 2",
             "modality": "Presencial",
-            "day": "Lun",
-            "startTime": "08:00",
-            "endTime": "10:00",
+            "day": "Mar",
+            "startTime": "07:00",
+            "endTime": "09:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA M401",
-            "capacity": 44,
+            "location": "UTEC-BA M1001",
+            "capacity": 45,
             "enrolled": 0,
             "professor": "Morales Ortiz, Jorge Arturo",
             "email": "jmorales@utec.edu.pe"
@@ -25361,7 +25390,7 @@
             "endTime": "18:00",
             "frequency": "Semana General",
             "location": "UTEC-BA M801",
-            "capacity": 44,
+            "capacity": 45,
             "enrolled": 0,
             "professor": "Morales Ortiz, Jorge Arturo",
             "email": "jmorales@utec.edu.pe"
@@ -25500,7 +25529,7 @@
             "capacity": 45,
             "enrolled": 0,
             "professor": "Candiotti Barrenechea, Sergio Alonso",
-            "email": "scandiotti@utec.edu.pe"
+            "email": "scandiotti@utec.edu.pe 32"
           }
         ]
       },
@@ -25568,7 +25597,7 @@
             "capacity": 16,
             "enrolled": 0,
             "professor": "Candiotti Barrenechea, Sergio Alonso",
-            "email": "scandiotti@utec.edu.pe 42"
+            "email": "scandiotti@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 12",
@@ -25824,7 +25853,7 @@
             "capacity": 24,
             "enrolled": 0,
             "professor": "Nunura Nunura, Cesar Rolando",
-            "email": "cnunura@utec.edu.pe 69"
+            "email": "cnunura@utec.edu.pe"
           }
         ]
       }
@@ -26145,7 +26174,7 @@
             "capacity": 5,
             "enrolled": 0,
             "professor": "Alvarez Sanchez, Helard Henry",
-            "email": "halvarez@utec.edu.pe"
+            "email": "halvarez@utec.edu.pe 84"
           },
           {
             "type": "TEORÍA VIRTUAL 2",
@@ -26176,7 +26205,7 @@
             "capacity": 5,
             "enrolled": 0,
             "professor": "Charca Mamani, Samuel",
-            "email": "scharca@utec.edu.pe 84"
+            "email": "scharca@utec.edu.pe"
           },
           {
             "type": "TEORÍA VIRTUAL 3",
@@ -26306,7 +26335,7 @@
             "capacity": 53,
             "enrolled": 0,
             "professor": "Araujo Pantoja, Patricia",
-            "email": "paraujo@utec.edu.pe 83"
+            "email": "paraujo@utec.edu.pe"
           },
           {
             "type": "TEORÍA VIRTUAL 11",
@@ -26374,7 +26403,7 @@
             "email": "scharca@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 15.01",
+            "type": "TEORÍA VIRTUAL 16",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "16:00",
@@ -26387,7 +26416,7 @@
             "email": "obejarano@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 15.02",
+            "type": "TEORÍA VIRTUAL 17",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "15:00",
@@ -26400,7 +26429,7 @@
             "email": "crios@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 15.03",
+            "type": "TEORÍA VIRTUAL 18",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "07:00",
@@ -26484,7 +26513,7 @@
             "capacity": 17,
             "enrolled": 0,
             "professor": "Apaza Nina, Jose Enrique",
-            "email": "japaza@utec.edu.pe"
+            "email": "japaza@utec.edu.pe 42"
           }
         ]
       }
@@ -26802,7 +26831,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A804",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Olivera Oliva, Davy Alonso",
             "email": "volivera@utec.edu.pe"
           }
@@ -26820,7 +26849,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A402",
             "capacity": 17,
-            "enrolled": 0,
+            "enrolled": 4,
             "professor": "Olivera Oliva, Davy Alonso",
             "email": "volivera@utec.edu.pe"
           }
@@ -27449,7 +27478,7 @@
             "capacity": 10,
             "enrolled": 0,
             "professor": "Callupe Luna, Jhedmar Jhonatan",
-            "email": "jcallupe@utec.edu.pe"
+            "email": "jcallupe@utec.edu.pe 82"
           }
         ]
       },
@@ -27622,7 +27651,7 @@
             "capacity": 6,
             "enrolled": 0,
             "professor": "Gamero Tornero, Milenka Karolyn",
-            "email": "mgamero@utec.edu.pe"
+            "email": "mgamero@utec.edu.pe 83"
           },
           {
             "type": "TEORÍA VIRTUAL 7",
@@ -27666,7 +27695,7 @@
             "capacity": 10,
             "enrolled": 0,
             "professor": "Cabrera Donayre, Rony Martin",
-            "email": "rcabrerad@utec.edu.pe 82"
+            "email": "rcabrerad@utec.edu.pe"
           }
         ]
       },
@@ -27724,7 +27753,7 @@
             "email": "lvolodina@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "09:00",
@@ -27737,7 +27766,7 @@
             "email": "cflores@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 12",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Lun",
             "startTime": "14:00",
@@ -27750,7 +27779,7 @@
             "email": "rcabrerad@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 13",
+            "type": "TEORÍA VIRTUAL 13",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "19:00",
@@ -27763,7 +27792,7 @@
             "email": "dhuamanchahua@utec. edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 14",
+            "type": "TEORÍA VIRTUAL 14",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "14:00",
@@ -27776,7 +27805,7 @@
             "email": "jcallupe@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 15",
+            "type": "TEORÍA VIRTUAL 15",
             "modality": "Sincronico",
             "day": "Lun",
             "startTime": "10:00",
@@ -27789,7 +27818,7 @@
             "email": "ejara@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 16",
+            "type": "TEORÍA VIRTUAL 16",
             "modality": "Sincronico",
             "day": "Lun",
             "startTime": "10:00",
@@ -27802,7 +27831,7 @@
             "email": "wbarrutia@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 17",
+            "type": "TEORÍA VIRTUAL 17",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "14:00",
@@ -27815,7 +27844,7 @@
             "email": "jtapullima@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 17.01",
+            "type": "TEORÍA VIRTUAL 18",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "09:00",
@@ -27828,7 +27857,7 @@
             "email": "dinga@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 17.01",
+            "type": "TEORÍA VIRTUAL 18",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "15:00",
@@ -27862,7 +27891,7 @@
             "capacity": 24,
             "enrolled": 0,
             "professor": "Ramos Ponce, Oscar Efraín",
-            "email": "oramos@utec.edu.pe 94"
+            "email": "oramos@utec.edu.pe"
           },
           {
             "type": "TEORÍA 1",
@@ -28154,7 +28183,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A702",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Rojas muñoz, Nimrod Angel",
             "email": "nrojas@utec.edu.pe"
           },
@@ -28167,7 +28196,7 @@
             "frequency": "Semana A",
             "location": "UTEC-BA L209",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Olortegui Huaman, Miguel Tomas",
             "email": "molortegui@utec.edu.p e"
           },
@@ -28180,7 +28209,7 @@
             "frequency": "Semana B",
             "location": "UTEC-BA L209",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Olortegui Huaman, Miguel Tomas",
             "email": "molortegui@utec.edu.p e"
           }
@@ -28198,7 +28227,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Flores Alvarez, Pedro alonso",
             "email": "pfloresa@utec.edu.pe"
           },
@@ -28211,9 +28240,9 @@
             "frequency": "Semana A",
             "location": "UTEC-BA L209",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Olortegui Huaman, Miguel Tomas",
-            "email": "molortegui@utec.edu.p e"
+            "email": "molortegui@utec.edu.p e 51"
           },
           {
             "type": "LABORATORIO 22",
@@ -28224,7 +28253,7 @@
             "frequency": "Semana B",
             "location": "UTEC-BA L209",
             "capacity": 22,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Olortegui Huaman, Miguel Tomas",
             "email": "molortegui@utec.edu.p e"
           }
@@ -28332,7 +28361,7 @@
             "capacity": 22,
             "enrolled": 0,
             "professor": "Flores Alvarez, Pedro alonso",
-            "email": "pfloresa@utec.edu.pe 51"
+            "email": "pfloresa@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 51",
@@ -28567,7 +28596,7 @@
             "capacity": 20,
             "enrolled": 0,
             "professor": "Paucara Prado, Jhonatan David",
-            "email": "jpaucara@utec.edu.pe"
+            "email": "jpaucara@utec.edu.pe 88"
           }
         ]
       },
@@ -28603,7 +28632,7 @@
             "capacity": 20,
             "enrolled": 0,
             "professor": "Torres Aragon, Ricardo",
-            "email": "rtorresa@utec.edu.pe 87"
+            "email": "rtorresa@utec.edu.pe"
           }
         ]
       },
@@ -28675,7 +28704,7 @@
             "capacity": 20,
             "enrolled": 0,
             "professor": "ROBLES RODRIGUEZ, ISAAC SANTIAGO",
-            "email": "irobles@utec.edu.pe"
+            "email": "irobles@utec.edu.pe 87"
           }
         ]
       },
@@ -28783,7 +28812,7 @@
             "capacity": 20,
             "enrolled": 0,
             "professor": "Zorrilla Aranguren, Carlos Marcelo",
-            "email": "czorrilla@utec.edu.pe 88"
+            "email": "czorrilla@utec.edu.pe"
           }
         ]
       }
@@ -28897,7 +28926,7 @@
             "capacity": 23,
             "enrolled": 0,
             "professor": "Gonzales Balladares, Julio",
-            "email": "jgonzales@utec.edu.pe 89"
+            "email": "jgonzales@utec.edu.pe"
           }
         ]
       },
@@ -28933,7 +28962,7 @@
             "capacity": 23,
             "enrolled": 0,
             "professor": "Collazos Ticona, Isabel del Carmen",
-            "email": "icollazos@utec.edu.pe"
+            "email": "icollazos@utec.edu.pe 89"
           }
         ]
       },
@@ -29099,7 +29128,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AUDITORIO",
             "capacity": 287,
-            "enrolled": 0,
+            "enrolled": 188,
             "professor": "Montoya Alarcon De Hamoir, Sheyla Rosa",
             "email": "smontoya@utec.edu.pe"
           },
@@ -29112,7 +29141,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1001",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Marquez Abad, Carla Alejandra",
             "email": "cmarquez@utec.edu.pe"
           },
@@ -29125,7 +29154,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A705",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 4,
             "professor": "Muñoz Rios, Jimena Sol",
             "email": "jmunoz@utec.edu.pe"
           },
@@ -29138,7 +29167,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "De Leo Martinez, Andrés",
             "email": "adeleo@utec.edu.pe"
           },
@@ -29151,7 +29180,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1001",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Montoya Alarcon De Hamoir, Sheyla Rosa",
             "email": "smontoya@utec.edu.pe"
           },
@@ -29164,7 +29193,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A701",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 44,
             "professor": "Marquez Abad, Carla Alejandra",
             "email": "cmarquez@utec.edu.pe"
           },
@@ -29177,7 +29206,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A701",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 32,
             "professor": "Reaño Donair, Violeta Stephanie",
             "email": "vreano@utec.edu.pe"
           },
@@ -29190,7 +29219,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1003",
             "capacity": 21,
-            "enrolled": 0,
+            "enrolled": 10,
             "professor": "Baca Marroquin, Emily",
             "email": "ebaca@utec.edu.pe"
           }
@@ -29208,7 +29237,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AUDITORIO",
             "capacity": 288,
-            "enrolled": 0,
+            "enrolled": 102,
             "professor": "Alexandrino Ocaña, Grace Eliana",
             "email": "galexandrino@utec.edu .pe"
           },
@@ -29221,7 +29250,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A704",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Watson Jimenez, Lucia",
             "email": "lwatson@utec.edu.pe"
           },
@@ -29234,7 +29263,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A705",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Espinoza Delgado, Giancarlo",
             "email": "gespinozad@utec.edu. pe"
           },
@@ -29247,7 +29276,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A705",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Muñoz Rios, Jimena Sol",
             "email": "jmunoz@utec.edu.pe"
           },
@@ -29260,7 +29289,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A704",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 14,
             "professor": "Watson Jimenez, Lucia",
             "email": "lwatson@utec.edu.pe"
           },
@@ -29286,7 +29315,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A801",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "Marquez Abad, Carla Alejandra",
             "email": "cmarquez@utec.edu.pe"
           },
@@ -29317,7 +29346,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AUDITORIO",
             "capacity": 276,
-            "enrolled": 0,
+            "enrolled": 126,
             "professor": "Alexandrino Ocaña, Grace Eliana",
             "email": "galexandrino@utec.edu .pe"
           },
@@ -29330,7 +29359,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A704",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 31,
             "professor": "Millán Falconí, Armando",
             "email": "amillan@utec.edu.pe"
           },
@@ -29343,7 +29372,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A705",
             "capacity": 44,
-            "enrolled": 0,
+            "enrolled": 21,
             "professor": "",
             "email": ""
           },
@@ -29356,7 +29385,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1002",
             "capacity": 32,
-            "enrolled": 0,
+            "enrolled": 23,
             "professor": "Espinoza Delgado, Giancarlo",
             "email": "gespinozad@utec.edu. pe"
           },
@@ -29369,7 +29398,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1002",
             "capacity": 31,
-            "enrolled": 0,
+            "enrolled": 22,
             "professor": "",
             "email": ""
           },
@@ -29384,7 +29413,7 @@
             "capacity": 30,
             "enrolled": 0,
             "professor": "Watson Jimenez, Lucia",
-            "email": "lwatson@utec.edu.pe"
+            "email": "lwatson@utec.edu.pe 90"
           },
           {
             "type": "LABORATORIO 36",
@@ -29395,7 +29424,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A1002",
             "capacity": 30,
-            "enrolled": 0,
+            "enrolled": 17,
             "professor": "Reaño Donair, Violeta Stephanie",
             "email": "vreano@utec.edu.pe"
           },
@@ -29408,9 +29437,9 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A702",
             "capacity": 45,
-            "enrolled": 0,
+            "enrolled": 12,
             "professor": "Burneo Velezmoro, Fiorella",
-            "email": "fburneo@utec.edu.pe 90"
+            "email": "fburneo@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 38",
@@ -29439,7 +29468,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA AUDITORIO",
             "capacity": 51,
-            "enrolled": 0,
+            "enrolled": 8,
             "professor": "Alexandrino Ocaña, Grace Eliana",
             "email": "galexandrino@utec.edu .pe"
           },
@@ -29452,7 +29481,7 @@
             "frequency": "Semana General",
             "location": "UTEC-BA A403",
             "capacity": 35,
-            "enrolled": 0,
+            "enrolled": 8,
             "professor": "Baca Marroquin, Emily",
             "email": "ebaca@utec.edu.pe"
           },
@@ -29491,7 +29520,7 @@
             "capacity": 40,
             "enrolled": 0,
             "professor": "Granda Escajadillo, Kevin André",
-            "email": "kgranda@utec.edu.pe"
+            "email": "kgranda@utec.edu.pe 86"
           },
           {
             "type": "TEORÍA VIRTUAL 1",
@@ -29646,7 +29675,7 @@
             "capacity": 40,
             "enrolled": 0,
             "professor": "Espinoza Bustamante, Angel Alexander Simon",
-            "email": "aespinozab@utec.edu. pe 86"
+            "email": "aespinozab@utec.edu. pe"
           },
           {
             "type": "TEORÍA VIRTUAL 6",
