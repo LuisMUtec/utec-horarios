@@ -23,32 +23,31 @@ export interface SectionAnalysis {
  * "TEORÍA 1" → { base: "TEORÍA", num: "1" }
  * "LABORATORIO 11" → { base: "LABORATORIO", num: "11" }
  * "TEORÍA VIRTUAL 1" → { base: "TEORÍA VIRTUAL", num: "1" }
- * "TEORÍA 23.01" → { base: "TEORÍA", num: "23", suffix: ".01" }
+ * "TEORÍA 23.01" → { base: "TEORÍA", num: "23.01" }
  */
-function parseSessionType(type: string): { base: string; num: string; groupNum: string } {
+function parseSessionType(type: string): { base: string; num: string } {
   // Match: everything up to the last space + number (possibly with .XX suffix)
   const match = type.match(/^(.+?)\s+(\d+)(\.\d+)?$/);
-  if (!match) return { base: type, num: '', groupNum: '' };
+  if (!match) return { base: type, num: '' };
   const base = match[1];
-  const fullNum = match[2] + (match[3] || '');
-  const groupNum = match[2]; // without .XX suffix
-  return { base, num: fullNum, groupNum };
+  const num = match[2] + (match[3] || '');
+  return { base, num };
 }
 
 export function analyzeSection(section: Section): SectionAnalysis {
   const sessions = section.sessions;
 
-  // Group sessions by their groupNum (treating .01 variants as same group)
+  // Group sessions by full parsed number, so 22, 22.01 and 22.02 remain separate options.
   const parsed = sessions.map(s => ({ session: s, ...parseSessionType(s.type) }));
 
-  // Build groups: keyed by "baseType-groupNum", each group has sessions and capacity
-  const groupMap = new Map<string, { base: string; groupNum: string; sessions: typeof parsed; capacity: number }>();
+  // Build groups keyed by "baseType-num".
+  const groupMap = new Map<string, { base: string; num: string; sessions: typeof parsed; capacity: number }>();
 
   for (const p of parsed) {
     if (!p.num) continue;
-    const key = `${p.base}-${p.groupNum}`;
+    const key = `${p.base}-${p.num}`;
     if (!groupMap.has(key)) {
-      groupMap.set(key, { base: p.base, groupNum: p.groupNum, sessions: [], capacity: p.session.capacity });
+      groupMap.set(key, { base: p.base, num: p.num, sessions: [], capacity: p.session.capacity });
     }
     groupMap.get(key)!.sessions.push(p);
   }
@@ -79,8 +78,8 @@ export function analyzeSection(section: Section): SectionAnalysis {
     } else {
       // Subsession: lower capacity groups are selectable
       const first = group.sessions[0].session;
-      const id = `${group.base}-${group.groupNum}`;
-      const label = `${group.base} ${group.groupNum}`;
+      const id = `${group.base}-${group.num}`;
+      const label = `${group.base} ${group.num}`;
       subsessionGroups.push({
         id,
         label,

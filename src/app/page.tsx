@@ -61,7 +61,14 @@ export default function Home() {
       const newSelected: SelectedCourse = { courseCode, sectionNumber, subsessionId };
       const withSubsession = autoAssignSubsession(newSelected);
       const existing = prev.findIndex(s => s.courseCode === courseCode);
-      const conflictCheck = checkNewCourseConflict(courses, prev, courseCode, sectionNumber, courseCode);
+      const conflictCheck = checkNewCourseConflict(
+        courses,
+        prev,
+        courseCode,
+        sectionNumber,
+        withSubsession.subsessionId,
+        courseCode
+      );
       
       if (conflictCheck.hasConflict) {
         showToast(`No se puede agregar porque hay un cruce de horario con: ${conflictCheck.conflictingCourseName}`, 'error');
@@ -83,7 +90,15 @@ export default function Home() {
 
   const handleChangeSection = useCallback((courseCode: string, newSection: number) => {
     setSelectedCourses(prev => {
-      const conflictCheck = checkNewCourseConflict(courses, prev, courseCode, newSection, courseCode);
+      const newSelection = autoAssignSubsession({ courseCode, sectionNumber: newSection });
+      const conflictCheck = checkNewCourseConflict(
+        courses,
+        prev,
+        courseCode,
+        newSection,
+        newSelection.subsessionId,
+        courseCode
+      );
       
       if (conflictCheck.hasConflict) {
         showToast(`No se puede cambiar de sección porque hay un cruce de horario con: ${conflictCheck.conflictingCourseName}`, 'error');
@@ -92,8 +107,7 @@ export default function Home() {
 
       return prev.map(s => {
         if (s.courseCode !== courseCode) return s;
-        // Reset subsessionId and auto-assign for new section
-        return autoAssignSubsession({ courseCode, sectionNumber: newSection });
+        return newSelection;
       });
     });
   }, [showToast]);
