@@ -340,6 +340,15 @@ export default function Home() {
           Utec Horarios © 2026
         </div>
       </footer>
+
+      {toast && (
+        <ToastAlert
+          key={toast.id}
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 }
