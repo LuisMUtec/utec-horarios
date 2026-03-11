@@ -37,19 +37,19 @@ export default function SelectedCoursesList({
         return (
           <div
             key={selected.courseCode}
-            className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg"
+            className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors duration-300"
           >
-            <div className={`w-3 h-3 rounded-full ${bgColor} shrink-0`} />
+            <div className={`w-3 h-3 rounded-full ${bgColor} shrink-0 dark:opacity-80`} />
             <div className="min-w-0 flex-1">
-              <div className="text-sm font-medium text-gray-900 truncate">
+              <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                 {course.name}
               </div>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-xs font-mono text-gray-500">{course.code}</span>
+                <span className="text-xs font-mono text-gray-500 dark:text-gray-400">{course.code}</span>
                 <select
                   value={selected.sectionNumber}
                   onChange={e => onChangeSection(course.code, parseInt(e.target.value))}
-                  className="text-xs border border-gray-200 rounded px-1.5 py-0.5 bg-white text-gray-700"
+                  className="text-xs border border-gray-200 dark:border-gray-600 rounded px-1.5 py-0.5 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 outline-none transition-colors duration-300"
                 >
                   {course.sections.map(s => (
                     <option key={s.number} value={s.number}>

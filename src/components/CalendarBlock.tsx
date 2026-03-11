@@ -15,10 +15,10 @@ export default function CalendarBlock({ event, top, height, hasConflict, isPrevi
 
   return (
     <div
-      className={`absolute left-0.5 right-0.5 rounded-md border-l-3 px-1.5 py-1 overflow-hidden cursor-default group ${color} ${
-        isPreview ? 'opacity-50 border-dashed' : ''
+      className={`absolute left-0.5 right-0.5 rounded-md border-l-3 px-1.5 py-1 overflow-hidden cursor-default group transition-colors duration-300 ${color} ${
+        isPreview ? 'opacity-50 dark:opacity-40 border-dashed' : ''
       } ${
-        !isPreview && hasConflict ? 'ring-2 ring-red-500 ring-offset-1' : ''
+        !isPreview && hasConflict ? 'ring-2 ring-red-500 dark:ring-red-500/80 ring-offset-1 dark:ring-offset-gray-900' : ''
       }`}
       style={{ top, height: Math.max(height, 20) }}
       title={`${courseCode} - ${courseName}\n${session.type}\n${session.startTime} - ${session.endTime}\n${session.location}\n${session.professor}`}
