@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import coursesData from '@/data/courses.json';
 import { Course, SelectedCourse } from '@/types';
 import { getCalendarEvents, getPreviewEvents, checkNewCourseConflict } from '@/lib/schedule-utils';
@@ -34,6 +34,7 @@ export default function Home() {
   const [previewSection, setPreviewSection] = useState<{courseCode: string, sectionNumber: number, subsessionId?: string} | null>(null);
   const [cargaHabilCodes, setCargaHabilCodes] = useState<string[] | null>(null);
   const [studentName, setStudentName] = useState<string | null>(null);
+  const [courseTipos, setCourseTipos] = useState<Record<string, string> | null>(null);
   
   const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' | 'info'; id: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -139,6 +140,7 @@ export default function Home() {
       if (data.success) {
         setCargaHabilCodes(data.codes);
         setStudentName(data.studentName || null);
+        setCourseTipos(data.courseTipos && Object.keys(data.courseTipos).length > 0 ? data.courseTipos : null);
         showToast(`Carga Hábil procesada. Se encontraron ${data.codes.length} cursos permitidos.`, 'success');
       } else {
         showToast(data.error || 'Error al procesar el PDF.', 'error');
@@ -153,9 +155,21 @@ export default function Home() {
     }
   };
 
-  const displayedCourses = cargaHabilCodes 
-    ? courses.filter(c => cargaHabilCodes.includes(c.code))
-    : courses;
+  const displayedCourses = useMemo(() => {
+    const filtered = cargaHabilCodes
+      ? courses.filter(c => cargaHabilCodes.includes(c.code))
+      : courses;
+    if (!courseTipos) return filtered;
+    return [...filtered].sort((a, b) => {
+      const tipoOrder = (code: string) => {
+        const tipo = courseTipos[code];
+        if (tipo === 'Obligatorio') return 0;
+        if (tipo === 'Electivo') return 1;
+        return 2;
+      };
+      return tipoOrder(a.code) - tipoOrder(b.code);
+    });
+  }, [cargaHabilCodes, courseTipos]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
@@ -185,9 +199,6 @@ export default function Home() {
               <span>{cargaHabilCodes ? 'Cambiar PDF' : 'Subir Carga Hábil'}</span>
             </button>
             <ThemeToggle />
-            <div className="text-xs text-gray-400 dark:text-gray-500 hidden md:block">
-              {displayedCourses.length} cursos{cargaHabilCodes ? ' en tu PDF' : ' disponibles'}
-            </div>
           </div>
         </div>
       </header>
@@ -199,7 +210,7 @@ export default function Home() {
               <div className="flex justify-between items-center mb-3">
                 <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">Buscar cursos</h2>
                 {cargaHabilCodes && (
-                  <button onClick={() => { setCargaHabilCodes(null); setStudentName(null); }} className="text-xs text-gray-500 dark:text-gray-400 hover:text-red-500">
+                  <button onClick={() => { setCargaHabilCodes(null); setStudentName(null); setCourseTipos(null); }} className="text-xs text-gray-500 dark:text-gray-400 hover:text-red-500">
                     Remover filtro Carga Hábil
                   </button>
                 )}

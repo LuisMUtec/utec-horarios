@@ -151,12 +151,16 @@ export const DAY_LABELS: Record<string, string> = {
 export const START_HOUR = 7;
 export const END_HOUR = 22;
 
+function normalize(str: string): string {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
 export function searchCourses(courses: Course[], query: string): Course[] {
   if (!query || query.length < 2) return [];
-  const q = query.toLowerCase().trim();
-  return courses.filter(
-    c =>
-      c.code.toLowerCase().includes(q) ||
-      c.name.toLowerCase().includes(q)
-  ).slice(0, 20);
+  const words = normalize(query).split(/\s+/).filter(w => w.length > 0);
+  if (words.length === 0) return [];
+  return courses.filter(c => {
+    const text = normalize(c.code) + ' ' + normalize(c.name);
+    return words.every(w => text.includes(w));
+  }).slice(0, 20);
 }
