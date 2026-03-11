@@ -90,38 +90,6 @@ export default function Home() {
     setSelectedCourses(prev => prev.filter(s => s.courseCode !== courseCode));
   }, []);
 
-  const handleChangeSection = useCallback((courseCode: string, newSection: number) => {
-    setSelectedCourses(prev => {
-      const newSelection = autoAssignSubsession({ courseCode, sectionNumber: newSection });
-      const conflictCheck = checkNewCourseConflict(
-        courses,
-        prev,
-        courseCode,
-        newSection,
-        newSelection.subsessionId,
-        courseCode
-      );
-      
-      if (conflictCheck.hasConflict) {
-        showToast(`No se puede cambiar de sección porque hay un cruce de horario con: ${conflictCheck.conflictingCourseName}`, 'error');
-        return prev;
-      }
-
-      return prev.map(s => {
-        if (s.courseCode !== courseCode) return s;
-        return newSelection;
-      });
-    });
-  }, [showToast]);
-
-  const handleChangeSubsession = useCallback((courseCode: string, subsessionId: string) => {
-    setSelectedCourses(prev =>
-      prev.map(s =>
-        s.courseCode === courseCode ? { ...s, subsessionId } : s
-      )
-    );
-  }, []);
-
   const events = getCalendarEvents(courses, selectedCourses);
 
   const previewEvents = previewSection
@@ -308,8 +276,6 @@ export default function Home() {
                 courses={courses}
                 selectedCourses={selectedCourses}
                 onRemoveCourse={handleRemoveCourse}
-                onChangeSection={handleChangeSection}
-                onChangeSubsession={handleChangeSubsession}
               />
             </div>
           </div>

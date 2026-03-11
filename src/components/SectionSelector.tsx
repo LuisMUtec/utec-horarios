@@ -20,7 +20,9 @@ export default function SectionSelector({ course, selectedSection, selectedSubse
         const isSelected = selectedSection === section.number;
         const analysis = analyzeSection(section);
         const hasSubsessions = analysis.subsessionGroups.length > 0;
-        const professors = [...new Set(section.sessions.map(s => s.professor))];
+        const professors = hasSubsessions
+          ? [...new Set(analysis.mandatorySessions.map(s => s.professor).filter(Boolean))]
+          : [...new Set(section.sessions.map(s => s.professor))];
         const modalities = [...new Set(section.sessions.map(s => s.modality))];
         const capacity = section.sessions[0]?.capacity ?? 0;
         const enrolled = section.sessions[0]?.enrolled ?? 0;

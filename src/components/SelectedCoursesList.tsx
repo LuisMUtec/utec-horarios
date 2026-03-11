@@ -8,16 +8,12 @@ interface Props {
   courses: Course[];
   selectedCourses: SelectedCourse[];
   onRemoveCourse: (courseCode: string) => void;
-  onChangeSection: (courseCode: string, newSection: number) => void;
-  onChangeSubsession: (courseCode: string, subsessionId: string) => void;
 }
 
 export default function SelectedCoursesList({
   courses,
   selectedCourses,
   onRemoveCourse,
-  onChangeSection,
-  onChangeSubsession,
 }: Props) {
   if (selectedCourses.length === 0) {
     return (
@@ -56,29 +52,13 @@ export default function SelectedCoursesList({
               </div>
               <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                 <span className="text-xs font-mono text-gray-500 dark:text-gray-400">{course.code}</span>
-                <select
-                  value={selected.sectionNumber}
-                  onChange={e => onChangeSection(course.code, parseInt(e.target.value))}
-                  className="text-[11px] border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 outline-none focus:ring-1 focus:ring-blue-500/50 transition-colors duration-300"
-                >
-                  {course.sections.map(s => (
-                    <option key={s.number} value={s.number}>
-                      Sección {s.number}
-                    </option>
-                  ))}
-                </select>
-                {hasSubsessions && (
-                  <select
-                    value={selected.subsessionId || ''}
-                    onChange={e => onChangeSubsession(course.code, e.target.value)}
-                    className="text-[11px] border border-amber-200 dark:border-amber-900/40 rounded px-1.5 py-0.5 bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-300 outline-none focus:ring-1 focus:ring-amber-500/50 transition-colors"
-                  >
-                    {analysis.subsessionGroups.map(g => (
-                      <option key={g.id} value={g.id}>
-                        {g.label}
-                      </option>
-                    ))}
-                  </select>
+                <span className="text-[11px] border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200">
+                  Sección {selected.sectionNumber}
+                </span>
+                {hasSubsessions && selected.subsessionId && (
+                  <span className="text-[11px] border border-amber-200 dark:border-amber-900/40 rounded px-1.5 py-0.5 bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-300">
+                    {analysis.subsessionGroups.find(g => g.id === selected.subsessionId)?.label ?? selected.subsessionId}
+                  </span>
                 )}
               </div>
               {professors.length > 0 && (
