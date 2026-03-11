@@ -8,8 +8,8 @@ import SectionSelector from './SectionSelector';
 interface Props {
   courses: Course[];
   selectedCourses: SelectedCourse[];
-  onAddCourse: (courseCode: string, sectionNumber: number) => void;
-  onHoverSection: (info: {courseCode: string, sectionNumber: number} | null) => void;
+  onAddCourse: (courseCode: string, sectionNumber: number, subsessionId?: string) => void;
+  onHoverSection: (info: {courseCode: string, sectionNumber: number, subsessionId?: string} | null) => void;
 }
 
 export default function CourseSearch({ courses, selectedCourses, onAddCourse, onHoverSection }: Props) {
@@ -88,8 +88,8 @@ export default function CourseSearch({ courses, selectedCourses, onAddCourse, on
                   selectedSection={
                     selectedCourses.find(s => s.courseCode === course.code)?.sectionNumber
                   }
-                  onSelectSection={(sectionNum) => {
-                    onAddCourse(course.code, sectionNum);
+                  onSelectSection={(sectionNum, subsessionId) => {
+                    onAddCourse(course.code, sectionNum, subsessionId);
                   }}
                   onHoverSection={onHoverSection}
                 />

@@ -5,19 +5,35 @@ import coursesData from '@/data/courses.json';
 import { Course, SelectedCourse } from '@/types';
 import { getCalendarEvents, getPreviewEvents } from '@/lib/schedule-utils';
 import { loadSelectedCourses, saveSelectedCourses } from '@/lib/storage';
+import { analyzeSection } from '@/lib/subsession-utils';
 import CourseSearch from '@/components/CourseSearch';
 import SelectedCoursesList from '@/components/SelectedCoursesList';
 import WeeklyCalendar from '@/components/WeeklyCalendar';
 
 const courses = coursesData as Course[];
 
+function autoAssignSubsession(selected: SelectedCourse): SelectedCourse {
+  if (selected.subsessionId) return selected;
+  const course = courses.find(c => c.code === selected.courseCode);
+  if (!course) return selected;
+  const section = course.sections.find(s => s.number === selected.sectionNumber);
+  if (!section) return selected;
+  const analysis = analyzeSection(section);
+  if (analysis.subsessionGroups.length > 0) {
+    return { ...selected, subsessionId: analysis.subsessionGroups[0].id };
+  }
+  return selected;
+}
+
 export default function Home() {
   const [selectedCourses, setSelectedCourses] = useState<SelectedCourse[]>([]);
   const [mounted, setMounted] = useState(false);
-  const [previewSection, setPreviewSection] = useState<{courseCode: string, sectionNumber: number} | null>(null);
+  const [previewSection, setPreviewSection] = useState<{courseCode: string, sectionNumber: number, subsessionId?: string} | null>(null);
 
   useEffect(() => {
-    setSelectedCourses(loadSelectedCourses());
+    // Migration: auto-assign subsessionId for old data that lacks it
+    const loaded = loadSelectedCourses().map(autoAssignSubsession);
+    setSelectedCourses(loaded);
     setMounted(true);
   }, []);
 
@@ -27,15 +43,17 @@ export default function Home() {
     }
   }, [selectedCourses, mounted]);
 
-  const handleAddCourse = useCallback((courseCode: string, sectionNumber: number) => {
+  const handleAddCourse = useCallback((courseCode: string, sectionNumber: number, subsessionId?: string) => {
     setSelectedCourses(prev => {
+      const newSelected: SelectedCourse = { courseCode, sectionNumber, subsessionId };
+      const withSubsession = autoAssignSubsession(newSelected);
       const existing = prev.findIndex(s => s.courseCode === courseCode);
       if (existing >= 0) {
         const updated = [...prev];
-        updated[existing] = { courseCode, sectionNumber };
+        updated[existing] = withSubsession;
         return updated;
       }
-      return [...prev, { courseCode, sectionNumber }];
+      return [...prev, withSubsession];
     });
   }, []);
 
@@ -45,8 +63,18 @@ export default function Home() {
 
   const handleChangeSection = useCallback((courseCode: string, newSection: number) => {
     setSelectedCourses(prev =>
+      prev.map(s => {
+        if (s.courseCode !== courseCode) return s;
+        // Reset subsessionId and auto-assign for new section
+        return autoAssignSubsession({ courseCode, sectionNumber: newSection });
+      })
+    );
+  }, []);
+
+  const handleChangeSubsession = useCallback((courseCode: string, subsessionId: string) => {
+    setSelectedCourses(prev =>
       prev.map(s =>
-        s.courseCode === courseCode ? { ...s, sectionNumber: newSection } : s
+        s.courseCode === courseCode ? { ...s, subsessionId } : s
       )
     );
   }, []);
@@ -61,7 +89,8 @@ export default function Home() {
         (() => {
           const idx = selectedCourses.findIndex(s => s.courseCode === previewSection.courseCode);
           return idx >= 0 ? idx : selectedCourses.length;
-        })()
+        })(),
+        previewSection.subsessionId
       )
     : [];
 
@@ -111,6 +140,7 @@ export default function Home() {
                 selectedCourses={selectedCourses}
                 onRemoveCourse={handleRemoveCourse}
                 onChangeSection={handleChangeSection}
+                onChangeSubsession={handleChangeSubsession}
               />
             </div>
           </div>

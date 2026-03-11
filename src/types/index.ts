@@ -26,6 +26,7 @@ export interface Course {
 export interface SelectedCourse {
   courseCode: string;
   sectionNumber: number;
+  subsessionId?: string;  // e.g., "LABORATORIO-11", undefined if no subsessions
 }
 
 export interface CalendarEvent {
