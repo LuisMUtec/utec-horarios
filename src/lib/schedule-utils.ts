@@ -84,6 +84,7 @@ export function checkNewCourseConflict(
   selectedCourses: SelectedCourse[],
   newCourseCode: string,
   newSectionNumber: number,
+  newSubsessionId?: string,
   ignoreCourseCode?: string
 ): { hasConflict: boolean; conflictingCourseName?: string } {
   const newCourse = courses.find(c => c.code === newCourseCode);
@@ -91,6 +92,7 @@ export function checkNewCourseConflict(
 
   const newSection = newCourse.sections.find(s => s.number === newSectionNumber);
   if (!newSection) return { hasConflict: false };
+  const newSessions = getFilteredSessions(newSection, newSubsessionId);
 
   for (const selected of selectedCourses) {
     if (selected.courseCode === ignoreCourseCode) continue;
@@ -100,9 +102,10 @@ export function checkNewCourseConflict(
 
     const existingSection = existingCourse.sections.find(s => s.number === selected.sectionNumber);
     if (!existingSection) continue;
+    const existingSessions = getFilteredSessions(existingSection, selected.subsessionId);
 
-    for (const newSession of newSection.sessions) {
-      for (const existingSession of existingSection.sessions) {
+    for (const newSession of newSessions) {
+      for (const existingSession of existingSessions) {
         if (hasConflict(newSession, existingSession)) {
           return { hasConflict: true, conflictingCourseName: existingCourse.name };
         }
