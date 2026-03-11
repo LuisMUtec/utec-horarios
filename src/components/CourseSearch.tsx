@@ -9,10 +9,11 @@ interface Props {
   courses: Course[];
   selectedCourses: SelectedCourse[];
   onAddCourse: (courseCode: string, sectionNumber: number, subsessionId?: string) => void;
+  onRemoveCourse: (courseCode: string) => void;
   onHoverSection: (info: {courseCode: string, sectionNumber: number, subsessionId?: string} | null) => void;
 }
 
-export default function CourseSearch({ courses, selectedCourses, onAddCourse, onHoverSection }: Props) {
+export default function CourseSearch({ courses, selectedCourses, onAddCourse, onRemoveCourse, onHoverSection }: Props) {
   const [query, setQuery] = useState('');
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
 
@@ -102,9 +103,13 @@ export default function CourseSearch({ courses, selectedCourses, onAddCourse, on
                   selectedSection={
                     selectedCourses.find(s => s.courseCode === course.code)?.sectionNumber
                   }
+                  selectedSubsessionId={
+                    selectedCourses.find(s => s.courseCode === course.code)?.subsessionId
+                  }
                   onSelectSection={(sectionNum, subsessionId) => {
                     onAddCourse(course.code, sectionNum, subsessionId);
                   }}
+                  onRemoveCourse={onRemoveCourse}
                   onHoverSection={onHoverSection}
                 />
               )}
