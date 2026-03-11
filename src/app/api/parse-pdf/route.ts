@@ -47,10 +47,26 @@ export async function POST(request: Request) {
     // Get unique course codes
     const uniqueCodes = Array.from(new Set(matches));
 
+    // Extract course type (Obligatorio/Electivo) for each code
+    const courseTipos: Record<string, string> = {};
+    const codePositions = [...fullText.matchAll(/[A-Z]{2}\d{4}/g)];
+    for (const match of codePositions) {
+      const code = match[0];
+      if (courseTipos[code]) continue; // keep first occurrence
+      const startPos = match.index! + code.length;
+      // Look in the next 200 chars for Obligatorio or Electivo
+      const snippet = fullText.substring(startPos, startPos + 200);
+      const tipoMatch = snippet.match(/\b(Obligatorio|Electivo)\b/i);
+      if (tipoMatch) {
+        courseTipos[code] = tipoMatch[1].charAt(0).toUpperCase() + tipoMatch[1].slice(1).toLowerCase();
+      }
+    }
+
     return NextResponse.json({
       success: true,
       codes: uniqueCodes,
       studentName: studentName,
+      courseTipos,
       parsedPages: numPages
     });
   } catch (error) {
