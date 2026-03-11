@@ -27,12 +27,12 @@ export default function WeeklyCalendar({ events, previewEvents = [] }: Props) {
     <div className="overflow-x-auto">
       <div className="min-w-[700px]">
         {/* Header */}
-        <div className="grid grid-cols-[60px_repeat(6,1fr)] border-b border-gray-200">
-          <div className="p-2 text-xs text-gray-400 text-center">Hora</div>
+        <div className="grid grid-cols-[60px_repeat(6,1fr)] border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+          <div className="p-2 text-xs text-gray-400 dark:text-gray-500 text-center">Hora</div>
           {DAYS.map(day => (
             <div
               key={day}
-              className="p-2 text-center text-sm font-semibold text-gray-700 border-l border-gray-200"
+              className="p-2 text-center text-sm font-semibold text-gray-700 dark:text-gray-300 border-l border-gray-200 dark:border-gray-800 transition-colors duration-300"
             >
               <span className="hidden sm:inline">{DAY_LABELS[day]}</span>
               <span className="sm:hidden">{day}</span>
@@ -47,7 +47,7 @@ export default function WeeklyCalendar({ events, previewEvents = [] }: Props) {
             {hours.map(hour => (
               <div
                 key={hour}
-                className="border-b border-gray-100 text-xs text-gray-400 text-right pr-2 flex items-start justify-end"
+                className="border-b border-gray-100 dark:border-gray-800/50 text-xs text-gray-400 dark:text-gray-500 text-right pr-2 flex items-start justify-end transition-colors duration-300"
                 style={{ height: HOUR_HEIGHT }}
               >
                 <span className="-mt-2">{String(hour).padStart(2, '0')}:00</span>
@@ -64,14 +64,14 @@ export default function WeeklyCalendar({ events, previewEvents = [] }: Props) {
             return (
               <div
                 key={day}
-                className="relative border-l border-gray-200"
+                className="relative border-l border-gray-200 dark:border-gray-800 transition-colors duration-300"
                 style={{ height: TOTAL_HOURS * HOUR_HEIGHT }}
               >
                 {/* Hour grid lines */}
                 {hours.map(hour => (
                   <div
                     key={hour}
-                    className="absolute w-full border-b border-gray-100"
+                    className="absolute w-full border-b border-gray-100 dark:border-gray-800/50 transition-colors duration-300"
                     style={{ top: (hour - START_HOUR) * HOUR_HEIGHT, height: HOUR_HEIGHT }}
                   />
                 ))}

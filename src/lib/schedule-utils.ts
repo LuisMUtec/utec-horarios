@@ -2,18 +2,18 @@ import { CalendarEvent, Course, SelectedCourse, Session } from '@/types';
 import { getFilteredSessions } from './subsession-utils';
 
 const COURSE_COLORS = [
-  'bg-blue-100 border-blue-400 text-blue-900',
-  'bg-emerald-100 border-emerald-400 text-emerald-900',
-  'bg-violet-100 border-violet-400 text-violet-900',
-  'bg-amber-100 border-amber-400 text-amber-900',
-  'bg-rose-100 border-rose-400 text-rose-900',
-  'bg-cyan-100 border-cyan-400 text-cyan-900',
-  'bg-orange-100 border-orange-400 text-orange-900',
-  'bg-pink-100 border-pink-400 text-pink-900',
-  'bg-teal-100 border-teal-400 text-teal-900',
-  'bg-indigo-100 border-indigo-400 text-indigo-900',
-  'bg-lime-100 border-lime-400 text-lime-900',
-  'bg-fuchsia-100 border-fuchsia-400 text-fuchsia-900',
+  'bg-blue-100 dark:bg-blue-900/40 border-blue-400 dark:border-blue-700 text-blue-900 dark:text-blue-100',
+  'bg-emerald-100 dark:bg-emerald-900/40 border-emerald-400 dark:border-emerald-700 text-emerald-900 dark:text-emerald-100',
+  'bg-violet-100 dark:bg-violet-900/40 border-violet-400 dark:border-violet-700 text-violet-900 dark:text-violet-100',
+  'bg-amber-100 dark:bg-amber-900/40 border-amber-400 dark:border-amber-700 text-amber-900 dark:text-amber-100',
+  'bg-rose-100 dark:bg-rose-900/40 border-rose-400 dark:border-rose-700 text-rose-900 dark:text-rose-100',
+  'bg-cyan-100 dark:bg-cyan-900/40 border-cyan-400 dark:border-cyan-700 text-cyan-900 dark:text-cyan-100',
+  'bg-orange-100 dark:bg-orange-900/40 border-orange-400 dark:border-orange-700 text-orange-900 dark:text-orange-100',
+  'bg-pink-100 dark:bg-pink-900/40 border-pink-400 dark:border-pink-700 text-pink-900 dark:text-pink-100',
+  'bg-teal-100 dark:bg-teal-900/40 border-teal-400 dark:border-teal-700 text-teal-900 dark:text-teal-100',
+  'bg-indigo-100 dark:bg-indigo-900/40 border-indigo-400 dark:border-indigo-700 text-indigo-900 dark:text-indigo-100',
+  'bg-lime-100 dark:bg-lime-900/40 border-lime-400 dark:border-lime-700 text-lime-900 dark:text-lime-100',
+  'bg-fuchsia-100 dark:bg-fuchsia-900/40 border-fuchsia-400 dark:border-fuchsia-700 text-fuchsia-900 dark:text-fuchsia-100',
 ];
 
 export function getCourseColor(index: number): string {
@@ -77,6 +77,40 @@ export function findConflicts(events: CalendarEvent[]): Set<string> {
   }
 
   return conflictIds;
+}
+
+export function checkNewCourseConflict(
+  courses: Course[],
+  selectedCourses: SelectedCourse[],
+  newCourseCode: string,
+  newSectionNumber: number,
+  ignoreCourseCode?: string
+): { hasConflict: boolean; conflictingCourseName?: string } {
+  const newCourse = courses.find(c => c.code === newCourseCode);
+  if (!newCourse) return { hasConflict: false };
+
+  const newSection = newCourse.sections.find(s => s.number === newSectionNumber);
+  if (!newSection) return { hasConflict: false };
+
+  for (const selected of selectedCourses) {
+    if (selected.courseCode === ignoreCourseCode) continue;
+    
+    const existingCourse = courses.find(c => c.code === selected.courseCode);
+    if (!existingCourse) continue;
+
+    const existingSection = existingCourse.sections.find(s => s.number === selected.sectionNumber);
+    if (!existingSection) continue;
+
+    for (const newSession of newSection.sessions) {
+      for (const existingSession of existingSection.sessions) {
+        if (hasConflict(newSession, existingSession)) {
+          return { hasConflict: true, conflictingCourseName: existingCourse.name };
+        }
+      }
+    }
+  }
+
+  return { hasConflict: false };
 }
 
 export function getPreviewEvents(

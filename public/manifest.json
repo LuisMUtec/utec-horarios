@@ -1,0 +1,17 @@
+{
+  "name": "UTEC Horarios Premium",
+  "short_name": "UTEC Horarios",
+  "description": "Visualizador de horarios premium para alumnos de UTEC.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
