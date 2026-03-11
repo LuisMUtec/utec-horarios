@@ -1,4 +1,5 @@
 import { CalendarEvent, Course, SelectedCourse, Session } from '@/types';
+import { getFilteredSessions } from './subsession-utils';
 
 const COURSE_COLORS = [
   'bg-blue-100 dark:bg-blue-900/40 border-blue-400 dark:border-blue-700 text-blue-900 dark:text-blue-100',
@@ -33,8 +34,9 @@ export function getCalendarEvents(
     if (!section) return;
 
     const color = getCourseColor(idx);
+    const filteredSessions = getFilteredSessions(section, selected.subsessionId);
 
-    for (const session of section.sessions) {
+    for (const session of filteredSessions) {
       events.push({
         courseCode: course.code,
         courseName: course.name,
@@ -115,7 +117,8 @@ export function getPreviewEvents(
   courses: Course[],
   courseCode: string,
   sectionNumber: number,
-  colorIndex: number
+  colorIndex: number,
+  subsessionId?: string
 ): CalendarEvent[] {
   const course = courses.find(c => c.code === courseCode);
   if (!course) return [];
@@ -124,8 +127,9 @@ export function getPreviewEvents(
   if (!section) return [];
 
   const color = getCourseColor(colorIndex);
+  const filteredSessions = getFilteredSessions(section, subsessionId);
 
-  return section.sessions.map(session => ({
+  return filteredSessions.map(session => ({
     courseCode: course.code,
     courseName: course.name,
     session,
