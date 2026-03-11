@@ -243,14 +243,33 @@ export default function Home() {
         </div>
       </main>
 
-      {toast && (
-        <ToastAlert
-          key={toast.id}
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+      <footer className="max-w-[1400px] mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gray-100 dark:border-gray-800 transition-colors duration-300">
+        <div className="flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500">
+          <span>Hecho con por</span>
+          <div className="flex items-center gap-3">
+            <a 
+              href="https://github.com/LuisMUtec" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-blue-500 transition-colors"
+            >
+              LuisMUtec
+            </a>
+            <span className="text-gray-300 dark:text-gray-700">|</span>
+            <a 
+              href="https://github.com/JoelxD12O" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-blue-500 transition-colors"
+            >
+              JoelxD12O
+            </a>
+          </div>
+        </div>
+        <div className="text-[10px] text-gray-300 dark:text-gray-600">
+          Utec Horarios © 2026
+        </div>
+      </footer>
     </div>
   );
 }
