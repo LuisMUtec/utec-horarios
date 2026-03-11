@@ -2,7 +2,7 @@
 
 import { Course, SelectedCourse } from '@/types';
 import { getCourseColor } from '@/lib/schedule-utils';
-import { analyzeSection } from '@/lib/subsession-utils';
+import { analyzeSection, getFilteredSessions } from '@/lib/subsession-utils';
 
 interface Props {
   courses: Course[];
@@ -36,6 +36,10 @@ export default function SelectedCoursesList({
         const section = course.sections.find(s => s.number === selected.sectionNumber);
         const analysis = section ? analyzeSection(section) : null;
         const hasSubsessions = analysis && analysis.subsessionGroups.length > 0;
+
+        // Get professors from the active sessions (filtered by subsession if applicable)
+        const filteredSessions = section ? getFilteredSessions(section, selected.subsessionId) : [];
+        const professors = [...new Set(filteredSessions.map(s => s.professor).filter(Boolean))];
 
         const colorClass = getCourseColor(idx);
         const bgColor = colorClass.split(' ')[0];
@@ -77,6 +81,11 @@ export default function SelectedCoursesList({
                   </select>
                 )}
               </div>
+              {professors.length > 0 && (
+                <div className="mt-1 text-[11px] text-gray-500 dark:text-gray-400 truncate">
+                  {professors.map(p => p.split(',')[0]).join(' / ')}
+                </div>
+              )}
             </div>
             <button
               onClick={() => onRemoveCourse(course.code)}

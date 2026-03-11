@@ -244,6 +244,7 @@ export default function Home() {
                 courses={displayedCourses}
                 selectedCourses={selectedCourses}
                 onAddCourse={handleAddCourse}
+                onRemoveCourse={handleRemoveCourse}
                 onHoverSection={setPreviewSection}
               />
             </div>
