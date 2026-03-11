@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# UTEC Horarios
 
-## Getting Started
+Aplicación web para planificar y armar tu horario de clases en UTEC (Universidad de Tecnología e Ingeniería). Visualiza los cursos disponibles en un calendario semanal, detecta cruces de horario automáticamente y guarda tu selección en el navegador.
 
-First, run the development server:
+## Características
+
+- **Búsqueda de cursos** por código o nombre
+- **Calendario semanal** interactivo con bloques de horario por curso
+- **Detección de conflictos** automática al agregar cursos o cambiar secciones
+- **Previsualización** de secciones antes de seleccionarlas
+- **Subsesiones** — selección independiente de laboratorios, teorías, etc.
+- **Carga Hábil** — sube tu PDF de carga hábil para filtrar solo los cursos que puedes llevar
+- **Persistencia** en localStorage (tu horario se guarda entre sesiones)
+- **Modo oscuro/claro**
+- **431 cursos**, 744 secciones y 1806 sesiones (período 2026-1)
+
+## Tech Stack
+
+- **Next.js 16** (App Router)
+- **React 19**
+- **TypeScript**
+- **Tailwind CSS 4**
+
+## Inicio rápido
 
 ```bash
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Estructura del proyecto
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── page.tsx              # Página principal con estado global
+│   └── api/parse-pdf/        # API para procesar PDF de Carga Hábil
+├── components/
+│   ├── CourseSearch.tsx       # Buscador de cursos
+│   ├── SectionSelector.tsx   # Selector de secciones y subsesiones
+│   ├── WeeklyCalendar.tsx    # Calendario semanal
+│   ├── CalendarBlock.tsx     # Bloque individual en el calendario
+│   ├── SelectedCoursesList.tsx # Lista de cursos seleccionados
+│   ├── ThemeToggle.tsx       # Toggle modo oscuro/claro
+│   └── ToastAlert.tsx        # Notificaciones toast
+├── lib/
+│   ├── schedule-utils.ts     # Colores, conflictos, búsqueda, constantes
+│   ├── subsession-utils.ts   # Análisis de subsesiones (labs, teorías)
+│   └── storage.ts            # Helpers de localStorage
+├── data/
+│   └── courses.json          # Datos de cursos extraídos del PDF
+└── types/
+    └── index.ts              # Tipos: Course, Section, Session, etc.
 
-## Learn More
+scripts/
+└── parse-pdf.js              # Parser del PDF de horarios (pdfjs-dist)
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Actualización de datos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Los datos de cursos se extraen del PDF oficial de horarios de UTEC usando el script de parsing:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+node scripts/parse-pdf.js
+```
 
-## Deploy on Vercel
+El script usa `pdfjs-dist` con extracción basada en posición (no texto) para manejar campos concatenados en el PDF. Genera `src/data/courses.json`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts disponibles
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Comando | Descripción |
+|---------|-------------|
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Build de producción |
+| `npm run start` | Servidor de producción |
+| `npm run lint` | Linter (ESLint) |
