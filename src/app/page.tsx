@@ -12,6 +12,7 @@ import SelectedCoursesList from '@/components/SelectedCoursesList';
 import WeeklyCalendar from '@/components/WeeklyCalendar';
 import ThemeToggle from '@/components/ThemeToggle';
 import ToastAlert from '@/components/ToastAlert';
+import FeedbackButton from '@/components/FeedbackButton';
 
 const courses = coursesData as Course[];
 
@@ -340,6 +341,8 @@ export default function Home() {
           Utec Horarios © 2026
         </div>
       </footer>
+
+      <FeedbackButton />
 
       {toast && (
         <ToastAlert
