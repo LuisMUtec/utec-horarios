@@ -9,6 +9,7 @@ import {
   END_HOUR,
   timeToMinutes,
   findConflicts,
+  computeOverlapLayout,
 } from '@/lib/schedule-utils';
 import CalendarBlock from './CalendarBlock';
 
@@ -79,23 +80,29 @@ export default function WeeklyCalendar({ events, previewEvents = [], calendarRef
                 ))}
 
                 {/* Events */}
-                {dayEvents.map(({ event, idx }) => {
-                  const startMin = timeToMinutes(event.session.startTime);
-                  const endMin = timeToMinutes(event.session.endTime);
-                  const top = ((startMin - START_HOUR * 60) / 60) * HOUR_HEIGHT;
-                  const height = ((endMin - startMin) / 60) * HOUR_HEIGHT;
-                  const hasConflict = conflicts.has(`${idx}`);
+                {(() => {
+                  const layout = computeOverlapLayout(dayEvents);
+                  return dayEvents.map(({ event, idx }) => {
+                    const startMin = timeToMinutes(event.session.startTime);
+                    const endMin = timeToMinutes(event.session.endTime);
+                    const top = ((startMin - START_HOUR * 60) / 60) * HOUR_HEIGHT;
+                    const height = ((endMin - startMin) / 60) * HOUR_HEIGHT;
+                    const hasConflict = conflicts.has(`${idx}`);
+                    const overlap = layout.get(idx);
 
-                  return (
-                    <CalendarBlock
-                      key={`${event.courseCode}-${idx}`}
-                      event={event}
-                      top={top}
-                      height={height}
-                      hasConflict={hasConflict}
-                    />
-                  );
-                })}
+                    return (
+                      <CalendarBlock
+                        key={`${event.courseCode}-${idx}`}
+                        event={event}
+                        top={top}
+                        height={height}
+                        hasConflict={hasConflict}
+                        column={overlap?.column ?? 0}
+                        totalColumns={overlap?.totalColumns ?? 1}
+                      />
+                    );
+                  });
+                })()}
 
                 {/* Preview Events */}
                 {previewEvents

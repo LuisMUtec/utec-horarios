@@ -141,6 +141,78 @@ export function getPreviewEvents(
   }));
 }
 
+export interface OverlapLayout {
+  column: number;
+  totalColumns: number;
+}
+
+export function computeOverlapLayout(
+  dayEvents: { event: CalendarEvent; idx: number }[]
+): Map<number, OverlapLayout> {
+  const result = new Map<number, OverlapLayout>();
+  if (dayEvents.length === 0) return result;
+
+  // Sort by start time, then by end time
+  const sorted = [...dayEvents].sort((a, b) => {
+    const aStart = timeToMinutes(a.event.session.startTime);
+    const bStart = timeToMinutes(b.event.session.startTime);
+    if (aStart !== bStart) return aStart - bStart;
+    return timeToMinutes(a.event.session.endTime) - timeToMinutes(b.event.session.endTime);
+  });
+
+  // Build overlap clusters (groups of transitively overlapping events)
+  const clusters: typeof sorted[] = [];
+  let currentCluster: typeof sorted = [sorted[0]];
+  let clusterEnd = timeToMinutes(sorted[0].event.session.endTime);
+
+  for (let i = 1; i < sorted.length; i++) {
+    const start = timeToMinutes(sorted[i].event.session.startTime);
+    if (start < clusterEnd) {
+      // Overlaps with current cluster
+      currentCluster.push(sorted[i]);
+      clusterEnd = Math.max(clusterEnd, timeToMinutes(sorted[i].event.session.endTime));
+    } else {
+      clusters.push(currentCluster);
+      currentCluster = [sorted[i]];
+      clusterEnd = timeToMinutes(sorted[i].event.session.endTime);
+    }
+  }
+  clusters.push(currentCluster);
+
+  // Assign columns within each cluster
+  for (const cluster of clusters) {
+    // columns[col] = end time of the last event placed in that column
+    const columns: number[] = [];
+
+    for (const item of cluster) {
+      const itemStart = timeToMinutes(item.event.session.startTime);
+      // Find the first column where the event fits (no overlap)
+      let placed = false;
+      for (let col = 0; col < columns.length; col++) {
+        if (itemStart >= columns[col]) {
+          columns[col] = timeToMinutes(item.event.session.endTime);
+          result.set(item.idx, { column: col, totalColumns: 0 }); // totalColumns set later
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) {
+        result.set(item.idx, { column: columns.length, totalColumns: 0 });
+        columns.push(timeToMinutes(item.event.session.endTime));
+      }
+    }
+
+    // Set totalColumns for all events in this cluster
+    const total = columns.length;
+    for (const item of cluster) {
+      const layout = result.get(item.idx)!;
+      layout.totalColumns = total;
+    }
+  }
+
+  return result;
+}
+
 export const DAYS = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'] as const;
 export const DAY_LABELS: Record<string, string> = {
   Lun: 'Lunes',

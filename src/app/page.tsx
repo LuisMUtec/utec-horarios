@@ -5,7 +5,7 @@ import { toBlob } from 'html-to-image';
 import coursesData from '@/data/courses.json';
 import { Course, SelectedCourse } from '@/types';
 import { getCalendarEvents, getPreviewEvents, checkNewCourseConflict } from '@/lib/schedule-utils';
-import { loadSelectedCourses, saveSelectedCourses } from '@/lib/storage';
+import { loadSelectedCourses, saveSelectedCourses, loadAllowConflicts, saveAllowConflicts } from '@/lib/storage';
 import { analyzeSection } from '@/lib/subsession-utils';
 import CourseSearch from '@/components/CourseSearch';
 import SelectedCoursesList from '@/components/SelectedCoursesList';
@@ -37,6 +37,7 @@ export default function Home() {
   const [studentName, setStudentName] = useState<string | null>(null);
   const [courseTipos, setCourseTipos] = useState<Record<string, string> | null>(null);
   
+  const [allowConflicts, setAllowConflicts] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' | 'info'; id: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
@@ -50,6 +51,7 @@ export default function Home() {
     // Migration: auto-assign subsessionId for old data that lacks it
     const loaded = loadSelectedCourses().map(autoAssignSubsession);
     setSelectedCourses(loaded);
+    setAllowConflicts(loadAllowConflicts());
     setMounted(true);
   }, []);
 
@@ -59,23 +61,30 @@ export default function Home() {
     }
   }, [selectedCourses, mounted]);
 
+  const handleToggleConflicts = useCallback((value: boolean) => {
+    setAllowConflicts(value);
+    saveAllowConflicts(value);
+  }, []);
+
   const handleAddCourse = useCallback((courseCode: string, sectionNumber: number, subsessionId?: string) => {
     setSelectedCourses(prev => {
       const newSelected: SelectedCourse = { courseCode, sectionNumber, subsessionId };
       const withSubsession = autoAssignSubsession(newSelected);
       const existing = prev.findIndex(s => s.courseCode === courseCode);
-      const conflictCheck = checkNewCourseConflict(
-        courses,
-        prev,
-        courseCode,
-        sectionNumber,
-        withSubsession.subsessionId,
-        courseCode
-      );
-      
-      if (conflictCheck.hasConflict) {
-        showToast(`No se puede agregar porque hay un cruce de horario con: ${conflictCheck.conflictingCourseName}`, 'error');
-        return prev;
+      if (!allowConflicts) {
+        const conflictCheck = checkNewCourseConflict(
+          courses,
+          prev,
+          courseCode,
+          sectionNumber,
+          withSubsession.subsessionId,
+          courseCode
+        );
+
+        if (conflictCheck.hasConflict) {
+          showToast(`No se puede agregar porque hay un cruce de horario con: ${conflictCheck.conflictingCourseName}`, 'error');
+          return prev;
+        }
       }
 
       if (existing >= 0) {
@@ -85,7 +94,7 @@ export default function Home() {
       }
       return [...prev, withSubsession];
     });
-  }, [showToast]);
+  }, [showToast, allowConflicts]);
 
   const handleRemoveCourse = useCallback((courseCode: string) => {
     setSelectedCourses(prev => prev.filter(s => s.courseCode !== courseCode));
@@ -257,6 +266,27 @@ export default function Home() {
                 onRemoveCourse={handleRemoveCourse}
                 onHoverSection={setPreviewSection}
               />
+            </div>
+
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 transition-colors duration-300">
+              <label className="flex items-center justify-between cursor-pointer">
+                <span className="text-xs text-gray-600 dark:text-gray-300">Permitir cruces de horario</span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={allowConflicts}
+                  onClick={() => handleToggleConflicts(!allowConflicts)}
+                  className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${
+                    allowConflicts ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-3.5 w-3.5 rounded-full bg-white shadow-sm transition-transform ${
+                      allowConflicts ? 'translate-x-[18px]' : 'translate-x-[3px]'
+                    }`}
+                  />
+                </button>
+              </label>
             </div>
 
             <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 transition-colors duration-300">
