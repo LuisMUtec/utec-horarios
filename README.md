@@ -65,7 +65,7 @@ src/
 │   └── courses.json            # Datos de cursos extraídos del PDF
 ├── types/
 │   └── index.ts                # Tipos: Course, Section, Session, etc.
-└── middleware.ts               # Rate limiting en las rutas /api
+└── proxy.ts                    # Rate limiting en las rutas /api
 
 scripts/
 └── parse-pdf.js                # Parser del PDF de horarios (pdfjs-dist)
