@@ -353,7 +353,13 @@ export function solveSchedule(
   }
 
   function search(depth: number): void {
-    if (nodes >= maxNodes) return;
+    // Marcar acá y no sólo en el bucle: si el tope se alcanza procesando la
+    // última opción de cada nivel, ningún for enclosing vuelve a evaluar su
+    // guarda y la búsqueda se daría por completa sin serlo.
+    if (nodes >= maxNodes) {
+      exhaustive = false;
+      return;
+    }
 
     if (depth === groups.length) {
       record();

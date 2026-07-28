@@ -259,6 +259,19 @@ describe('solveSchedule — entradas degeneradas', () => {
     expect(result.candidates).toHaveLength(2);
   });
 
+  it('no declara completa una búsqueda cortada en la rama más a la derecha', () => {
+    // El tope se agota al bajar por la última opción de cada nivel, así que
+    // ningún bucle enclosing vuelve a evaluar su guarda: sólo la guarda de
+    // entrada de la recursión puede marcar la truncación.
+    const courses = [
+      curso('AA', [{ number: 1, sessions: [sesion('Lun', '09:00', '11:00')] }]),
+      curso('BB', [{ number: 1, sessions: [sesion('Lun', '11:00', '13:00')] }]),
+    ];
+    const result = solveSchedule(courses, ['AA', 'BB'], { maxNodes: 1 });
+    expect(result.candidates).toEqual([]);
+    expect(result.exhaustive).toBe(false);
+  });
+
   it('al pasarse del tope de nodos avisa que el resultado puede no ser óptimo', () => {
     const result = solveSchedule(coursesData as Course[], ['CS6003', 'CC6105', 'CC6101', 'HH6001', 'PI6001'], {
       maxNodes: 500,
