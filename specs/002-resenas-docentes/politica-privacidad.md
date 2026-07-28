@@ -13,10 +13,9 @@
 >    Mientras no exista, el documento afirma un borrado que no ocurre.
 > 3. **Revisión legal si te vas a apoyar en la Ley 29733 peruana.** El plazo de
 >    30 días y el alcance de los derechos están puestos con criterio de producto,
->    no verificados contra la norma. El punto más expuesto es la conservación
->    indefinida del correo institucional de un usuario sancionado: es un dato
->    personal que sobrevive a un pedido de eliminación, y la justificación —que
->    sin él la expulsión no sería permanente— es de producto, no jurídica.
+>    no verificados contra la norma. Lo más expuesto: **la baja de cuenta cierra
+>    el acceso pero conserva la identidad de forma indefinida.** Es una supresión
+>    débil, justificada por producto y no por derecho.
 
 ---
 
@@ -33,10 +32,9 @@ reseñas de docentes por curso. No es un servicio oficial de UTEC.
 claro u oscuro y tus preferencias se guardan solo en tu propio navegador. Si
 borras los datos del sitio, desaparecen.
 
-Hay una excepción y preferimos que la sepas: cuando despliegas un curso para ver
-a sus docentes, tu navegador le pide a nuestro servidor las reseñas de ese
-curso. Viaja el curso que estás mirando, no la lista de los que elegiste. No
-abrimos una cuenta ni armamos un perfil tuyo con eso.
+Con una excepción: al desplegar un curso, tu navegador le pide a nuestro servidor
+las reseñas de ese curso. Viaja el curso que miras, no la lista de los que
+elegiste, y no armamos ningún perfil tuyo con eso.
 
 Puedes ver los promedios, el porcentaje de recomendación y los conteos de los
 docentes sin iniciar sesión.
@@ -64,10 +62,9 @@ Guardamos tu puntuación, tu respuesta a si recomendarías llevar ese curso con
 ese docente, tu comentario si escribiste uno, y las fechas de publicación y de
 última edición, asociados a tu cuenta.
 
-Guardamos también tu declaración de que llevaste el curso con ese docente. Es lo
-único que respalda tu reseña —no la comprobamos contra tu matrícula ni contra
-tus notas—, y por eso la conservamos: si alguien reporta esa reseña, forma parte
-de lo que se revisa.
+Guardamos también tu declaración de que llevaste el curso con ese docente. No la
+comprobamos contra tu matrícula ni tus notas: es lo único que respalda tu reseña,
+y forma parte de lo que se revisa si alguien la reporta.
 
 Para escribir un comentario te pedimos además tu **carrera** y tu **ciclo
 actual**. Los usamos como contexto interno de moderación. No se muestran nunca.
@@ -114,8 +111,9 @@ autenticación), **Vercel** (alojamiento y analítica de uso agregada) y
   días ya no la ve nadie y no cuenta en ningún promedio; solo sigue disponible
   para resolver un reporte que estuviera abierto sobre ella y para que borrar y
   volver a publicar no sirva para saltarse el límite de publicación.
-- **Si pides eliminar tu cuenta, se eliminan también todas tus reseñas**, con el
-  mismo plazo de 30 días hasta el borrado definitivo.
+- **Si pides dar de baja tu cuenta**, se eliminan todas tus reseñas con el mismo
+  plazo de 30 días, y se borran tu carrera y tu ciclo. La cuenta no se borra: se
+  cierra. Abajo está qué queda y por qué.
 
 ## Tus opciones
 
@@ -124,29 +122,37 @@ autenticación), **Vercel** (alojamiento y analítica de uso agregada) y
 - Puedes **corregir** tu carrera y tu ciclo desde tu perfil.
 - Puedes usar toda la parte pública **sin iniciar sesión**.
 
-Para lo demás —saber qué datos tenemos tuyos, corregirlos o eliminar tu cuenta—
-escríbenos a **privacidad@mail.luismaquera.dev**. Te respondemos en un máximo de
-30 días naturales.
-
-Eliminar la cuenta se hace a mano, no con un botón: escríbenos desde tu correo
-institucional y lo procesamos.
+Para lo demás —saber qué datos tenemos tuyos, corregirlos o dar de baja tu
+cuenta— escríbenos a **privacidad@mail.luismaquera.dev**. Te respondemos en un
+máximo de 30 días naturales.
 
 Ese buzón es solo para privacidad y datos. Para sugerencias o errores de la
 aplicación, usa el botón de contacto de la propia app.
+
+### Qué significa "dar de baja" acá
+
+La baja se hace a mano, no con un botón: escríbenos desde tu correo institucional
+y la procesamos.
+
+**La baja cierra tu cuenta, no la borra.**
+
+Desaparecen tu acceso, todas tus reseñas, tu carrera y tu ciclo.
+
+Queda el registro de que esa cuenta existió, con su correo. A los 30 días ya no
+hay ninguna reseña tuya asociada a él.
+
+Lo conservamos por una razón: sin ese registro, alguien a quien le retiramos el
+acceso podría darse de baja, registrarse otra vez con el mismo correo y empezar
+de cero.
 
 ## Si se retira tu acceso
 
 Si incumples las normas de la comunidad podemos retirarte el acceso de forma
 permanente y eliminar todas tus reseñas. Te informaremos del motivo.
 
-Esto es **la única excepción** a todo lo anterior: el registro de la sanción
-—**tu correo institucional**, el motivo y la fecha— se conserva de forma
-indefinida, y se conserva aunque pidas eliminar tu cuenta.
-
-Guardamos el correo y no un identificador interno a propósito, porque el
-identificador desaparece con la cuenta y el correo no. Sin ese registro una
-expulsión permanente no sería permanente: bastaría con borrar la cuenta y volver
-a entrar. Con él, además, ese correo no puede volver a registrarse.
+Esto es **la única excepción** a todo lo anterior: el motivo y la fecha de la
+sanción se conservan en tu cuenta de forma indefinida, también si después pides
+la baja.
 
 Tus reseñas sí se eliminan y se purgan con el plazo normal de 30 días.
 
