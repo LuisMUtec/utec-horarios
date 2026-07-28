@@ -22,6 +22,9 @@ habría servido saber a ti antes de llevar ese curso.
 
 Puedes publicar solo una puntuación, sin escribir nada. También sirve.
 
+Tu reseña queda atada a ese docente en ese curso: si deja de dictarlo, deja de
+mostrarse, y vuelve a aparecer si vuelve a dictarlo.
+
 ## Qué no va
 
 - **Insultos o ataques personales** contra el docente o contra cualquiera.

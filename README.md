@@ -28,7 +28,9 @@ Aplicación web para planificar y armar tu horario de clases en UTEC (Universida
 
 ## Inicio rápido
 
-Requisitos: **Node >= 20.9** y **pnpm** (el proyecto fija la versión con el campo `packageManager`; si usás Corepack, `corepack enable` la instala sola).
+Requisitos: **Node >= 22.18** y **pnpm** (el proyecto fija la versión con el campo `packageManager`; si usás Corepack, `corepack enable` la instala sola).
+
+Esa versión de Node la pide `scripts/generate-offer-migration.mts`: es TypeScript que corre con `node` a secas, apoyado en el type stripping nativo, sin flag ni transpilador.
 
 ```bash
 # Instalar dependencias
@@ -108,7 +110,9 @@ Estas contraseñas son públicas: están en el repo. `supabase db push` sube sol
 
 ### Migraciones
 
-El esquema vive en `supabase/migrations/`, en archivos `<timestamp>_<slug>.sql` que se aplican en orden. Para una tabla o función nueva:
+El esquema vive en `supabase/migrations/`, en archivos `<timestamp>_<slug>.sql` que se aplican en orden. Hoy son cinco tablas y dos vistas en `public`, más un esquema `private`, fuera de la Data API, con las funciones de moderación —que solo invoca `service_role`— y los ayudantes que usan las políticas: el procedimiento está en [`docs/moderacion.md`](docs/moderacion.md) y el porqué del diseño en [`specs/002-resenas-docentes/plan.md`](specs/002-resenas-docentes/plan.md).
+
+Para una tabla o función nueva:
 
 ```bash
 supabase migration new nombre_del_cambio   # crea el archivo vacío
@@ -164,13 +168,18 @@ supabase/
 ├── config.toml                 # Config del stack local (puertos, auth, hooks)
 ├── migrations/                 # Esquema y hooks de la base de datos
 ├── seed.sql                    # Datos de desarrollo (solo local)
+├── tests/                      # Tests pgTAP (RLS, reglas, moderación)
 └── functions/send-email/       # Edge Function: correos de Auth vía Resend
 
+tests/                          # Tests de Vitest (*.test.ts)
+
 scripts/
-└── parse-pdf.js                # Parser del PDF de horarios (pdfjs-dist)
+├── parse-pdf.js                # Parser del PDF de horarios (pdfjs-dist)
+└── generate-offer-migration.mts # Migración de la oferta docente–curso
 
 docs/
-└── auth.md                     # Decisiones de autenticación y su porqué
+├── auth.md                     # Decisiones de autenticación y su porqué
+└── moderacion.md               # Bandeja de reportes y bajas de cuenta
 ```
 
 ## Actualización de datos
@@ -183,6 +192,15 @@ pnpm parse-pdf
 
 El script usa `pdfjs-dist` con extracción basada en posición (no texto) para manejar campos concatenados en el PDF. Genera `src/data/courses.json`.
 
+Con el `courses.json` nuevo hay que refrescar la oferta de la base, que es la que decide qué pares docente–curso admiten reseñas:
+
+```bash
+pnpm diff-oferta      # lista los pares que entran y los que salen, sin escribir nada
+pnpm generate-offer   # emite la migración en supabase/migrations/
+```
+
+El orden importa: el diff se mira **antes** de generar, porque un par que sale deja de mostrar sus reseñas y un correo mal parseado se ve igual que un cambio real de docente.
+
 Para cambiar de ciclo: reemplaza `consulta_horario.pdf`, corre el script y actualiza el período en `src/app/layout.tsx` (título) y `src/app/page.tsx` (header).
 
 ## Scripts disponibles
@@ -193,9 +211,13 @@ Para cambiar de ciclo: reemplaza `consulta_horario.pdf`, corre el script y actua
 | `pnpm build` | Build de producción |
 | `pnpm start` | Servidor de producción |
 | `pnpm lint` | Linter (ESLint) |
+| `pnpm typecheck` | Chequeo de tipos (`tsc --noEmit`) |
 | `pnpm test` | Tests (Vitest) |
 | `pnpm test:watch` | Tests en modo watch |
+| `pnpm test:db` | Tests pgTAP de la base (`supabase test db`, pide `supabase start`) |
 | `pnpm parse-pdf` | Regenera `courses.json` desde el PDF de horarios |
+| `pnpm diff-oferta` | Lista los pares docente–curso que entran y salen de la oferta |
+| `pnpm generate-offer` | Emite la migración que refresca la oferta |
 
 ## Tests
 
@@ -212,6 +234,17 @@ pnpm test
 Después de correr `pnpm parse-pdf` para un ciclo nuevo, `pnpm test` valida los datos generados antes de deployar.
 
 Las migraciones y el seed no se prueban con Vitest: los valida el job `supabase` del CI, que levanta el stack local y comprueba que un estudiante sembrado inicia sesión y que el hook de dominio rechaza cuentas ajenas. Cubre las dos cosas que se rompen en silencio: una migración que ya no aplica sobre una base limpia, y un seed que inserta datos que Auth después no puede leer.
+
+Lo que sí depende del motor —las políticas RLS, las reglas de las reseñas, las funciones de moderación— se prueba con pgTAP, en `supabase/tests/`. El mismo job del CI los corre, y en local:
+
+```bash
+supabase db reset   # imprescindible si cambiaron migrations/ o seed.sql
+pnpm test:db
+```
+
+`supabase start` aplica migraciones y seed solo cuando crea el volumen: sobre un
+stack ya levantado, los tests corren contra el esquema anterior y pasan o fallan
+por el motivo equivocado.
 
 ## Cómo contribuir
 

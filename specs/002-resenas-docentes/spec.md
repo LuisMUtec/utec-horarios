@@ -122,7 +122,7 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 - **Varios docentes en una sección**: cada docente se presenta y se evalúa por separado; no existe una puntuación de la sección completa.
 - **Mismo docente en cursos distintos**: sus puntuaciones no se mezclan; cada curso tiene su propio promedio y comentarios.
 - **Sesión sin docente en la oferta**: se muestra `Docente por asignar`. Es un estado distinto de `Sin puntuaciones`: allí hay un docente que todavía nadie evaluó, acá no hay a quién evaluar.
-- **Par docente–curso fuera de la oferta vigente**: solo se puede reseñar lo que aparece en la oferta actual. Si un par deja de dictarse, sus reseñas se conservan pero dejan de mostrarse hasta que el par vuelva a la oferta; es una consecuencia asumida de anclar las reseñas al flujo de armado del horario.
+- **Par docente–curso fuera de la oferta vigente**: solo se puede reseñar lo que aparece en la oferta actual. Si un par deja de dictarse, sus reseñas se conservan pero dejan de mostrarse, sin aviso en la interfaz, hasta que el par vuelva a la oferta; es una consecuencia asumida de anclar las reseñas al flujo de armado del horario.
 - **Promedio con una sola puntuación**: se muestra junto a `1 puntuación` para no aparentar mayor representatividad.
 - **Eliminación de la última reseña**: el resumen vuelve al estado `Sin puntuaciones`.
 - **Comentario vacío o compuesto solo por espacios**: se trata como una reseña sin comentario.

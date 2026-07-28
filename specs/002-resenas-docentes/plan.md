@@ -403,6 +403,12 @@ sobre `reviews` que no sea la fila propia.** `teacher_course_summaries` para `an
 
 ### RLS
 
+> **Corregido durante la implementación.** Este bloque describe el diseño acordado, pero
+> la implementación encontró que le faltaban dos piezas sin las cuales no se sostiene.
+> Están al final de la sección, en *[Lo que RLS por sí sola no cerró](#lo-que-rls-por-sí-sola-no-cerró)*:
+> los privilegios de `reviews` van **por columna**, y eliminar la reseña propia **no puede
+> ser un `update` directo**. Léelo antes de tomar este SQL como definitivo.
+
 ```sql
 alter table public.profiles        enable row level security;
 alter table public.reviews         enable row level security;
@@ -472,6 +478,49 @@ create policy "ver los reportes propios" on public.review_reports
 `deleted_by_author` (FR-039, FR-040): la política de privacidad promete 30 días de
 retención antes del borrado real y el edge case *Límite de publicación* exige que borrar
 no libere cupo. Un `delete` físico incumpliría las dos cosas.
+
+### Lo que RLS por sí sola no cerró
+
+Dos cosas que el bloque de arriba daba por resueltas y no lo estaban. Las dos salieron de
+correr el esquema, no de leerlo.
+
+**1. Los privilegios de `reviews` tienen que ser por columna.** Con `grant select, insert,
+update on public.reviews to authenticated`, un estudiante llega por la Data API y reescribe
+`published_at` de sus ocho reseñas 48 horas atrás; la novena entra. Medido de punta a punta.
+Por el lado del `insert` es peor: veinte filas antedatadas en un solo statement no tocan
+ninguna ventana, y FR-030 deja de existir. También quedaban a su alcance `purge_after` —los
+30 días de retención—, `comment_edited_at` —la marca `editado` de FR-055— y
+`course_teacher_id`, que mueve una reseña a otro docente.
+
+El `with check` de la política no puede cerrarlo, porque **RLS no ve la fila vieja**: no hay
+forma de escribir "`published_at` no cambió". El mecanismo correcto es el privilegio por
+columna, que es además lo que recomienda la documentación de Supabase para la Data API:
+
+```sql
+grant insert (author_id, course_teacher_id, rating, recommends, comment,
+              declared_attendance, respect_acknowledged) on public.reviews to authenticated;
+grant update (rating, recommends, comment, respect_acknowledged) on public.reviews to authenticated;
+```
+
+Un `grant` de más lo reabre en silencio, así que `supabase/tests/permisos.test.sql` fija la
+lista exacta de columnas en las dos direcciones: las selladas y las editables.
+
+**2. Eliminar la reseña propia no puede ser un `update`.** Postgres aplica la política de
+`select` también a la fila **resultante** de un `update`. Como esa política exige
+`state = 'active'`, la transición a `deleted_by_author` falla con *new row violates row-level
+security policy*: **el autor no puede eliminar su reseña**. Relajar la política tampoco vale,
+porque rompería la promesa de que durante los 30 días *"ya no la ve nadie"*, su autor incluido.
+
+La salida es una función `security definer` que comprueba la propiedad ella misma. Va en
+`public` y no en `private` porque tiene que ser alcanzable por la Data API:
+
+```sql
+public.delete_own_review(review_id uuid)   -- execute solo para authenticated
+```
+
+Con eso `state` sale del `grant update` por completo: el autor no lo toca nunca, ni para
+eliminar ni para resucitar lo que moderación eliminó (FR-048). El `with check` de la política
+de update se reduce a `state = 'active'`.
 
 ### Lo que RLS no puede sostener
 
@@ -803,8 +852,9 @@ Un cambio de horario no toca las reseñas: están ancladas a `(curso, correo del
 no a la sección ni al bloque. Un cambio de docente saca ese par de la oferta, `is_current`
 pasa a `false` y sus reseñas dejan de mostrarse.
 
-**Sin resolver.** Dos salidas: mostrar las reseñas de un par retirado en solo lectura y con
-una nota, o mantener el apagado y dejarlo asumido por escrito.
+**Resuelto**: se mantiene el apagado, asumido por escrito en el spec y en las normas de la
+comunidad. La alternativa —dejar el par retirado en solo lectura con una nota— se descartó
+por añadir un estado más a la interfaz para un caso de borde.
 
 `pnpm diff-oferta` lista los pares que aparecen y desaparecen antes de sobreescribir
 `courses.json`. Es el insumo del `is_current` y distingue un cambio real de un correo mal
@@ -836,6 +886,6 @@ parseado.
 - [x] Política de privacidad alineada con el diseño (sigue siendo borrador)
 - [ ] **Plan revisado y aprobado**
 - [ ] Las tres condiciones de publicación de la política, cumplidas
-- [ ] R6 resuelto: qué pasa con las reseñas de un docente reemplazado
+- [x] R6 resuelto: qué pasa con las reseñas de un docente reemplazado (se apagan con el par y reaparecen si vuelve a la oferta)
 - [ ] R1 medido con el primer componente
 - [ ] Reparto en PRs
