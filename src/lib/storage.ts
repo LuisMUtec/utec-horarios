@@ -18,6 +18,17 @@ function applyUpdate<T>(update: Updater<T>, prev: T): T {
   return typeof update === 'function' ? (update as (p: T) => T)(prev) : update;
 }
 
+/** Escribe en localStorage. Devuelve false si falló (Safari privado, cuota llena). */
+function writeKey(key: string, value: unknown): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // --- Cursos seleccionados ---
 
 const EMPTY_COURSES: SelectedCourse[] = [];
@@ -29,7 +40,11 @@ function readCourses(): SelectedCourse[] {
   if (typeof window === 'undefined') return EMPTY_COURSES;
   try {
     const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : EMPTY_COURSES;
+    if (!data) return EMPTY_COURSES;
+    const parsed = JSON.parse(data);
+    // JSON válido pero con la forma equivocada (objeto, string, null) haría
+    // reventar el .map() de page.tsx. Ante datos corruptos, arrancar de cero.
+    return Array.isArray(parsed) ? parsed : EMPTY_COURSES;
   } catch {
     return EMPTY_COURSES;
   }
@@ -49,18 +64,14 @@ export function getSelectedCoursesServerSnapshot(): SelectedCourse[] {
   return EMPTY_COURSES;
 }
 
-export function setSelectedCourses(update: Updater<SelectedCourse[]>): void {
+/** Devuelve false si no se pudo persistir (Safari privado, cuota llena). */
+export function setSelectedCourses(update: Updater<SelectedCourse[]>): boolean {
   const next = applyUpdate(update, getSelectedCoursesSnapshot());
-  if (next === coursesCache) return;
+  if (next === coursesCache) return true;
   coursesCache = next;
-  if (typeof window !== 'undefined') {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      // Ignore storage errors
-    }
-  }
+  const persisted = writeKey(STORAGE_KEY, next);
   coursesListeners.forEach((listener) => listener());
+  return persisted;
 }
 
 // --- Permitir cruces de horario ---
@@ -91,16 +102,12 @@ export function getAllowConflictsServerSnapshot(): boolean {
   return false;
 }
 
-export function setAllowConflicts(update: Updater<boolean>): void {
+/** Devuelve false si no se pudo persistir (Safari privado, cuota llena). */
+export function setAllowConflicts(update: Updater<boolean>): boolean {
   const next = applyUpdate(update, getAllowConflictsSnapshot());
-  if (next === allowConflictsCache) return;
+  if (next === allowConflictsCache) return true;
   allowConflictsCache = next;
-  if (typeof window !== 'undefined') {
-    try {
-      localStorage.setItem(ALLOW_CONFLICTS_KEY, JSON.stringify(next));
-    } catch {
-      // Ignore storage errors
-    }
-  }
+  const persisted = writeKey(ALLOW_CONFLICTS_KEY, next);
   allowConflictsListeners.forEach((listener) => listener());
+  return persisted;
 }

@@ -71,12 +71,21 @@ export default function Home() {
     setToast({ message, type, id: Date.now() });
   }, []);
 
+  // Los setters del store devuelven false si localStorage rechazó la escritura
+  // (Safari en modo privado, cuota llena). Sin esto el horario se perdería al
+  // recargar sin ningún aviso.
+  const warnIfNotPersisted = useCallback((persisted: boolean) => {
+    if (!persisted) {
+      showToast('No se pudo guardar tu horario. Si estás en modo privado, se perderá al cerrar la pestaña.', 'error');
+    }
+  }, [showToast]);
+
   const handleToggleConflicts = useCallback((value: boolean) => {
-    setAllowConflicts(value);
-  }, []);
+    warnIfNotPersisted(setAllowConflicts(value));
+  }, [warnIfNotPersisted]);
 
   const handleAddCourse = useCallback((courseCode: string, sectionNumber: number, subsessionId?: string) => {
-    setSelectedCourses(prevStored => {
+    warnIfNotPersisted(setSelectedCourses(prevStored => {
       // prevStored viene crudo del store; migrar para que el chequeo de cruces
       // opere sobre los mismos datos que muestra la UI.
       const prev = prevStored.map(autoAssignSubsession);
@@ -105,12 +114,12 @@ export default function Home() {
         return updated;
       }
       return [...prev, withSubsession];
-    });
-  }, [showToast, allowConflicts]);
+    }));
+  }, [showToast, allowConflicts, warnIfNotPersisted]);
 
   const handleRemoveCourse = useCallback((courseCode: string) => {
-    setSelectedCourses(prev => prev.filter(s => s.courseCode !== courseCode));
-  }, []);
+    warnIfNotPersisted(setSelectedCourses(prev => prev.filter(s => s.courseCode !== courseCode)));
+  }, [warnIfNotPersisted]);
 
   const events = getCalendarEvents(courses, selectedCourses);
 
@@ -308,7 +317,7 @@ export default function Home() {
                 </h2>
                 {selectedCourses.length > 0 && (
                   <button
-                    onClick={() => setSelectedCourses([])}
+                    onClick={() => warnIfNotPersisted(setSelectedCourses([]))}
                     className="text-xs text-red-500 hover:text-red-700"
                   >
                     Limpiar todo

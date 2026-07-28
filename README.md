@@ -91,7 +91,21 @@ Para cambiar de ciclo: reemplaza `consulta_horario.pdf`, corre el script y actua
 | `pnpm build` | Build de producción |
 | `pnpm start` | Servidor de producción |
 | `pnpm lint` | Linter (ESLint) |
+| `pnpm test` | Tests (Vitest) |
+| `pnpm test:watch` | Tests en modo watch |
 | `pnpm parse-pdf` | Regenera `courses.json` desde el PDF de horarios |
+
+## Tests
+
+```bash
+pnpm test
+```
+
+- **`tests/courses-data.test.ts`** — invariantes sobre `courses.json`: días válidos, horarios `HH:MM` con fin posterior al inicio, sesiones dentro de la grilla 07:00-22:00, códigos únicos y bien formados, `enrolled <= capacity`. Es la red de seguridad del update de ciclo: si el parseo del PDF sale mal, falla acá y no en producción.
+- **`tests/parse-pdf.test.ts`** — golden test: parsea el PDF y lo compara contra el `courses.json` commiteado. Detecta tanto un PDF cambiado sin regenerar como un cambio de comportamiento de `pdfjs-dist`.
+- **`tests/storage.test.ts`** — el store de `localStorage`, incluyendo la estabilidad referencial de `getSnapshot` (si se rompe, `useSyncExternalStore` entra en loop infinito), datos corruptos y fallos de escritura.
+
+Después de correr `pnpm parse-pdf` para un ciclo nuevo, `pnpm test` valida los datos generados antes de deployar.
 
 ## Cómo contribuir
 

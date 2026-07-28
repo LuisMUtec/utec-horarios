@@ -199,9 +199,7 @@ async function parsePDF() {
     }
   }
 
-  const outputPath = path.join(__dirname, '..', 'src', 'data', 'courses.json');
-  fs.writeFileSync(outputPath, JSON.stringify(courses, null, 2));
-  console.log(`\nWritten to ${outputPath}`);
+  return courses;
 }
 
 function assignToColumns(rowItems, colStarts) {
@@ -258,4 +256,17 @@ function parseRecord(rec) {
   };
 }
 
-parsePDF().catch(console.error);
+const OUTPUT_PATH = path.join(__dirname, '..', 'src', 'data', 'courses.json');
+
+// Solo escribe cuando se corre como CLI. Al importarlo (tests) parsePDF es puro:
+// devuelve los cursos sin tocar courses.json.
+if (require.main === module) {
+  parsePDF()
+    .then(courses => {
+      fs.writeFileSync(OUTPUT_PATH, JSON.stringify(courses, null, 2));
+      console.log(`\nWritten to ${OUTPUT_PATH}`);
+    })
+    .catch(console.error);
+}
+
+module.exports = { parsePDF, OUTPUT_PATH };
