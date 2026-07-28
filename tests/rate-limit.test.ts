@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
+  MAX_TRACKED_CLIENTS,
   RATE_LIMIT,
   RATE_LIMIT_WINDOW_MS,
   getClientKey,
@@ -61,8 +62,59 @@ describe('isRateLimited', () => {
     expect(isRateLimited(store, 'ip', RATE_LIMIT_WINDOW_MS + 1)).toBe(false);
   });
 
-  it('no reinicia justo en el borde de la ventana', () => {
-    for (let i = 0; i < RATE_LIMIT; i++) isRateLimited(store, 'ip', 0);
-    expect(isRateLimited(store, 'ip', RATE_LIMIT_WINDOW_MS)).toBe(true);
+  it('reinicia justo al cumplirse la ventana', () => {
+    // Con `>` el request del borde caía en la ventana vieja y regalaba uno extra.
+    for (let i = 0; i <= RATE_LIMIT; i++) isRateLimited(store, 'ip', 0);
+    expect(isRateLimited(store, 'ip', RATE_LIMIT_WINDOW_MS)).toBe(false);
+  });
+
+  it('sigue bloqueando un milisegundo antes del borde', () => {
+    for (let i = 0; i <= RATE_LIMIT; i++) isRateLimited(store, 'ip', 0);
+    expect(isRateLimited(store, 'ip', RATE_LIMIT_WINDOW_MS - 1)).toBe(true);
+  });
+});
+
+describe('isRateLimited: techo de clientes', () => {
+  function fill(store: Map<string, RateLimitEntry>, count: number, now: number) {
+    for (let i = 0; i < count; i++) isRateLimited(store, `ip-${i}`, now);
+  }
+
+  it('no crece más allá del techo', () => {
+    const store = new Map<string, RateLimitEntry>();
+    fill(store, MAX_TRACKED_CLIENTS + 500, 0);
+    expect(store.size).toBeLessThanOrEqual(MAX_TRACKED_CLIENTS);
+  });
+
+  it('al llegar al techo purga primero las entradas vencidas', () => {
+    const store = new Map<string, RateLimitEntry>();
+    fill(store, MAX_TRACKED_CLIENTS, 0);
+
+    isRateLimited(store, 'nuevo', RATE_LIMIT_WINDOW_MS);
+
+    // Las viejas vencieron todas, así que sobrevive solo la nueva.
+    expect(store.size).toBe(1);
+    expect(store.has('nuevo')).toBe(true);
+  });
+
+  it('con todas vigentes desaloja la del reinicio más antiguo', () => {
+    const store = new Map<string, RateLimitEntry>();
+    isRateLimited(store, 'la-mas-vieja', 0);
+    fill(store, MAX_TRACKED_CLIENTS - 1, 1);
+
+    isRateLimited(store, 'nuevo', 2);
+
+    expect(store.has('la-mas-vieja')).toBe(false);
+    expect(store.has('nuevo')).toBe(true);
+    expect(store.size).toBe(MAX_TRACKED_CLIENTS);
+  });
+
+  it('no desaloja a un cliente que ya está en el mapa', () => {
+    const store = new Map<string, RateLimitEntry>();
+    fill(store, MAX_TRACKED_CLIENTS, 0);
+
+    isRateLimited(store, 'ip-0', 1);
+
+    expect(store.size).toBe(MAX_TRACKED_CLIENTS);
+    expect(store.get('ip-0')?.count).toBe(2);
   });
 });

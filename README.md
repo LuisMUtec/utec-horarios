@@ -53,6 +53,8 @@ La app permite iniciar sesión con Google, restringido a cuentas `@utec.edu.pe`.
 
 Ambas son públicas por diseño: viajan al navegador.
 
+Hay una tercera opcional, `NEXT_PUBLIC_SITE_URL`, con el origen público que se usa para armar las URLs de redirección del login. En Vercel se deduce del deploy y en local del propio request, así que solo hace falta si la app corre detrás de otro proxy o con un dominio propio.
+
 Para montar el proyecto desde cero:
 
 1. **Google Cloud Console** → *APIs & Services → Credentials → OAuth client ID → Web application*. En *Authorized redirect URIs* va la URL de Supabase, no la de la app: `https://<ref>.supabase.co/auth/v1/callback`. Scopes: solo `openid`, `email` y `profile`.
@@ -60,7 +62,7 @@ Para montar el proyecto desde cero:
 3. **Supabase → Authentication → URL Configuration**: *Site URL* la de producción, y en *Redirect URLs* `http://localhost:3000/**` más el patrón de previews.
 4. **Supabase → Authentication → Hooks → Before User Created**: apuntar a `public.hook_restrict_signup_to_utec`, la función que crea `supabase/migrations/`. Rechaza en el servidor cualquier alta fuera del dominio.
 
-El dominio se valida en tres capas: Google solo ofrece cuentas UTEC, el hook bloquea el alta, y el callback vuelve a comprobar el correo antes de dejar pasar la sesión.
+El dominio lo imponen el hook, que bloquea el alta, y el callback, que vuelve a comprobar el correo antes de dejar pasar la sesión. El parámetro `hd` que se le pasa a Google no es una restricción: solo le sugiere qué cuenta ofrecer.
 
 Rutas del flujo: `GET /auth/login` lleva a Google, `GET /auth/callback` cierra el intercambio y deja la sesión en cookies, `POST /auth/signout` la cierra.
 

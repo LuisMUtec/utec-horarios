@@ -7,8 +7,10 @@ const rateLimitStore = new Map<string, RateLimitEntry>();
 
 /** Devuelve un 429 si corresponde, o null para dejar seguir el request. */
 function rateLimit(request: NextRequest): NextResponse | null {
-  // El límite es solo para /api; las páginas no lo consumen.
-  if (!request.nextUrl.pathname.startsWith('/api')) return null;
+  // El límite es solo para /api; las páginas no lo consumen. El corte es en el
+  // borde de segmento: `startsWith('/api')` también agarraría `/api-docs`.
+  const { pathname } = request.nextUrl;
+  if (pathname !== '/api' && !pathname.startsWith('/api/')) return null;
 
   if (!isRateLimited(rateLimitStore, getClientKey(request.headers), Date.now())) {
     return null;
