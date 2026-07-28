@@ -1,7 +1,7 @@
 name: Propuesta de feature (spec)
 description: Propón una feature o un cambio de comportamiento, definiendo su spec.
 title: "[spec] "
-labels: ["spec", "feature"]
+labels: ["spec", "enhancement"]
 body:
   - type: markdown
     attributes:
