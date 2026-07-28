@@ -6,7 +6,30 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path to extensions, public;
 
-select plan(31);
+select plan(36);
+
+-- ---------------------------------------------------------------------------
+-- Inventario
+-- ---------------------------------------------------------------------------
+-- Las aserciones de abajo prueban reglas concretas, así que un trigger que se
+-- añade sin prueba —o uno que desaparece— no rompe ninguna. La lista sí.
+select triggers_are('public', 'reviews',
+  array['review_00_normalize', 'review_10_current_pair', 'review_20_daily_limit',
+        'review_30_comment_profile', 'review_40_stamp_timestamps',
+        'review_40_stamp_on_insert', 'review_50_purge_after'],
+  'reviews tiene exactamente los siete triggers del diseño'
+);
+
+select triggers_are('public', 'review_reports', array['report_10_reportable'],
+  'review_reports solo el de reportabilidad (FR-042)');
+
+select triggers_are('public', 'profiles', array['profile_touch'],
+  'profiles solo el de updated_at');
+
+-- Sin triggers_are: la lista de auth.users la pone Supabase y cambia con la
+-- versión del stack; lo nuestro es que el perfil se cree.
+select has_trigger('auth', 'users', 'on_auth_user_created',
+  'auth.users dispara la creación del perfil');
 
 -- Fixtures propias en TEST301/TEST302: el seed ya tiene datos y un conteo sin
 -- acotar mentiría en cuanto alguien lo toque.
@@ -384,6 +407,26 @@ select lives_ok(
     values ('00000000-0000-0000-0000-000000301040',
             '00000000-0000-0000-0000-000000301006', 'other', 'Expone datos de un tercero.')$$,
   'pero otra persona sí puede reportarla'
+);
+
+-- ---------------------------------------------------------------------------
+-- updated_at del perfil
+-- ---------------------------------------------------------------------------
+-- El sello viejo hay que ponerlo con el trigger apagado: encendido reescribe
+-- updated_at en el mismo update que intentara envejecerlo, y la aserción pasaría
+-- con el trigger haciendo nada.
+alter table public.profiles disable trigger profile_touch;
+update public.profiles set updated_at = now() - interval '5 days'
+where id = '00000000-0000-0000-0000-000000301001';
+alter table public.profiles enable trigger profile_touch;
+
+update public.profiles set term = 9
+where id = '00000000-0000-0000-0000-000000301001';
+
+select is(
+  (select updated_at from public.profiles where id = '00000000-0000-0000-0000-000000301001'),
+  now(),
+  'cambiar el perfil refresca updated_at'
 );
 
 select * from finish();
