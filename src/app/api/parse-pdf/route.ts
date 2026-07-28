@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 // Required for pdfjs-dist to work in standard Node environments without throwing Worker errors
-// @ts-ignore
+// @ts-expect-error pdf.worker.mjs no expone tipos (TS7016); se importa solo por su efecto secundario.
 await import('pdfjs-dist/legacy/build/pdf.worker.mjs');
 
 export async function POST(request: Request) {
@@ -31,7 +31,10 @@ export async function POST(request: Request) {
     for (let i = 1; i <= numPages; i++) {
         const page = await pdfDocument.getPage(i);
         const textContent = await page.getTextContent();
-        const pageText = textContent.items.map((item: any) => item.str).join(' ');
+        // items es (TextItem | TextMarkedContent)[]; solo TextItem tiene .str
+        const pageText = textContent.items
+          .map((item) => ('str' in item ? item.str : ''))
+          .join(' ');
         fullText += pageText + ' ';
     }
 

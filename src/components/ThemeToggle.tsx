@@ -1,38 +1,41 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
+
+// El tema vive en el DOM (<html class="dark">), no en React: el script bloqueante
+// de layout.tsx ya lo aplica antes del primer paint. Acá solo lo leemos.
+function subscribeToTheme(onChange: () => void): () => void {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributeFilter: ['class'] });
+  return () => observer.disconnect();
+}
+
+function getThemeSnapshot(): boolean {
+  return document.documentElement.classList.contains('dark');
+}
+
+function getThemeServerSnapshot(): boolean {
+  return false;
+}
 
 export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const isDark = useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    getThemeServerSnapshot
+  );
 
-  useEffect(() => {
-    setMounted(true);
-    const root = window.document.documentElement;
-    if (root.classList.contains('dark')) {
-      setIsDark(true);
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme')) {
-      setIsDark(true);
-      root.classList.add('dark');
-    }
-  }, []);
-
+  // Solo escribe en el DOM y localStorage: el MutationObserver dispara el re-render.
   const toggleTheme = () => {
     const root = window.document.documentElement;
-    const newDark = !isDark;
-    setIsDark(newDark);
-    if (newDark) {
-      root.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
+    if (isDark) {
       root.classList.remove('dark');
       localStorage.setItem('theme', 'light');
+    } else {
+      root.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
     }
   };
-
-  if (!mounted) {
-    return <div className="w-10 h-10" />; // placeholder to prevent layout shift
-  }
 
   return (
     <button

@@ -86,11 +86,7 @@ async function parsePDF() {
     // Get data items (below header, or all items on headerless pages)
     const dataItems = headerY > 0
       ? items.filter(it => it.y > headerY + 5)
-      : items.filter(it => {
-          // On pages without header, filter out page numbers and non-table content
-          // Page numbers are typically standalone small numbers at the bottom
-          return true;
-        });
+      : items;
 
     // Group by Y into visual rows (tolerance of 3px)
     const yBuckets = new Map();

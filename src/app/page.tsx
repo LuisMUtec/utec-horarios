@@ -1,11 +1,20 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
 import { toBlob } from 'html-to-image';
 import coursesData from '@/data/courses.json';
 import { Course, SelectedCourse } from '@/types';
 import { getCalendarEvents, getPreviewEvents, checkNewCourseConflict } from '@/lib/schedule-utils';
-import { loadSelectedCourses, saveSelectedCourses, loadAllowConflicts, saveAllowConflicts } from '@/lib/storage';
+import {
+  subscribeSelectedCourses,
+  getSelectedCoursesSnapshot,
+  getSelectedCoursesServerSnapshot,
+  setSelectedCourses,
+  subscribeAllowConflicts,
+  getAllowConflictsSnapshot,
+  getAllowConflictsServerSnapshot,
+  setAllowConflicts,
+} from '@/lib/storage';
 import { analyzeSection } from '@/lib/subsession-utils';
 import CourseSearch from '@/components/CourseSearch';
 import SelectedCoursesList from '@/components/SelectedCoursesList';
@@ -30,14 +39,29 @@ function autoAssignSubsession(selected: SelectedCourse): SelectedCourse {
 }
 
 export default function Home() {
-  const [selectedCourses, setSelectedCourses] = useState<SelectedCourse[]>([]);
-  const [mounted, setMounted] = useState(false);
+  const storedCourses = useSyncExternalStore(
+    subscribeSelectedCourses,
+    getSelectedCoursesSnapshot,
+    getSelectedCoursesServerSnapshot
+  );
+  // Migración: asigna subsessionId a datos viejos que no lo tienen. Se aplica acá
+  // y no en lib/storage.ts porque autoAssignSubsession depende de courses.json.
+  const selectedCourses = useMemo(
+    () => storedCourses.map(autoAssignSubsession),
+    [storedCourses]
+  );
+
+  const allowConflicts = useSyncExternalStore(
+    subscribeAllowConflicts,
+    getAllowConflictsSnapshot,
+    getAllowConflictsServerSnapshot
+  );
+
   const [previewSection, setPreviewSection] = useState<{courseCode: string, sectionNumber: number, subsessionId?: string} | null>(null);
   const [cargaHabilCodes, setCargaHabilCodes] = useState<string[] | null>(null);
   const [studentName, setStudentName] = useState<string | null>(null);
   const [courseTipos, setCourseTipos] = useState<Record<string, string> | null>(null);
-  
-  const [allowConflicts, setAllowConflicts] = useState(false);
+
   const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' | 'info'; id: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
@@ -47,27 +71,15 @@ export default function Home() {
     setToast({ message, type, id: Date.now() });
   }, []);
 
-  useEffect(() => {
-    // Migration: auto-assign subsessionId for old data that lacks it
-    const loaded = loadSelectedCourses().map(autoAssignSubsession);
-    setSelectedCourses(loaded);
-    setAllowConflicts(loadAllowConflicts());
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      saveSelectedCourses(selectedCourses);
-    }
-  }, [selectedCourses, mounted]);
-
   const handleToggleConflicts = useCallback((value: boolean) => {
     setAllowConflicts(value);
-    saveAllowConflicts(value);
   }, []);
 
   const handleAddCourse = useCallback((courseCode: string, sectionNumber: number, subsessionId?: string) => {
-    setSelectedCourses(prev => {
+    setSelectedCourses(prevStored => {
+      // prevStored viene crudo del store; migrar para que el chequeo de cruces
+      // opere sobre los mismos datos que muestra la UI.
+      const prev = prevStored.map(autoAssignSubsession);
       const newSelected: SelectedCourse = { courseCode, sectionNumber, subsessionId };
       const withSubsession = autoAssignSubsession(newSelected);
       const existing = prev.findIndex(s => s.courseCode === courseCode);
@@ -83,7 +95,7 @@ export default function Home() {
 
         if (conflictCheck.hasConflict) {
           showToast(`No se puede agregar porque hay un cruce de horario con: ${conflictCheck.conflictingCourseName}`, 'error');
-          return prev;
+          return prevStored; // sin cambios: conserva la referencia y evita escribir
         }
       }
 
