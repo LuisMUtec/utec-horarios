@@ -9,12 +9,12 @@
 
 ```text
 1. El estudiante busca un curso y despliega sus secciones (flujo existente)
-2. Junto a cada docente, ve su promedio de estrellas para ese curso, la cantidad de puntuaciones y la cantidad de comentarios
+2. Junto a cada docente, ve su promedio de estrellas para ese curso, el porcentaje que lo recomienda, la cantidad de puntuaciones y la cantidad de comentarios
 3. El estudiante abre el detalle de reseñas sin abandonar el flujo de armado del horario
 4. Si quiere leer comentarios, inicia sesión con su cuenta institucional UTEC
-5. Para puntuar, el estudiante declara que llevó el curso con ese docente y elige de 1 a 5 estrellas
+5. Para puntuar, el estudiante declara que llevó el curso con ese docente, elige de 1 a 5 estrellas e indica si recomendaría llevar ese curso con ese docente
 6. Para añadir un comentario, completa su carrera y ciclo actual, escribe el texto y confirma el compromiso de respeto
-7. La puntuación actualiza el promedio del docente en ese curso y, si el estudiante añadió texto, el comentario aparece en el detalle
+7. La puntuación actualiza el promedio y el porcentaje de recomendación del docente en ese curso y, si el estudiante añadió texto, el comentario aparece en el detalle
 8. El estudiante puede editar o eliminar posteriormente su propia reseña
 ```
 
@@ -30,7 +30,7 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 
 **Resumen por docente dentro de un curso**
 
-1. **Given** un curso con una sección dictada por un docente que tiene puntuaciones, **When** el estudiante despliega las secciones, **Then** junto al docente ve un promedio de 1 a 5 estrellas con un decimal, la cantidad total de puntuaciones y la cantidad total de comentarios.
+1. **Given** un curso con una sección dictada por un docente que tiene puntuaciones, **When** el estudiante despliega las secciones, **Then** junto al docente ve un promedio de 1 a 5 estrellas con un decimal, el porcentaje que lo recomienda, la cantidad total de puntuaciones y la cantidad total de comentarios.
 
 2. **Given** un mismo docente que aparece en dos secciones del mismo curso, **When** se muestran ambas secciones, **Then** las dos presentan el mismo resumen de reseñas correspondiente a la combinación docente–curso.
 
@@ -58,7 +58,7 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 
 **Creación y límites de reseñas**
 
-13. **Given** un estudiante autenticado que llevó el curso con el docente, **When** declara esa experiencia, selecciona entre 1 y 5 estrellas y publica sin escribir un comentario, **Then** su puntuación se incorpora al promedio sin exigirle carrera, ciclo ni compromiso de respeto, y aumenta la cantidad de puntuaciones en uno sin aumentar la cantidad de comentarios.
+13. **Given** un estudiante autenticado que llevó el curso con el docente, **When** declara esa experiencia, selecciona entre 1 y 5 estrellas, responde si lo recomendaría y publica sin escribir un comentario, **Then** su puntuación y su recomendación se incorporan al resumen sin exigirle carrera, ciclo ni compromiso de respeto, y aumenta la cantidad de puntuaciones en uno sin aumentar la cantidad de comentarios.
 
 14. **Given** un estudiante que no marca la casilla `Declaro que llevé este curso con este docente`, **When** intenta publicar una puntuación o un comentario, **Then** no puede publicar y el formulario le explica que el espacio recoge experiencias de alumnos que ya llevaron el curso con ese docente, y que no admite preguntas, solicitudes de información ni expresiones de interés.
 
@@ -74,13 +74,13 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 
 **Edición y eliminación**
 
-20. **Given** un estudiante que ya publicó una puntuación sin comentario, **When** cambia la cantidad de estrellas y guarda la edición, **Then** el promedio se recalcula sin exigir carrera, ciclo ni compromiso de respeto y sin aumentar la cantidad de puntuaciones.
+20. **Given** un estudiante que ya publicó una puntuación sin comentario, **When** cambia la cantidad de estrellas o su recomendación y guarda la edición, **Then** el promedio y el porcentaje se recalculan sin exigir carrera, ciclo ni compromiso de respeto y sin aumentar la cantidad de puntuaciones.
 
 21. **Given** un estudiante que añade un comentario a una puntuación existente, **When** completa carrera y ciclo, acepta el compromiso de respeto y guarda la edición, **Then** la cantidad de comentarios aumenta en uno y la cantidad de puntuaciones no cambia.
 
 22. **Given** un estudiante que elimina el comentario pero conserva la puntuación, **When** guarda la edición, **Then** la cantidad de comentarios disminuye en uno y la puntuación continúa formando parte del promedio, sin exigir una nueva confirmación de respeto.
 
-23. **Given** un estudiante que elimina su reseña, **When** confirma la eliminación, **Then** su puntuación deja de formar parte del promedio y su comentario, si existía, desaparece.
+23. **Given** un estudiante que elimina su reseña, **When** confirma la eliminación, **Then** su puntuación deja de formar parte del promedio, su recomendación deja de contar en el porcentaje y su comentario, si existía, desaparece.
 
 24. **Given** un estudiante que edita una reseña existente, **When** guarda el cambio, **Then** la edición no se considera una puntuación nueva para el límite de ocho puntuaciones en 24 horas.
 
@@ -112,6 +112,10 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 
 36. **Given** una reseña eliminada por moderación, **When** su autor vuelve al detalle del docente, **Then** la reseña no puede restaurarse ni editarse, se haya aplicado o no una sanción a ese autor.
 
+**Recomendación del docente**
+
+37. **Given** un estudiante que intenta publicar una puntuación sin responder si recomendaría al docente, **When** confirma la publicación, **Then** no puede publicar y se le indica que la respuesta es obligatoria.
+
 ### Edge Cases
 
 - **Docente repetido dentro de una sección**: si el mismo docente figura en más de una sesión de la sección, aparece una sola vez con un único resumen.
@@ -134,12 +138,12 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 
 **Comparar antes de matricularse**
 
-- **SC-001**: Un visitante sin sesión puede comparar a todos los docentes de un curso —promedio, cantidad de puntuaciones y de comentarios— dentro del flujo de armado del horario, sin iniciar sesión y sin perder los cursos y secciones que ya había seleccionado.
+- **SC-001**: Un visitante sin sesión puede comparar a todos los docentes de un curso —promedio, porcentaje de recomendación, cantidad de puntuaciones y de comentarios— dentro del flujo de armado del horario, sin iniciar sesión y sin perder los cursos y secciones que ya había seleccionado.
 - **SC-002**: Ante un docente sin reseñas o sin asignar, el estudiante distingue por qué no hay promedio: `Sin puntuaciones` y `Docente por asignar` no se confunden entre sí ni con un fallo de carga.
 
 **Contribuir**
 
-- **SC-003**: Publicar una puntuación sin comentario se completa desde el resumen del docente en un solo formulario, sin exigir carrera, ciclo ni compromiso de respeto.
+- **SC-003**: Contribuir con puntuación y recomendación, sin escribir un comentario, no le exige al estudiante carrera, ciclo ni compromiso de respeto.
 - **SC-004**: Un estudiante puede reseñar a todos los docentes de una carga académica completa en una sola sesión, sin toparse con el límite de 24 horas.
 
 **Confiar en lo que se ve**
@@ -162,7 +166,7 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 #### Resumen y comparación dentro del horario
 
 - **FR-001**: El sistema DEBE asociar las reseñas a una combinación específica de docente y curso, no al docente de manera global ni a una sección.
-- **FR-002**: El sistema DEBE mostrar junto a cada docente de una sección su promedio para ese curso, la cantidad de puntuaciones y la cantidad de comentarios.
+- **FR-002**: El sistema DEBE mostrar junto a cada docente de una sección su promedio para ese curso, el porcentaje de recomendación (FR-058), la cantidad de puntuaciones y la cantidad de comentarios.
 - **FR-003**: El promedio DEBE calcularse con todas las puntuaciones activas de la combinación docente–curso y mostrarse con un decimal en una escala de 1 a 5 estrellas.
 - **FR-004**: La puntuación DEBE representar la excelencia general de la experiencia académica con el docente en ese curso; la interfaz NO DEBE presentarla como una medida de facilidad.
 - **FR-005**: El conteo de puntuaciones DEBE incluir toda reseña activa con estrellas, tenga o no comentario.
@@ -175,6 +179,9 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 - **FR-012**: El acceso al detalle de reseñas NO DEBE hacer que el estudiante pierda los cursos y secciones que ya seleccionó.
 - **FR-053**: La identidad de un docente DEBE ser su correo institucional, no su nombre: dos docentes homónimos no comparten reseñas y un mismo docente escrito de dos formas no se divide en dos.
 - **FR-054**: Cuando una sesión no tenga docente registrado en la oferta, el sistema DEBE mostrar `Docente por asignar` y NO DEBE ofrecer resumen, detalle ni publicación para ella. Este estado DEBE distinguirse de `Sin puntuaciones` (FR-007).
+- **FR-058**: El sistema DEBE mostrar, junto al promedio y los conteos de cada docente en un curso, el porcentaje de estudiantes que recomendaría llevar ese curso con ese docente.
+- **FR-059**: El porcentaje DEBE calcularse como la proporción de respuestas `Sí` sobre el total de reseñas activas de la combinación docente–curso y mostrarse como número entero, sin decimales. Como la recomendación es obligatoria (FR-061), ese total coincide siempre con la cantidad de puntuaciones (FR-005). El porcentaje DEBE mostrarse desde la primera reseña, acompañado siempre de la cantidad de puntuaciones (FR-002), sin umbral mínimo.
+- **FR-060**: El porcentaje DEBE ser visible sin iniciar sesión, en las mismas condiciones que el promedio y los conteos (FR-008).
 
 #### Acceso y perfil
 
@@ -189,7 +196,7 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 
 #### Publicación de puntuaciones y comentarios
 
-- **FR-021**: Antes de publicar una puntuación nueva para una combinación docente–curso, el estudiante DEBE confirmar explícitamente `Declaro que llevé este curso con este docente` y elegir exactamente una puntuación entera de 1 a 5 estrellas.
+- **FR-021**: Antes de publicar una puntuación nueva para una combinación docente–curso, el estudiante DEBE confirmar explícitamente `Declaro que llevé este curso con este docente`, elegir exactamente una puntuación entera de 1 a 5 estrellas y responder la recomendación (FR-061).
 - **FR-022**: El comentario DEBE ser opcional y admitir como máximo 500 caracteres.
 - **FR-023**: El formulario DEBE presentar el comentario opcional con el texto `Cuenta algo que le serviría saber a otro estudiante. Este espacio no es para preguntas`.
 - **FR-024**: El sistema NO DEBE permitir publicar un comentario sin una puntuación.
@@ -202,17 +209,20 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 - **FR-031**: El sistema DEBE explicar el límite cuando bloquee una novena puntuación e indicar cuándo vuelve a estar disponible la publicación.
 - **FR-032**: El sistema NO DEBE solicitar ni guardar el período académico en que el estudiante llevó el curso.
 - **FR-033**: La fecha de publicación DEBE registrarse y mostrarse junto a los comentarios, pero NO DEBE presentarse como la fecha en que el estudiante llevó el curso.
+- **FR-061**: Toda reseña DEBE incluir una respuesta obligatoria a `¿Recomendarías llevar este curso con este docente?`, con las opciones `Sí` y `No` y sin valor preseleccionado. El sistema NO DEBE permitir publicar una reseña sin esta respuesta.
+- **FR-062**: La recomendación DEBE representar si el estudiante aconsejaría esa experiencia académica a otro alumno; la interfaz NO DEBE presentarla como una medida de facilidad, de carga ni de dificultad del curso.
 
 #### Lectura, edición y eliminación
 
 - **FR-034**: Los comentarios DEBEN mostrarse del más reciente al más antiguo.
-- **FR-035**: Cada comentario DEBE mostrar la puntuación asociada, el texto y la fecha de publicación, sin identidad pública del autor.
+- **FR-035**: Cada comentario DEBE mostrar la puntuación asociada, la recomendación asociada, el texto y la fecha de publicación, sin identidad pública del autor.
 - **FR-036**: Las reseñas sin comentario NO DEBEN generar elementos vacíos en la lista de comentarios.
 - **FR-037**: El autor DEBE poder editar la puntuación y añadir, modificar o eliminar el comentario de su reseña activa; una reseña eliminada por moderación NO DEBE poder editarse ni restaurarse por su autor, se haya aplicado o no una sanción.
 - **FR-038**: Una edición DEBE actualizar el promedio y los conteos sin aumentar la cantidad de puntuaciones ni consumir un cupo adicional del límite de publicación; añadir o editar texto mantiene los requisitos de perfil y compromiso de respeto.
 - **FR-039**: El autor DEBE poder eliminar su reseña después de una confirmación explícita.
 - **FR-040**: Una reseña eliminada DEBE dejar inmediatamente de participar en el promedio y en los conteos.
 - **FR-055**: Un comentario modificado después de publicarse DEBE mostrar la marca `editado` junto a su fecha. La fecha visible sigue siendo la de publicación (FR-033) y NO DEBE reemplazarse por la de la última edición.
+- **FR-063**: La recomendación forma parte de la reseña y NO constituye una contribución independiente. Toda regla de unicidad, límite de publicación, edición, eliminación, moderación y sanción aplicable a la puntuación (FR-027, FR-030, FR-037, FR-038, FR-040, FR-048, FR-056) DEBE aplicarse igualmente a la recomendación, y el porcentaje DEBE recalcularse en los mismos momentos que el promedio.
 
 #### Normas, reportes y sanciones
 
@@ -236,8 +246,8 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 - **Estudiante UTEC**: persona autenticada con una cuenta institucional autorizada. Atributos: identidad privada, carrera, ciclo actual, estado de acceso y fecha de creación del perfil. Carrera, ciclo e identidad no se muestran públicamente.
 - **Docente**: persona que figura como responsable de una o más sesiones en la oferta de un curso, identificada por su correo institucional. Puede aparecer en varias secciones y cursos. Una sesión sin correo de docente no tiene docente evaluable.
 - **Combinación docente–curso**: unidad sobre la que se agregan y consultan puntuaciones y comentarios. No depende del número de sección.
-- **Reseña**: contribución única de un estudiante sobre una combinación docente–curso. Atributos: declaración de experiencia, puntuación de 1 a 5, comentario opcional, fecha de publicación, fecha de última edición, autor privado y estado. Se persiste.
-- **Resumen de reseñas**: promedio de estrellas, cantidad de puntuaciones y cantidad de comentarios activos de una combinación docente–curso. Derivado de las reseñas vigentes.
+- **Reseña**: contribución única de un estudiante sobre una combinación docente–curso. Atributos: declaración de experiencia, puntuación de 1 a 5, recomendación sí/no, comentario opcional, fecha de publicación, fecha de última edición, autor privado y estado. Se persiste.
+- **Resumen de reseñas**: promedio de estrellas, porcentaje de recomendación, cantidad de puntuaciones y cantidad de comentarios activos de una combinación docente–curso. Derivado de las reseñas vigentes.
 - **Reporte**: aviso de un estudiante sobre una reseña posiblemente contraria a las normas. Atributos: reseña, reportante privado, motivo, explicación opcional, fecha y estado de revisión. Se persiste.
 - **Sanción**: pérdida permanente del acceso autenticado de un estudiante por incumplimiento de las normas, acompañada de la eliminación de todas sus reseñas. Atributos: estudiante, motivo y fecha de aplicación. El motivo se le comunica al sancionado. Se persiste.
 
@@ -250,6 +260,7 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 - Habrá una persona responsable de revisar manualmente los reportes y aplicar las decisiones de moderación.
 - Carrera y ciclo son datos declarados por el estudiante; aportan contexto operativo, pero no demuestran que haya llevado un curso.
 - El MVP no afirma que la experiencia académica declarada haya sido verificada contra una matrícula o un historial de notas.
+- La recomendación (FR-061) se incorpora asumiendo que aporta señal propia frente al promedio de estrellas. En el referente público esa correlación es de ~0.83, alta pero no total. Si con datos propios resulta redundante, retirarla es una decisión válida y esperada.
 
 ---
 
@@ -257,7 +268,7 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 
 - Crear un ranking global de docentes, cursos o carreras.
 - Recomendar automáticamente una sección o un docente.
-- Incluir criterios separados como claridad, dificultad, carga, evaluaciones o facilidad.
+- Incluir criterios separados de la enseñanza como claridad, dificultad, carga, evaluaciones o facilidad. La recomendación (FR-061) no es uno de estos: no describe una dimensión del curso, sino si el estudiante aconsejaría la experiencia. La evidencia pública del referente muestra que un puntaje de dificultad separado correlaciona negativamente con el de calidad, es decir, castiga a los docentes exigentes.
 - Verificar mediante matrícula, historial académico, notas o documentos que el estudiante llevó el curso.
 - Solicitar o mostrar el período académico en que el estudiante llevó el curso.
 - Mostrar públicamente perfiles, nombres, correos, carreras o ciclos de los autores.
