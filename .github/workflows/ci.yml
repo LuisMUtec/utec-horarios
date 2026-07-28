@@ -81,6 +81,11 @@ jobs:
           version: 2.109.1
       # Aplica migrations/ y seed.sql sobre una base recién creada.
       - run: supabase start
+      # RLS y los triggers son la frontera de seguridad de las reseñas: la Data
+      # API sigue alcanzable con la publishable key, así que un error en una
+      # política es una fuga que ningún test de TypeScript detecta.
+      - name: Tests de base (pgTAP)
+        run: supabase test db
       - name: Verificar migraciones y seed
         run: |
           set -euo pipefail
