@@ -21,18 +21,20 @@ Aplicación web para planificar y armar tu horario de clases en UTEC (Universida
 - **React 19**
 - **TypeScript**
 - **Tailwind CSS 4**
-- **pdfjs-dist / pdf-parse** — extracción de datos de los PDFs
+- **pdfjs-dist** — extracción de datos de los PDFs
 - **html-to-image** — exportar el calendario como PNG
 - **Vercel Analytics**
 
 ## Inicio rápido
 
+Requisitos: **Node >= 20.9** y **pnpm** (el proyecto fija la versión con el campo `packageManager`; si usás Corepack, `corepack enable` la instala sola).
+
 ```bash
 # Instalar dependencias
-npm install
+pnpm install
 
 # Iniciar servidor de desarrollo
-npm run dev
+pnpm dev
 ```
 
 Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
@@ -74,7 +76,7 @@ scripts/
 Los datos de cursos se extraen del PDF oficial de horarios de UTEC (`consulta_horario.pdf`, en la raíz del repo) usando el script de parsing:
 
 ```bash
-node scripts/parse-pdf.js
+pnpm parse-pdf
 ```
 
 El script usa `pdfjs-dist` con extracción basada en posición (no texto) para manejar campos concatenados en el PDF. Genera `src/data/courses.json`.
@@ -85,7 +87,13 @@ Para cambiar de ciclo: reemplaza `consulta_horario.pdf`, corre el script y actua
 
 | Comando | Descripción |
 |---------|-------------|
-| `npm run dev` | Servidor de desarrollo |
-| `npm run build` | Build de producción |
-| `npm run start` | Servidor de producción |
-| `npm run lint` | Linter (ESLint) |
+| `pnpm dev` | Servidor de desarrollo |
+| `pnpm build` | Build de producción |
+| `pnpm start` | Servidor de producción |
+| `pnpm lint` | Linter (ESLint) |
+| `pnpm parse-pdf` | Regenera `courses.json` desde el PDF de horarios |
+
+## Notas de dependencias
+
+- `pnpm-workspace.yaml` declara en `allowBuilds` los únicos paquetes autorizados a correr scripts de instalación (`sharp`, `unrs-resolver`). pnpm bloquea el resto por defecto como medida de seguridad.
+- `@vercel/analytics` debe quedarse en **>= 2.0.1**. La 2.0.0 declaraba `nuxt` como peer *requerido* (faltaba en `peerDependenciesMeta`), lo que arrastraba Nuxt, Vite y Nitro enteros al árbol de dependencias.

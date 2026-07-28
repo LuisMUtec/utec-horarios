@@ -1,0 +1,6 @@
+# Únicos paquetes autorizados a ejecutar scripts de instalación (postinstall).
+# sharp: binarios nativos para la optimización de imágenes de Next.
+# unrs-resolver: binario napi del resolver de TypeScript para ESLint.
+allowBuilds:
+  sharp: true
+  unrs-resolver: true

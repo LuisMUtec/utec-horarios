@@ -1,18 +1,23 @@
 {
-  "name": "horariosapp-init",
+  "name": "utec-horarios",
   "version": "0.1.0",
+  "license": "MIT",
   "private": true,
+  "packageManager": "pnpm@11.16.0",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "parse-pdf": "node scripts/parse-pdf.js"
   },
   "dependencies": {
-    "@vercel/analytics": "^2.0.0",
+    "@vercel/analytics": "^2.0.1",
     "html-to-image": "^1.11.13",
     "next": "16.1.6",
-    "pdf-parse": "^1.1.1",
     "pdfjs-dist": "^4.0.379",
     "react": "19.2.3",
     "react-dom": "19.2.3"
@@ -20,7 +25,6 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/pdf-parse": "^1.1.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
