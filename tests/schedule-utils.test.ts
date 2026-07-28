@@ -8,11 +8,11 @@ import {
 import type { CalendarEvent, Session } from '@/types';
 
 /**
- * Bloques libres entre clases (specs/001-bloques libres-horario/spec.md).
+ * Bloques libres entre clases (specs/001-bloques-libres/spec.md).
  *
- * computeFreeBlocks es la única lógica no trivial de la feature: fusiona los tramos
- * ocupados de cada día y deriva los libres. Los casos numerados corresponden a
- * los acceptance scenarios del spec.
+ * computeFreeBlocks es la única lógica no trivial de la feature: fusiona los
+ * tramos ocupados de cada día y deriva los libres. Los casos numerados
+ * corresponden a los acceptance scenarios del spec.
  */
 
 function clase(day: string, startTime: string, endTime: string, extra: Partial<CalendarEvent> = {}): CalendarEvent {

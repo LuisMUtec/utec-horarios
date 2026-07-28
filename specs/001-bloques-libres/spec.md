@@ -7,7 +7,7 @@
 
 ## Execution Flow (main)
 
-```
+```text
 1. El usuario selecciona cursos y secciones (flujo existente)
 2. El calendario semanal renderiza los bloques de clase (flujo existente)
 3. Para cada día, el sistema calcula los intervalos libres entre la primera y la última clase
@@ -122,7 +122,7 @@ Como estudiante de UTEC armando mi horario, quiero ver de un vistazo cuánto tie
 
 ### Key Entities
 
-- **Bloque libre (FreeBlock)**: intervalo libre entre dos clases de un mismo día. Atributos: día, hora de inicio, hora de fin, duración en minutos. Derivado — no se persiste.
+- **Bloque libre**: intervalo libre entre dos clases de un mismo día. Atributos: día, hora de inicio, hora de fin, duración en minutos. Derivado — no se persiste.
 - **Resumen semanal**: total de minutos en bloques libres de la semana, derivado de la suma de los bloques libres visibles.
 - **Preferencia "mostrar bloques libres"**: booleano persistido en el navegador; por defecto `true`.
 
