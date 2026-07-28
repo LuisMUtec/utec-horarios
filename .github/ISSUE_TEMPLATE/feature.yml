@@ -27,7 +27,7 @@ body:
       label: Acceptance Scenarios
       description: En Given/When/Then. Cada uno debe poder verificarse mirando la app.
       placeholder: |
-        1. Given un día con clases de 07:00–09:00 y de 17:00–19:00, When se renderiza el calendario, Then aparece un bloque entre 09:00 y 17:00 etiquetado `bloque libre 8 h`.
+        1. Given un día con clases de 07:00–09:00 y de 17:00–19:00, When se renderiza el calendario, Then aparece un bloque entre 09:00 y 17:00 etiquetado `Bloque Libre 8 h`.
         2. Given …, When …, Then …
     validations:
       required: true

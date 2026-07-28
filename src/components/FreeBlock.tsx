@@ -23,7 +23,7 @@ export default function FreeBlock({ top, height, label }: Props) {
       }}
     >
       <span className="text-[9px] leading-tight text-gray-400 dark:text-gray-500 px-1 truncate">
-        bloque libre {label}
+        Bloque Libre {label}
       </span>
     </div>
   );

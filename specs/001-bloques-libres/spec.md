@@ -28,13 +28,13 @@ Como estudiante de UTEC armando mi horario, quiero ver de un vistazo cuánto tie
 
 **Cálculo y visualización de bloques libres**
 
-1. **Given** un día con clases de 07:00–09:00 y de 17:00–19:00 y el toggle activo, **When** se renderiza el calendario, **Then** aparece un bloque libre entre 09:00 y 17:00 etiquetado `bloque libre 8 h`.
+1. **Given** un día con clases de 07:00–09:00 y de 17:00–19:00 y el toggle activo, **When** se renderiza el calendario, **Then** aparece un bloque libre entre 09:00 y 17:00 etiquetado `Bloque Libre 8 h`.
 
-2. **Given** un día con clases de 07:00–09:00 y de 11:00–13:00 (bloque libre de 2 h) y el toggle activo, **When** se renderiza el calendario, **Then** aparece un bloque etiquetado `bloque libre 2 h` (el umbral es inclusivo).
+2. **Given** un día con clases de 07:00–09:00 y de 11:00–13:00 (bloque libre de 2 h) y el toggle activo, **When** se renderiza el calendario, **Then** aparece un bloque etiquetado `Bloque Libre 2 h` (el umbral es inclusivo).
 
 3. **Given** un día con clases de 14:00–16:00 y de 17:00–19:00 (bloque libre de 1 h) y el toggle activo, **When** se renderiza el calendario, **Then** NO aparece ningún bloque libre para ese intervalo.
 
-4. **Given** un bloque libre de 2 h 30 min, **When** se renderiza su etiqueta, **Then** muestra `bloque libre 2 h 30 min`.
+4. **Given** un bloque libre de 2 h 30 min, **When** se renderiza su etiqueta, **Then** muestra `Bloque Libre 2 h 30 min`.
 
 5. **Given** un día con una sola clase, **When** se renderiza el calendario, **Then** no aparece ningún bloque libre en ese día (el tiempo antes de la primera clase y después de la última no cuenta como bloque libre).
 
@@ -60,7 +60,7 @@ Como estudiante de UTEC armando mi horario, quiero ver de un vistazo cuánto tie
 
 14. **Given** un usuario que nunca cambió la preferencia, **When** abre la aplicación, **Then** la visualización de bloques libres está activada.
 
-15. **Given** un horario con bloques libres, **When** el usuario desactiva el toggle "Mostrar bloques libres", **Then** los bloques libres y el contador desaparecen inmediatamente, sin afectar los bloques de clase.
+15. **Given** un horario con bloques libres, **When** el usuario desactiva el toggle "Mostrar Bloques Libres", **Then** los bloques libres y el contador desaparecen inmediatamente, sin afectar los bloques de clase.
 
 16. **Given** el usuario desactivó el toggle, **When** recarga la página, **Then** el toggle sigue desactivado y no hay un parpadeo inicial de bloques libres.
 
@@ -96,7 +96,7 @@ Como estudiante de UTEC armando mi horario, quiero ver de un vistazo cuánto tie
 
 - **FR-006**: Cada bloque libre visible DEBE renderizarse como un bloque dentro de la columna de su día, ocupando exactamente la franja horaria del bloque libre.
 - **FR-007**: El bloque libre DEBE distinguirse visualmente de un bloque de clase (borde punteado, sin relleno de color, tipografía tenue) y no debe competir en jerarquía visual con las clases.
-- **FR-008**: El bloque DEBE mostrar la etiqueta `bloque libre {duración}`, con la duración en formato `N h` cuando es entera y `N h M min` cuando incluye minutos.
+- **FR-008**: El bloque DEBE mostrar la etiqueta `Bloque Libre {duración}`, con la duración en formato `N h` cuando es entera y `N h M min` cuando incluye minutos.
 - **FR-009**: Los bloques libres DEBEN renderizarse por debajo de los bloques de clase y de previsualización cuando se superpongan.
 - **FR-010**: Los bloques libres NO DEBEN capturar eventos de puntero: no son interactivos ni seleccionables, y cualquier interacción sobre ellos debe alcanzar al elemento que tengan debajo o encima.
 - **FR-011**: Los bloques libres DEBEN ser legibles tanto en modo claro como en modo oscuro.
@@ -113,7 +113,7 @@ Como estudiante de UTEC armando mi horario, quiero ver de un vistazo cuánto tie
 
 #### Control de usuario
 
-- **FR-019**: El sistema DEBE ofrecer un toggle "Mostrar bloques libres" con el mismo patrón visual e interacción que el toggle existente "Permitir cruces de horario".
+- **FR-019**: El sistema DEBE ofrecer un toggle "Mostrar Bloques Libres" con el mismo patrón visual e interacción que el toggle existente "Permitir cruces de horario".
 - **FR-020**: El toggle DEBE ubicarse en la misma tarjeta que "Permitir cruces de horario", como una segunda opción del mismo grupo.
 - **FR-021**: La preferencia del toggle DEBE persistir en el navegador entre sesiones, con el mismo mecanismo que las demás preferencias.
 - **FR-022**: El estado por defecto para un usuario nuevo DEBE ser **activado**.
