@@ -1,12 +1,14 @@
 /**
  * Normalización del correo del docente, que es su identidad (FR-053).
  *
- * El campo que sale del PDF viene sucio de dos formas, que además se combinan:
- * la capacidad pegada al final ("pperezq@utec.edu.pe 44") y un espacio dentro
- * del dominio por el salto de línea ("rcondorena@utec.edu. pe").
+ * Cuando la fuente era el PDF el campo venía sucio de dos formas, que además se
+ * combinaban: la capacidad pegada al final ("pperezq@utec.edu.pe 44") y un
+ * espacio dentro del dominio por el salto de línea ("rcondorena@utec.edu. pe").
+ * El xlsx ya no parte nada, pero el normalizador se queda como red: es lo único
+ * que separa un correo sucio de un par docente–curso duplicado en la migración.
  *
  * Se normaliza al leer, no al parsear: src/data/courses.json sigue siendo el
- * volcado crudo del PDF (D5).
+ * volcado crudo de la fuente (D5).
  */
 
 const UTEC_DOMAIN = 'utec.edu.pe';

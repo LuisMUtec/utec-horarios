@@ -17,7 +17,7 @@
     "test:watch": "vitest",
     "test:db": "supabase test db",
     "gen-types": "{ echo '// GENERADO automáticamente — no editar a mano. Regenerar con: pnpm gen-types'; supabase gen types typescript --local --schema public; } > src/types/database.ts",
-    "parse-pdf": "node scripts/parse-pdf.js",
+    "parse-xlsx": "node scripts/parse-xlsx.mjs",
     "generate-offer": "node scripts/generate-offer-migration.mts",
     "diff-oferta": "node scripts/generate-offer-migration.mts --diff"
   },

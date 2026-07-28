@@ -13,7 +13,7 @@ Aplicación web para planificar y armar tu horario de clases en UTEC (Universida
 - **Exportar horario** como imagen PNG (al portapapeles o descarga)
 - **Persistencia** en localStorage (tu horario se guarda entre sesiones)
 - **Modo oscuro/claro**
-- **445 cursos**, 777 secciones y 1821 sesiones (período 2026-2)
+- **447 cursos**, 798 secciones y 1904 sesiones (período 2026-2)
 
 ## Tech Stack
 
@@ -159,7 +159,7 @@ src/
 │       ├── server.ts           # Cliente de servidor (cookies)
 │       └── proxy.ts            # Refresco de sesión en el proxy
 ├── data/
-│   └── courses.json            # Datos de cursos extraídos del PDF
+│   └── courses.json            # Datos de cursos extraídos del xlsx de horarios
 ├── types/
 │   └── index.ts                # Tipos: Course, Section, Session, etc.
 └── proxy.ts                    # Rate limiting en /api + refresco de sesión
@@ -174,7 +174,7 @@ supabase/
 tests/                          # Tests de Vitest (*.test.ts)
 
 scripts/
-├── parse-pdf.js                # Parser del PDF de horarios (pdfjs-dist)
+├── parse-xlsx.mjs              # Parser del xlsx de horarios (sin dependencias)
 └── generate-offer-migration.mts # Migración de la oferta docente–curso
 
 docs/
@@ -184,13 +184,15 @@ docs/
 
 ## Actualización de datos
 
-Los datos de cursos se extraen del PDF oficial de horarios de UTEC (`consulta_horario.pdf`, en la raíz del repo) usando el script de parsing:
+Los datos de cursos salen del export **xlsx** de "Consulta de Horarios" del portal de UTEC. El archivo **no está en el repo**: trae el nombre, la carrera y el turno de matrícula de quien lo descargó, y este repo es público. Baja el tuyo y pásale la ruta al script:
 
 ```bash
-pnpm parse-pdf
+pnpm parse-xlsx ~/Downloads/Consulta_Horario-<código>.xlsx
 ```
 
-El script usa `pdfjs-dist` con extracción basada en posición (no texto) para manejar campos concatenados en el PDF. Genera `src/data/courses.json`.
+Genera `src/data/courses.json`. El xlsx trae una fila por sesión y una columna por campo, así que el parseo es directo; el script aborta si los encabezados de la tabla cambian de nombre o de orden.
+
+> Antes se parseaba el PDF (`consulta_horario.pdf`) ordenando las celdas por posición en la página. Eso partía correos y nombres de curso al envolverse el texto (`...@utec.edu. pe`, `Telecomunicacione s`); por eso existe `src/lib/teacher-email.ts`.
 
 Con el `courses.json` nuevo hay que refrescar la oferta de la base, que es la que decide qué pares docente–curso admiten reseñas:
 
@@ -201,7 +203,7 @@ pnpm generate-offer   # emite la migración en supabase/migrations/
 
 El orden importa: el diff se mira **antes** de generar, porque un par que sale deja de mostrar sus reseñas y un correo mal parseado se ve igual que un cambio real de docente.
 
-Para cambiar de ciclo: reemplaza `consulta_horario.pdf`, corre el script y actualiza el período en `src/app/layout.tsx` (título) y `src/app/page.tsx` (header).
+Para cambiar de ciclo: baja el xlsx del ciclo nuevo, corre el script y actualiza el período en `src/app/layout.tsx` (título) y `src/app/page.tsx` (header).
 
 ## Scripts disponibles
 
@@ -215,7 +217,7 @@ Para cambiar de ciclo: reemplaza `consulta_horario.pdf`, corre el script y actua
 | `pnpm test` | Tests (Vitest) |
 | `pnpm test:watch` | Tests en modo watch |
 | `pnpm test:db` | Tests pgTAP de la base (`supabase test db`, pide `supabase start`) |
-| `pnpm parse-pdf` | Regenera `courses.json` desde el PDF de horarios |
+| `pnpm parse-xlsx <ruta>` | Regenera `courses.json` desde el xlsx de horarios |
 | `pnpm diff-oferta` | Lista los pares docente–curso que entran y salen de la oferta |
 | `pnpm generate-offer` | Emite la migración que refresca la oferta |
 
@@ -225,13 +227,14 @@ Para cambiar de ciclo: reemplaza `consulta_horario.pdf`, corre el script y actua
 pnpm test
 ```
 
-- **`tests/courses-data.test.ts`** — invariantes sobre `courses.json`: días válidos, horarios `HH:MM` con fin posterior al inicio, sesiones dentro de la grilla 07:00-22:00, códigos únicos y bien formados, `enrolled <= capacity`. Es la red de seguridad del update de ciclo: si el parseo del PDF sale mal, falla acá y no en producción.
-- **`tests/parse-pdf.test.ts`** — golden test: parsea el PDF y lo compara contra el `courses.json` commiteado. Detecta tanto un PDF cambiado sin regenerar como un cambio de comportamiento de `pdfjs-dist`.
+- **`tests/courses-data.test.ts`** — invariantes sobre `courses.json`: días válidos, horarios `HH:MM` con fin posterior al inicio, sesiones dentro de la grilla 07:00-22:00, códigos únicos y bien formados, `enrolled <= capacity`. Es la red de seguridad del update de ciclo: si el parseo sale mal, falla acá y no en producción.
+- **`tests/teacher-email.test.ts`** — el normalizador de correos y las cifras de la oferta vigente (sesiones, docentes distintos, pares reseñables). Como el xlsx no está en el repo, estas cifras son lo que ata `courses.json` a un update deliberado: si cambian sin que nadie lo decida, se regeneró el JSON sin mirar el diff.
+- **`tests/oferta-drift.test.ts`** — que la migración de oferta más reciente cubra exactamente los pares de `courses.json`. Sin él, regenerar el JSON y olvidar la migración deja la UI ofreciendo reseñar pares que la FK rechaza.
 - **`tests/storage.test.ts`** — el store de `localStorage`, incluyendo la estabilidad referencial de `getSnapshot` (si se rompe, `useSyncExternalStore` entra en loop infinito), datos corruptos y fallos de escritura.
 - **`tests/auth-domain.test.ts`** — la allowlist del dominio de correo, con los casos que un `endsWith` dejaría pasar (`@notutec.edu.pe`, `@utec.edu.pe.evil.com`).
 - **`tests/rate-limit.test.ts`** y **`tests/proxy.test.ts`** — el contador por IP, el 429 de `/api` y el matcher del proxy (si deja de excluir estáticos, el proxy corre en cada asset sin que falle nada más).
 
-Después de correr `pnpm parse-pdf` para un ciclo nuevo, `pnpm test` valida los datos generados antes de deployar.
+Después de correr `pnpm parse-xlsx` para un ciclo nuevo, `pnpm test` valida los datos generados antes de deployar.
 
 Las migraciones y el seed no se prueban con Vitest: los valida el job `supabase` del CI, que levanta el stack local y comprueba que un estudiante sembrado inicia sesión y que el hook de dominio rechaza cuentas ajenas. Cubre las dos cosas que se rompen en silencio: una migración que ya no aplica sobre una base limpia, y un seed que inserta datos que Auth después no puede leer.
 
