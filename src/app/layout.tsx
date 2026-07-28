@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "UTEC Horarios - Visualizador de Horarios 2026-1",
+  title: "UTEC Horarios - Visualizador de Horarios 2026-2",
   description: "Arma tu horario semestral de UTEC. Busca cursos, elige secciones y visualiza tu calendario semanal.",
   manifest: "/manifest.json",
   appleWebApp: {
