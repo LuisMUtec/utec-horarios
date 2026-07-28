@@ -23,6 +23,7 @@ Aplicación web para planificar y armar tu horario de clases en UTEC (Universida
 - **Tailwind CSS 4**
 - **pdfjs-dist** — extracción de datos de los PDFs
 - **html-to-image** — exportar el calendario como PNG
+- **Supabase** — autenticación con Google restringida a cuentas `@utec.edu.pe`
 - **Vercel Analytics**
 
 ## Inicio rápido
@@ -39,6 +40,34 @@ pnpm dev
 
 Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
+El login es opcional: sin variables de entorno la app corre igual, solo queda deshabilitado el inicio de sesión.
+
+## Autenticación (opcional)
+
+La app permite iniciar sesión con Google, restringido a cuentas `@utec.edu.pe`. Copia `.env.example` a `.env.local` y rellena las dos variables:
+
+| Variable | Dónde sacarla |
+|----------|---------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Project Settings → Data API |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase → Project Settings → API Keys |
+
+Ambas son públicas por diseño: viajan al navegador.
+
+Hay una tercera opcional, `NEXT_PUBLIC_SITE_URL`, con el origen público que se usa para armar las URLs de redirección del login. En Vercel se deduce del deploy y en local del propio request, así que solo hace falta si la app corre detrás de otro proxy o con un dominio propio.
+
+Para montar el proyecto desde cero:
+
+1. **Google Cloud Console** → *APIs & Services → Credentials → OAuth client ID → Web application*. En *Authorized redirect URIs* va la URL de Supabase, no la de la app: `https://<ref>.supabase.co/auth/v1/callback`. Scopes: solo `openid`, `email` y `profile`.
+2. **Supabase → Authentication → Sign In / Providers → Google**: pegar Client ID y Client Secret.
+3. **Supabase → Authentication → URL Configuration**: *Site URL* la de producción, y en *Redirect URLs* `http://localhost:3000/**` más el patrón de previews.
+4. **Supabase → Authentication → Hooks → Before User Created**: apuntar a `public.hook_restrict_signup_to_utec`, la función que crea `supabase/migrations/`. Rechaza en el servidor cualquier alta fuera del dominio.
+
+El dominio lo imponen el hook, que bloquea el alta, y el callback, que vuelve a comprobar el correo antes de dejar pasar la sesión. El parámetro `hd` que se le pasa a Google no es una restricción: solo le sugiere qué cuenta ofrecer.
+
+Rutas del flujo: `GET /auth/login` lleva a Google, `GET /auth/callback` cierra el intercambio y deja la sesión en cookies, `POST /auth/signout` la cierra.
+
+El porqué de cada decisión —las tres capas, los scopes de Google, por qué el login es opcional— está en [`docs/auth.md`](docs/auth.md).
+
 ## Estructura del proyecto
 
 ```
@@ -47,7 +76,12 @@ src/
 │   ├── layout.tsx              # Layout raíz, metadata y Analytics
 │   ├── page.tsx                # Página principal con estado global
 │   ├── globals.css             # Estilos globales (Tailwind)
-│   └── api/parse-pdf/          # API para procesar PDF de Carga Hábil
+│   ├── api/parse-pdf/          # API para procesar PDF de Carga Hábil
+│   └── auth/
+│       ├── login/              # Arranca el OAuth con Google
+│       ├── callback/           # Canjea el code y valida el dominio
+│       ├── signout/            # Cierra la sesión
+│       └── error/              # Página de error de login
 ├── components/
 │   ├── CourseSearch.tsx        # Buscador de cursos
 │   ├── SectionSelector.tsx     # Selector de secciones y subsesiones
@@ -60,15 +94,28 @@ src/
 ├── lib/
 │   ├── schedule-utils.ts       # Colores, conflictos, búsqueda, constantes
 │   ├── subsession-utils.ts     # Análisis de subsesiones (labs, teorías)
-│   └── storage.ts              # Helpers de localStorage
+│   ├── storage.ts              # Helpers de localStorage
+│   ├── auth-domain.ts          # Allowlist del dominio de correo
+│   ├── rate-limit.ts           # Contador por IP del rate limit
+│   ├── request-origin.ts       # Origen público del request (x-forwarded-*)
+│   └── supabase/
+│       ├── client.ts           # Cliente de navegador
+│       ├── server.ts           # Cliente de servidor (cookies)
+│       └── proxy.ts            # Refresco de sesión en el proxy
 ├── data/
 │   └── courses.json            # Datos de cursos extraídos del PDF
 ├── types/
 │   └── index.ts                # Tipos: Course, Section, Session, etc.
-└── proxy.ts                    # Rate limiting en las rutas /api
+└── proxy.ts                    # Rate limiting en /api + refresco de sesión
+
+supabase/
+└── migrations/                 # Esquema y hooks de la base de datos
 
 scripts/
 └── parse-pdf.js                # Parser del PDF de horarios (pdfjs-dist)
+
+docs/
+└── auth.md                     # Decisiones de autenticación y su porqué
 ```
 
 ## Actualización de datos
@@ -104,6 +151,8 @@ pnpm test
 - **`tests/courses-data.test.ts`** — invariantes sobre `courses.json`: días válidos, horarios `HH:MM` con fin posterior al inicio, sesiones dentro de la grilla 07:00-22:00, códigos únicos y bien formados, `enrolled <= capacity`. Es la red de seguridad del update de ciclo: si el parseo del PDF sale mal, falla acá y no en producción.
 - **`tests/parse-pdf.test.ts`** — golden test: parsea el PDF y lo compara contra el `courses.json` commiteado. Detecta tanto un PDF cambiado sin regenerar como un cambio de comportamiento de `pdfjs-dist`.
 - **`tests/storage.test.ts`** — el store de `localStorage`, incluyendo la estabilidad referencial de `getSnapshot` (si se rompe, `useSyncExternalStore` entra en loop infinito), datos corruptos y fallos de escritura.
+- **`tests/auth-domain.test.ts`** — la allowlist del dominio de correo, con los casos que un `endsWith` dejaría pasar (`@notutec.edu.pe`, `@utec.edu.pe.evil.com`).
+- **`tests/rate-limit.test.ts`** y **`tests/proxy.test.ts`** — el contador por IP, el 429 de `/api` y el matcher del proxy (si deja de excluir estáticos, el proxy corre en cada asset sin que falle nada más).
 
 Después de correr `pnpm parse-pdf` para un ciclo nuevo, `pnpm test` valida los datos generados antes de deployar.
 
