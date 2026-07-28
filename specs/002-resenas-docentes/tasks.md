@@ -364,7 +364,7 @@ Tres cosas que el plan dejaba a medias y que estas tareas cierran. **Revísalas 
 
 - [ ] T097 [P] Añadir a `docs/moderacion.md` la consulta de SC-009 ya verificada contra datos reales: pares con al menos una puntuación y estudiantes únicos que contribuyeron. Es lo que permite saber si la feature sigue en arranque en frío ([R4](plan.md#r4-arranque-en-frío)).
 
-- [ ] T098 [P] Comprobar en producción que `pg_cron` está habilitado en el proyecto `rlsswhwrigdgsboqakyw` y que el job de purga quedó programado. En local basta el reset; en producción es una dependencia externa ([R5](plan.md#r5-dependencias-externas-sin-cerrar)).
+- [x] T098 [P] Comprobar en producción que `pg_cron` está habilitado en el proyecto `rlsswhwrigdgsboqakyw` y que el job de purga quedó programado. **Hecho**: `cron.job` tiene `purgar-resenas-eliminadas`, `17 4 * * *`, `select private.purge_expired_reviews();`, `active = true`. En local basta el reset; en producción es una dependencia externa ([R5](plan.md#r5-dependencias-externas-sin-cerrar)).
 
 - [ ] T099 Cerrar las tres condiciones de publicación de [politica-privacidad.md](politica-privacidad.md) —incluida la casilla de que `privacidad@mail.luismaquera.dev` recibe correo— y quitarle el estado de borrador. Recién entonces enlazar `/privacidad` desde el formulario.
 
