@@ -73,11 +73,10 @@ Plantilla para copiar y rellenar: [`specs/TEMPLATE.md`](specs/TEMPLATE.md).
 - Commits en español siguiendo el historial: `feat:`, `fix:`, `docs:`.
 - El PR incluye el spec y enlaza el issue donde se discutió (`Closes #N`).
 - `pnpm lint` y `pnpm build` deben pasar.
-- El cuerpo del PR debe decir:
-  - qué se implementó,
-  - qué requisitos `FR-` cubre cada cambio,
-  - las decisiones de implementación que el spec no cubría,
-  - **y lo que quedó incompleto, si quedó algo.** Un requisito sin implementar declarado en el PR es un detalle a resolver; descubierto después del merge, es un bug.
+- El cuerpo del PR **no repite el spec** — el spec ya viaja en el propio PR y quien revisa lo tiene al lado. Nada de tablas que mapeen cada `FR-` a su archivo: envejecen mal y no dicen nada que el diff no diga. El cuerpo cuenta lo que *no* está en el spec:
+  - qué se implementó, en un párrafo;
+  - las decisiones de implementación que el spec no cubría, y por qué se tomaron así;
+  - **lo que quedó incompleto o sin verificar, si quedó algo.** Un requisito sin implementar declarado en el PR es un detalle a resolver; descubierto después del merge, es un bug.
 
 ## Estilo de código
 
