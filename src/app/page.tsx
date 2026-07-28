@@ -211,7 +211,7 @@ export default function Home() {
           <div>
             <h1 className="text-xl font-bold text-gray-900 dark:text-white">UTEC Horarios</h1>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-               {studentName ? `¡Hola, ${studentName}! • ` : ''}Periodo 2026-1
+               {studentName ? `¡Hola, ${studentName}! • ` : ''}Periodo 2026-2
             </p>
           </div>
           <div className="flex items-center gap-4">
