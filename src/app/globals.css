@@ -13,6 +13,10 @@
   display: none;
 }
 
+/* Misma idea que la variante dark: para el switch del toggle, que sin esto se
+   pintaría en ON hasta que React hidratara. */
+@custom-variant gaps-off (&:is(.hide-gaps *));
+
 @layer base {
   /* Custom Scrollbar - Premium Aesthetic */
   ::-webkit-scrollbar {

@@ -347,17 +347,19 @@ export default function Home() {
               </label>
               <label className="flex items-center justify-between cursor-pointer">
                 <span className="text-xs text-gray-600 dark:text-gray-300">Mostrar huecos</span>
+                {/* Las variantes gaps-off: corrigen el switch antes de que React
+                    hidrate, igual que las dark: de ThemeToggle. */}
                 <button
                   type="button"
                   role="switch"
                   aria-checked={showGaps}
                   onClick={() => handleToggleGaps(!showGaps)}
-                  className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${
+                  className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors gaps-off:bg-gray-300 dark:gaps-off:bg-gray-600 ${
                     showGaps ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
                   }`}
                 >
                   <span
-                    className={`inline-block h-3.5 w-3.5 rounded-full bg-white shadow-sm transition-transform ${
+                    className={`inline-block h-3.5 w-3.5 rounded-full bg-white shadow-sm transition-transform gaps-off:translate-x-[3px] ${
                       showGaps ? 'translate-x-[18px]' : 'translate-x-[3px]'
                     }`}
                   />
