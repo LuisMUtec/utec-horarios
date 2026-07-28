@@ -4,12 +4,12 @@ import { DAYS } from '@/lib/schedule-utils';
 import type { Course } from '@/types';
 
 /**
- * Invariantes sobre los datos generados desde el PDF.
+ * Invariantes sobre los datos generados desde el xlsx de horarios.
  *
- * El riesgo recurrente del proyecto es el update de ciclo: se reemplaza el PDF,
- * se corre `pnpm parse-pdf` y se deploya. Si el parseo sale mal, hoy nadie se
- * entera hasta que un alumno ve un horario roto. Estos tests corren sobre el
- * courses.json commiteado y fallan antes del deploy.
+ * El riesgo recurrente del proyecto es el update de ciclo: se baja un export
+ * nuevo, se corre `pnpm parse-xlsx` y se deploya. Si el parseo sale mal, hoy
+ * nadie se entera hasta que un alumno ve un horario roto. Estos tests corren
+ * sobre el courses.json commiteado y fallan antes del deploy.
  */
 
 const courses = coursesData as Course[];
