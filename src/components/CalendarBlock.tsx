@@ -1,6 +1,7 @@
 'use client';
 
 import { CalendarEvent } from '@/types';
+import { BLOCK_PAD } from '@/lib/schedule-utils';
 
 interface Props {
   event: CalendarEvent;
@@ -15,7 +16,6 @@ interface Props {
 export default function CalendarBlock({ event, top, height, hasConflict, isPreview, column = 0, totalColumns = 1 }: Props) {
   const { session, courseCode, courseName, color } = event;
 
-  const PAD = 2; // px padding between adjacent blocks
   const widthPct = 100 / totalColumns;
   const leftPct = column * widthPct;
 
@@ -29,8 +29,8 @@ export default function CalendarBlock({ event, top, height, hasConflict, isPrevi
       style={{
         top,
         height: Math.max(height, 20),
-        left: totalColumns > 1 ? `calc(${leftPct}% + ${PAD}px)` : PAD,
-        width: totalColumns > 1 ? `calc(${widthPct}% - ${PAD * 2}px)` : `calc(100% - ${PAD * 2}px)`,
+        left: totalColumns > 1 ? `calc(${leftPct}% + ${BLOCK_PAD}px)` : BLOCK_PAD,
+        width: totalColumns > 1 ? `calc(${widthPct}% - ${BLOCK_PAD * 2}px)` : `calc(100% - ${BLOCK_PAD * 2}px)`,
       }}
       title={`${courseCode} - ${courseName}\n${session.type}\n${session.startTime} - ${session.endTime}\n${session.location}\n${session.professor}`}
     >

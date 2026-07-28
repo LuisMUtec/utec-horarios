@@ -6,6 +6,17 @@
   --font-sans: var(--font-inter);
 }
 
+/* El script bloqueante de layout.tsx marca <html class="hide-gaps"> antes del
+   primer paint cuando el usuario desactivó "Mostrar huecos", para que nunca
+   lleguen a verse aunque React todavía no haya leído la preferencia. */
+.hide-gaps :is(.gap-block, .gap-summary) {
+  display: none;
+}
+
+/* Misma idea que la variante dark: para el switch del toggle, que sin esto se
+   pintaría en ON hasta que React hidratara. */
+@custom-variant gaps-off (&:is(.hide-gaps *));
+
 @layer base {
   /* Custom Scrollbar - Premium Aesthetic */
   ::-webkit-scrollbar {
