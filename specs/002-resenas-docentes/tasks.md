@@ -144,33 +144,33 @@ Tres cosas que el plan dejaba a medias y que estas tareas cierran. **Revísalas 
 
 ### Tests para US1
 
-- [ ] T028 [P] [US1] Crear `tests/review-format.test.ts`: promedio con un decimal en escala 1–5, porcentaje entero sin decimales, `1 puntuación` en singular frente a `N puntuaciones`, `Aún no hay comentarios`, y la distinción entre `Sin puntuaciones` (hay docente, nadie lo evaluó) y `Docente por asignar` (no hay a quién evaluar).
+- [x] T028 [P] [US1] Crear `tests/review-format.test.ts`: promedio con un decimal en escala 1–5, porcentaje entero sin decimales, `1 puntuación` en singular frente a `N puntuaciones`, `Aún no hay comentarios`, y la distinción entre `Sin puntuaciones` (hay docente, nadie lo evaluó) y `Docente por asignar` (no hay a quién evaluar).
 
-- [ ] T029 [P] [US1] Crear `tests/reviews-queries.test.ts` sobre la capa de consulta: la proyección de `getCourseSummaries` no incluye `author_id` bajo ninguna forma, y agrupa por par docente–curso de modo que un docente repetido en dos sesiones de la misma sección devuelve una sola entrada (FR-009) y el mismo docente en dos secciones del curso comparte resumen (FR-011).
+- [x] T029 [P] [US1] Crear `tests/reviews-queries.test.ts` sobre la capa de consulta: la proyección de `getCourseSummaries` no incluye `author_id` bajo ninguna forma, y agrupa por par docente–curso de modo que un docente repetido en dos sesiones de la misma sección devuelve una sola entrada (FR-009) y el mismo docente en dos secciones del curso comparte resumen (FR-011).
 
 ### Implementación de US1
 
-- [ ] T030 [P] [US1] Crear `src/lib/review-format.ts` con el formateo puro: promedio, porcentaje, plurales de conteos, etiqueta `editado`, y el texto del límite de FR-031. Sin JSX ni acceso a red — es una de las tres piezas que compensan el coverage del JSX nuevo ([R1](plan.md#r1-el-trinquete-de-coverage-bloquea-el-ci)).
+- [x] T030 [P] [US1] Crear `src/lib/review-format.ts` con el formateo puro: promedio, porcentaje, plurales de conteos, etiqueta `editado`, y el texto del límite de FR-031. Sin JSX ni acceso a red — es una de las tres piezas que compensan el coverage del JSX nuevo ([R1](plan.md#r1-el-trinquete-de-coverage-bloquea-el-ci)).
 
-- [ ] T031 [P] [US1] Crear `src/lib/reviews.ts` con las consultas contra Supabase que usan los route handlers, empezando por `getCourseSummaries(courseCode)` sobre `teacher_course_summaries`. Recibe el cliente por parámetro para ser testeable en node. Devuelve tipos propios de la aplicación, no las filas de la vista.
+- [x] T031 [P] [US1] Crear `src/lib/reviews.ts` con las consultas contra Supabase que usan los route handlers, empezando por `getCourseSummaries(courseCode)` sobre `teacher_course_summaries`. Recibe el cliente por parámetro para ser testeable en node. Devuelve tipos propios de la aplicación, no las filas de la vista.
 
-- [ ] T032 [P] [US1] Crear `src/lib/api-client.ts` con el fetch tipado a `/api/*` desde los componentes, incluida la caché en memoria por curso que vive lo que dure la pestaña y su invalidación explícita. La invalidación es lo que sostiene SC-005 en la pestaña del propio autor, que es donde más se nota; las fases 5 y 6 la van a llamar.
+- [x] T032 [P] [US1] Crear `src/lib/api-client.ts` con el fetch tipado a `/api/*` desde los componentes, incluida la caché en memoria por curso que vive lo que dure la pestaña y su invalidación explícita. La invalidación es lo que sostiene SC-005 en la pestaña del propio autor, que es donde más se nota; las fases 5 y 6 la van a llamar.
 
-- [ ] T033 [US1] Crear `src/app/api/courses/[code]/summaries/route.ts`: valida el código de curso, llama a `getCourseSummaries` con el cliente de servidor de `src/lib/supabase/server.ts` —uno por request, nunca en scope de módulo— y responde la proyección sin `author_id`. Sin sesión requerida. Si faltan las variables de entorno de Supabase, responde un cuerpo vacío bien formado en lugar de reventar, que es lo que mantiene la garantía de `docs/auth.md`.
+- [x] T033 [US1] Crear `src/app/api/courses/[code]/summaries/route.ts`: valida el código de curso, llama a `getCourseSummaries` con el cliente de servidor de `src/lib/supabase/server.ts` —uno por request, nunca en scope de módulo— y responde la proyección sin `author_id`. Sin sesión requerida. Si faltan las variables de entorno de Supabase, responde un cuerpo vacío bien formado en lugar de reventar, que es lo que mantiene la garantía de `docs/auth.md`.
 
-- [ ] T034 [P] [US1] Crear `src/components/reviews/TeacherSummary.tsx`: estrellas con el promedio, porcentaje de recomendación, conteo de puntuaciones y de comentarios, y los estados `Sin puntuaciones` y `Docente por asignar`. Tailwind con variante `dark:` en todo (edge case *Modo claro y oscuro*). Componente fino: todo el texto sale de `review-format.ts`. La interfaz no presenta la puntuación como medida de facilidad (FR-004) ni la recomendación como medida de carga o dificultad (FR-062).
+- [x] T034 [P] [US1] Crear `src/components/reviews/TeacherSummary.tsx`: estrellas con el promedio, porcentaje de recomendación, conteo de puntuaciones y de comentarios, y los estados `Sin puntuaciones` y `Docente por asignar`. Tailwind con variante `dark:` en todo (edge case *Modo claro y oscuro*). Componente fino: todo el texto sale de `review-format.ts`. La interfaz no presenta la puntuación como medida de facilidad (FR-004) ni la recomendación como medida de carga o dificultad (FR-062).
 
-- [ ] T035 [US1] Integrar `TeacherSummary` en `src/components/SectionSelector.tsx`, agrupando por docente normalizado con `teacherPairKey` para que un docente repetido en varias sesiones aparezca una sola vez (FR-009) y cada docente de una sección tenga su propio resumen (FR-010). Una sesión cuyo correo normalizado es `null` renderiza `Docente por asignar` y no ofrece detalle (FR-054).
+- [x] T035 [US1] Integrar `TeacherSummary` en `src/components/SectionSelector.tsx`, agrupando por docente normalizado con `teacherPairKey` para que un docente repetido en varias sesiones aparezca una sola vez (FR-009) y cada docente de una sección tenga su propio resumen (FR-010). Una sesión cuyo correo normalizado es `null` renderiza `Docente por asignar` y no ofrece detalle (FR-054).
 
-- [ ] T036 [US1] Pedir los resúmenes **por curso al desplegarlo** desde `SectionSelector`, no par por par, y cachearlos con `api-client.ts`. Una llamada trae los docentes de todas las secciones del curso ([D1](plan.md#d1-teacher_course_summaries-se-consulta-desde-el-cliente)).
+- [x] T036 [US1] Pedir los resúmenes **por curso al desplegarlo** desde `SectionSelector`, no par por par, y cachearlos con `api-client.ts`. Una llamada trae los docentes de todas las secciones del curso ([D1](plan.md#d1-teacher_course_summaries-se-consulta-desde-el-cliente)).
 
-- [ ] T037 [US1] Degradación sin Supabase: cuando falten `NEXT_PUBLIC_SUPABASE_URL` o `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, la app renderiza el horario exactamente como hoy y no muestra ni resúmenes ni estados de error. Armar el horario tiene que sobrevivir a que Supabase esté caído.
+- [x] T037 [US1] Degradación sin Supabase: cuando falten `NEXT_PUBLIC_SUPABASE_URL` o `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, la app renderiza el horario exactamente como hoy y no muestra ni resúmenes ni estados de error. Armar el horario tiene que sobrevivir a que Supabase esté caído.
 
-- [ ] T038 [US1] Estado de carga y de fallo distinguibles del estado `Sin puntuaciones`, que es literalmente lo que pide SC-002. Un resumen que no cargó no puede parecerse a un docente sin reseñas.
+- [x] T038 [US1] Estado de carga y de fallo distinguibles del estado `Sin puntuaciones`, que es literalmente lo que pide SC-002. Un resumen que no cargó no puede parecerse a un docente sin reseñas.
 
-- [ ] T039 [US1] Comprobar que abrir y cerrar el resumen no toca `localStorage` ni la selección de cursos y secciones (FR-012, SC-001). Añadir el caso a `tests/storage.test.ts` si el flujo lo permite sin jsdom.
+- [x] T039 [US1] Comprobar que abrir y cerrar el resumen no toca `localStorage` ni la selección de cursos y secciones (FR-012, SC-001). Añadir el caso a `tests/storage.test.ts` si el flujo lo permite sin jsdom.
 
-- [ ] T040 [US1] **Medir R1**: correr `pnpm test --coverage` con los `.tsx` nuevos dentro y comparar contra el piso de `vitest.config.ts` (`32.57 / 32.63 / 28.33 / 25.06`). Si alguno de los cuatro baja, montar jsdom + `@testing-library/react` y añadir tests de componente antes de seguir. Anotar el resultado en el Progress Tracking de plan.md — es el pendiente *R1 medido con el primer componente*.
+- [x] T040 [US1] **Medir R1**: correr `pnpm test --coverage` con los `.tsx` nuevos dentro y comparar contra el piso de `vitest.config.ts` (`32.57 / 32.63 / 28.33 / 25.06`). Si alguno de los cuatro baja, montar jsdom + `@testing-library/react` y añadir tests de componente antes de seguir. Anotar el resultado en el Progress Tracking de plan.md — es el pendiente *R1 medido con el primer componente*.
 
 **Checkpoint**: US1 funciona sola. Un visitante sin sesión compara docentes. PR 2 listo.
 
