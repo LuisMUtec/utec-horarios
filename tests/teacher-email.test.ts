@@ -83,12 +83,12 @@ describe('la oferta vigente, ya normalizada', () => {
     }))
     .filter((entry) => entry.email !== null);
 
-  it('tiene 1821 sesiones', () => {
-    expect(sessions).toHaveLength(1821);
+  it('tiene 1904 sesiones', () => {
+    expect(sessions).toHaveLength(1904);
   });
 
-  it('deja 378 sesiones sin docente evaluable', () => {
-    expect(sessions.length - withTeacher.length).toBe(378);
+  it('deja 199 sesiones sin docente evaluable', () => {
+    expect(sessions.length - withTeacher.length).toBe(199);
   });
 
   it('no descarta ningún docente al descartar esas sesiones', () => {
@@ -101,24 +101,26 @@ describe('la oferta vigente, ya normalizada', () => {
     expect(lost).toHaveLength(0);
   });
 
-  it('identifica 336 docentes distintos', () => {
-    expect(new Set(withTeacher.map((entry) => entry.email)).size).toBe(336);
+  it('identifica 372 docentes distintos', () => {
+    expect(new Set(withTeacher.map((entry) => entry.email)).size).toBe(372);
   });
 
-  it('produce 619 pares docente–curso reseñables', () => {
+  it('produce 757 pares docente–curso reseñables', () => {
     const pairs = new Set(
       withTeacher.map((entry) => teacherPairKey(entry.course.code, entry.email!))
     );
-    expect(pairs.size).toBe(619);
+    expect(pairs.size).toBe(757);
   });
 
-  it('recupera 344 sesiones que sin normalizar se habrían partido o perdido', () => {
-    // Sin este rescate serían 267 docentes y 496 pares.
+  it('no necesita rescatar ningún correo: la fuente ya viene limpia', () => {
+    // Con el PDF eran 344 sesiones rescatadas; el xlsx trae una celda por campo
+    // y no parte nada. El normalizador se queda como red: si vuelve a haber
+    // correos sucios, este test lo dice antes de que se cuelen a la migración.
     const recovered = sessions.filter(
       ({ session }) =>
         normalizeTeacherEmail(session.email) !== null &&
         normalizeTeacherEmail(session.email) !== session.email
     );
-    expect(recovered).toHaveLength(344);
+    expect(recovered).toHaveLength(0);
   });
 });
