@@ -3,7 +3,7 @@
 **Feature Branch**: `002-resenas-docentes`
 **Created**: 2026-07-28
 **Estado**: Propuesta — requiere tu revisión antes de escribir código
-**Spec**: [spec.md](spec.md) · 57 FR, 36 escenarios, SC-001..SC-009
+**Spec**: [spec.md](spec.md) · 63 FR, 37 escenarios, SC-001..SC-009
 
 ---
 
@@ -148,11 +148,14 @@ igual que el historial.
 
 ```sql
 -- Catálogo de FR-017. Lo lee el selector de carrera; `faculty` solo agrupa
--- visualmente y nunca acompaña a una reseña.
+-- visualmente y nunca acompaña a una reseña. `slug` es la llave estable de
+-- carreras-utec.md, y sirve para que la migración y el selector no dependan del
+-- orden en que se generen los ids.
 create table public.careers (
-  slug     text primary key,
-  name     text not null,
-  faculty  text not null,
+  id        uuid primary key default gen_random_uuid(),
+  slug      text unique not null check (slug ~ '^[a-z0-9-]+$'),
+  name      text not null,
+  faculty   text not null,
   is_active boolean not null default true
 );
 
@@ -161,15 +164,19 @@ create table public.careers (
 -- La sanción (FR-049, FR-056, FR-057) vive acá y no en una tabla aparte: la baja
 -- de cuenta es funcional y la fila de auth.users nunca se borra, así que el
 -- `sub` sobrevive y no hace falta anclar el baneo a nada más. Ver D3.
+--
+-- `restrict` y no `cascade`: con cascade, borrar la fila de auth.users se
+-- llevaría el perfil y con él la sanción, que es justo lo que tiene que
+-- sobrevivir. Un borrado manual falla en vez de dejar el baneo sin registro.
 create table public.profiles (
-  id          uuid primary key references auth.users(id) on delete cascade,
-  career_slug text references public.careers(slug),
-  term        smallint check (term between 1 and 10),
-  banned_at   timestamptz,
-  ban_reason  text,
+  id             uuid primary key references auth.users(id) on delete restrict,
+  career_id      uuid references public.careers(id),
+  term           smallint check (term between 1 and 10),
+  banned_at      timestamptz,
+  ban_reason     text,
   deactivated_at timestamptz,
-  created_at  timestamptz not null default now(),
-  updated_at  timestamptz not null default now(),
+  created_at     timestamptz not null default now(),
+  updated_at     timestamptz not null default now(),
   -- Un baneo sin motivo dejaría a FR-057 sin qué mostrar.
   constraint ban_has_reason check ((banned_at is null) = (ban_reason is null))
 );
@@ -177,12 +184,17 @@ create table public.profiles (
 -- La oferta vigente, materializada. Es la lista blanca de pares reseñables.
 -- `is_current` en vez de borrar: una reseña de un par que sale de la oferta se
 -- conserva y deja de mostrarse (Dependencies del spec), pero su FK sigue viva.
+--
+-- El par (course_code, teacher_email) es la llave natural y queda como unique;
+-- la que viaja por las FK es `id`, para que renombrar un correo mal parseado sea
+-- un update de una fila y no una cascada por todas las reseñas.
 create table public.course_teachers (
+  id            uuid primary key default gen_random_uuid(),
   course_code   text not null,
   teacher_email text not null check (teacher_email = lower(teacher_email)),
   teacher_name  text not null,
   is_current    boolean not null default true,
-  primary key (course_code, teacher_email)
+  unique (course_code, teacher_email)
 );
 
 create type public.review_state as enum ('active', 'deleted_by_author', 'removed_by_moderation');
@@ -194,8 +206,7 @@ create table public.reviews (
   -- Studio, Postgres se niega en vez de llevarse las reseñas por delante y
   -- anular la ventana de 30 días.
   author_id            uuid not null references auth.users(id) on delete restrict,
-  course_code          text not null,
-  teacher_email        text not null,
+  course_teacher_id    uuid not null references public.course_teachers(id) on delete restrict,
   rating               smallint not null check (rating between 1 and 5),
   -- FR-061: obligatoria. `not null` sin default es todo lo que hace falta —
   -- "sin valor preseleccionado" es del formulario, no de la columna.
@@ -204,6 +215,10 @@ create table public.reviews (
   -- FR-021: la declaración es el único respaldo que existe de que llevó el curso.
   -- Se guarda para que la moderación pueda apoyarse en ella.
   declared_attendance  boolean not null check (declared_attendance),
+  -- FR-025. Se persiste porque la Data API sigue alcanzable (D6): sin esta
+  -- columna, un insert directo por PostgREST publicaría un comentario sin haber
+  -- pasado por el control. Borrar el comentario no la resetea.
+  respect_acknowledged boolean not null default false,
   state                public.review_state not null default 'active',
   published_at         timestamptz not null default now(),
   comment_published_at timestamptz,
@@ -212,18 +227,17 @@ create table public.reviews (
   -- Se sella al salir de 'active'. La purga de 30 días de la política de
   -- privacidad barre por esta columna.
   purge_after          timestamptz,
-  foreign key (course_code, teacher_email)
-    references public.course_teachers (course_code, teacher_email)
+  constraint comment_needs_acknowledgement
+    check (comment is null or respect_acknowledged)
 );
 
 -- FR-027: como máximo una reseña activa por par. Parcial, para que las
 -- eliminadas no bloqueen volver a reseñar.
 create unique index reviews_one_active_per_pair
-  on public.reviews (author_id, course_code, teacher_email)
+  on public.reviews (author_id, course_teacher_id)
   where state = 'active';
 
--- El resumen se agrupa por par; el filtro de las políticas es por autor.
-create index reviews_by_pair on public.reviews (course_code, teacher_email) where state = 'active';
+create index reviews_by_pair on public.reviews (course_teacher_id) where state = 'active';
 create index reviews_by_author_recent on public.reviews (author_id, published_at desc);
 
 create type public.report_reason as enum
@@ -258,7 +272,7 @@ identidad se conserva para trazabilidad. Ninguna fila de `auth.users` se borra.
 |---|---|---|
 | Inicio de sesión | se bloquea (`auth.users.banned_until`) | Es lo que el usuario pidió: dejar de tener acceso |
 | `reviews` | pasan a eliminadas y se purgan a los 30 días | La política promete esa ventana y la usa para resolver reportes abiertos |
-| `profiles.career_slug` y `term` | se limpian | Son datos personales sin valor de trazabilidad una vez cerrado el acceso |
+| `profiles.career_id` y `term` | se limpian | Son datos personales sin valor de trazabilidad una vez cerrado el acceso |
 | `profiles.id`, la fila de `auth.users` y la sanción si la hubo | **quedan** | Es la trazabilidad. Sin ella una expulsión permanente se esquiva pidiendo la baja y volviendo a registrarse |
 
 ### Resúmenes públicos
@@ -266,20 +280,24 @@ identidad se conserva para trazabilidad. Ninguna fila de `auth.users` se borra.
 ```sql
 create view public.teacher_course_summaries as
 select
-  course_code,
-  teacher_email,
-  round(avg(rating)::numeric, 1) as average_rating,
-  count(*)                       as rating_count,
-  count(comment)                 as comment_count,
+  ct.id            as course_teacher_id,
+  ct.course_code,
+  ct.teacher_email,
+  round(avg(r.rating)::numeric, 1) as average_rating,
+  count(*)                         as rating_count,
+  count(r.comment)                 as comment_count,
   -- FR-059: proporción de `Sí` sobre el total de reseñas activas, entero. El
   -- denominador es count(*) y no un filtro aparte porque la recomendación es
   -- obligatoria: coincide siempre con rating_count. No puede ser cero — un
   -- grupo existe solo si tiene al menos una fila.
-  round(100.0 * count(*) filter (where recommends) / count(*))::int
-                                 as recommend_percentage
-from public.reviews
-where state = 'active'
-group by course_code, teacher_email;
+  round(100.0 * count(*) filter (where r.recommends) / count(*))::int
+                                   as recommend_percentage
+from public.reviews r
+join public.course_teachers ct on ct.id = r.course_teacher_id
+-- `is_current` acá y no solo en la UI: un par que sale de la oferta deja de
+-- mostrarse aunque conserve sus reseñas (Dependencies del spec).
+where r.state = 'active' and ct.is_current
+group by ct.id, ct.course_code, ct.teacher_email;
 
 grant select on public.teacher_course_summaries to anon, authenticated;
 ```
@@ -345,11 +363,13 @@ salida es la misma que para los resúmenes — una segunda vista:
 
 ```sql
 create view public.review_comments as
-select r.id, r.course_code, r.teacher_email,
+select r.id, r.course_teacher_id, ct.course_code, ct.teacher_email,
        r.rating, r.recommends, r.comment,
        r.comment_published_at, r.comment_edited_at
 from public.reviews r
+join public.course_teachers ct on ct.id = r.course_teacher_id
 where r.state = 'active'
+  and ct.is_current                            -- mismo recorte que el resumen
   and r.comment is not null                    -- FR-036: sin elementos vacíos
   and not public.is_banned()                   -- FR-049
   -- FR-046: oculta para quien la reportó, visible para el resto.
@@ -413,9 +433,16 @@ create policy "cada quien edita su perfil" on public.profiles
 
 -- La única política de select sobre `reviews`: la fila propia. Los comentarios
 -- ajenos se leen por `review_comments`, que no expone `author_id`.
-create policy "cada quien ve sus propias reseñas" on public.reviews
+-- `state = 'active'`: la política de privacidad dice que una reseña eliminada
+-- "ya no la ve nadie" durante sus 30 días. Ni su autor. Las eliminadas quedan
+-- solo para moderación y purga, que corren con service_role.
+create policy "cada quien ve sus propias reseñas activas" on public.reviews
   for select to authenticated
-  using (author_id = (select auth.uid()) and not public.is_banned());
+  using (
+    author_id = (select auth.uid())
+    and state = 'active'
+    and not public.is_banned()
+  );
 
 create policy "publicar reseñas propias" on public.reviews
   for insert to authenticated with check (
@@ -452,16 +479,17 @@ llegue por la Data API y no por código nuestro:
 |---|---|---|---|
 | `handle_new_user` | `after insert on auth.users` | — | Crea el `profiles` del usuario, para que el formulario de perfil siempre tenga fila que actualizar |
 | `normalize_review` | `before insert/update on reviews` | edge case | `comment := nullif(btrim(comment), '')`. Un comentario de solo espacios es una reseña sin comentario |
-| `enforce_current_pair` | `before insert on reviews` | FR-028 | El par tiene que estar en `course_teachers` **y** `is_current` |
+| `enforce_current_pair` | `before insert on reviews` | FR-028 | La FK ya exige que el par exista; el trigger agrega que esté `is_current` |
 | `enforce_daily_rating_limit` | `before insert on reviews` | FR-030 | ≤ 8 filas creadas por el autor en 24 h, **contando las eliminadas**. Levanta un error con el instante de liberación para FR-031 |
-| `enforce_comment_profile` | `before insert/update on reviews` | FR-017 | Si `comment is not null`, el perfil tiene que tener `career_slug` y `term` |
+| `enforce_comment_profile` | `before insert/update on reviews` | FR-017 | Si `comment is not null`, el perfil tiene que tener `career_id` y `term` |
 | `stamp_review_timestamps` | `before update on reviews` | FR-055, FR-033 | Primera vez que `comment` deja de ser nulo → `comment_published_at`. Cambio de texto con `comment_published_at` ya puesto → `comment_edited_at`. `published_at` nunca se toca |
 | `stamp_purge_after` | `before update on reviews` | privacidad | Al salir de `active`, `purge_after := now() + interval '30 days'` |
 | `enforce_reportable` | `before insert on review_reports` | FR-042, FR-052 | Solo se reporta una reseña activa **con comentario** |
 
-**FR-025 (compromiso de respeto) no se persiste**: es una confirmación por publicación, no
-un consentimiento con historia. Se impone en el formulario. Si en el review quieres
-trazabilidad, es una columna más y un check — dilo y entra.
+**FR-025 (compromiso de respeto) se persiste** en `respect_acknowledged`, con un check que
+exige `comment is null or respect_acknowledged`. En el formulario el control arranca
+desmarcado; la columna existe porque D6 no cierra la Data API y un insert directo publicaría
+un comentario sin haber pasado por él.
 
 ### Moderación sin consola (FR-051)
 
@@ -480,7 +508,7 @@ pasa a `removed_by_moderation` **todas** las reseñas activas del autor. Una sol
 evita que FR-056 se cumpla a medias.
 
 `deactivate_account` es la baja a pedido: bloquea el inicio de sesión, pasa las reseñas a
-eliminadas —lo que sella su `purge_after`— y limpia `career_slug` y `term`. No borra la
+eliminadas —lo que sella su `purge_after`— y limpia `career_id` y `term`. No borra la
 fila de `auth.users` ni la de `profiles`.
 
 **Un baneo y una baja no cierran la misma puerta.** La baja bloquea el login, que es lo que
@@ -527,7 +555,7 @@ políticas de arriba se evalúan sin código extra.
 | `PATCH /api/reviews/[id]` | Edita puntuación, recomendación o comentario | Sí |
 | `DELETE /api/reviews/[id]` | Soft delete a `deleted_by_author` | Sí |
 | `POST /api/reviews/[id]/reports` | Reporta una reseña | Sí |
-| `GET` y `PATCH /api/profile` | Carrera y ciclo | Sí |
+| `GET` y `PATCH /api/profile` | Carrera y ciclo, y el estado de sanción | Sí |
 
 **Qué compra**: un lugar donde validar entrada y responder errores en español; la
 proyección de cada respuesta decidida en el servidor, de modo que `author_id` no sale
@@ -538,8 +566,17 @@ aunque una consulta lo traiga; el rate limit por IP que `src/proxy.ts` ya aplica
 así que PostgREST sigue siendo alcanzable con ella. Los handlers no son la frontera — lo
 son RLS y los triggers.
 
+**El baneo se responde, no se deja fallar (FR-057).** Cada handler restringido consulta el
+perfil antes de operar y, si `banned_at` no es nulo, corta con `403` y un cuerpo
+`{ banned: true, reason }`. `GET /api/profile` devuelve lo mismo para que la UI muestre el
+motivo sin tener que provocar un error. Un rechazo de RLS es un fallo genérico y no alcanza
+para FR-057.
+
 El resumen se pide **por curso al desplegarlo**, no par por par: una llamada trae los
 docentes de todas las secciones y se cachea en memoria mientras dure la pestaña.
+**La caché se invalida en cada mutación**: publicar, editar o eliminar borra la entrada del
+curso afectado y vuelve a pedirla. Sin eso SC-005 se rompe en la pestaña del propio autor,
+que es donde más se nota.
 
 ### Estructura de archivos
 
@@ -791,9 +828,10 @@ parseado.
 - [x] Investigación de datos y del estado actual
 - [x] Modelo de datos, RLS, triggers y contratos
 - [x] Riesgos identificados
-- [x] D1 … D5 confirmadas
-- [x] Política de privacidad alineada con el diseño
+- [x] D1 … D6 documentadas y acordadas
+- [x] Política de privacidad alineada con el diseño (sigue siendo borrador)
 - [ ] **Plan revisado y aprobado**
+- [ ] Las tres condiciones de publicación de la política, cumplidas
 - [ ] R6 resuelto: qué pasa con las reseñas de un docente reemplazado
 - [ ] R1 medido con el primer componente
 - [ ] Reparto en PRs

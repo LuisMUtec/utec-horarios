@@ -54,7 +54,9 @@ entrega, tu nombre y tu foto. Pedimos únicamente los permisos mínimos
 (`openid`, `email`, `profile`): no accedemos a tu correo, tu Drive ni tu
 calendario.
 
-Usamos el correo para una sola cosa: comprobar que eres de UTEC.
+Usamos el correo para comprobar que eres de UTEC. Queda además asociado a tu
+cuenta mientras exista, y esa cuenta no se borra ni siquiera si pides la baja
+—abajo está por qué—.
 
 ### Si publicas una reseña
 

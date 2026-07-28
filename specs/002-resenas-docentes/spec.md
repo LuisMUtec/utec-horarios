@@ -88,7 +88,7 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 
 25. **Given** un docente con comentarios para un curso, **When** un estudiante autenticado abre el detalle, **Then** ve primero los comentarios publicados más recientemente.
 
-26. **Given** una reseña que contiene puntuación y comentario, **When** aparece en el detalle, **Then** muestra las estrellas, el texto y la fecha de publicación —con la marca `editado` si el comentario cambió después de publicarse—, sin identificar al autor ni mostrar su carrera, ciclo o período académico.
+26. **Given** una reseña que contiene puntuación y comentario, **When** aparece en el detalle, **Then** muestra las estrellas, el texto y la fecha en que se publicó ese comentario —con la marca `editado` si cambió después de publicarse—, sin identificar al autor ni mostrar su carrera, ciclo o período académico.
 
 27. **Given** un docente con puntuaciones pero sin comentarios, **When** un estudiante autenticado abre el detalle, **Then** ve el promedio y el mensaje `Aún no hay comentarios`.
 
@@ -208,20 +208,21 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 - **FR-030**: Cada estudiante DEBE poder crear como máximo ocho puntuaciones nuevas dentro de cualquier período de 24 horas. El tope cubre una carga académica completa para que un alumno pueda reseñar a todos sus docentes del ciclo de una sola vez.
 - **FR-031**: El sistema DEBE explicar el límite cuando bloquee una novena puntuación e indicar cuándo vuelve a estar disponible la publicación.
 - **FR-032**: El sistema NO DEBE solicitar ni guardar el período académico en que el estudiante llevó el curso.
-- **FR-033**: La fecha de publicación DEBE registrarse y mostrarse junto a los comentarios, pero NO DEBE presentarse como la fecha en que el estudiante llevó el curso.
+- **FR-033**: La fecha de publicación de la reseña DEBE registrarse y NO DEBE presentarse como la fecha en que el estudiante llevó el curso. Es la fecha que gobierna el límite de FR-030; la que se muestra junto a un comentario es la de FR-064.
 - **FR-061**: Toda reseña DEBE incluir una respuesta obligatoria a `¿Recomendarías llevar este curso con este docente?`, con las opciones `Sí` y `No` y sin valor preseleccionado. El sistema NO DEBE permitir publicar una reseña sin esta respuesta.
 - **FR-062**: La recomendación DEBE representar si el estudiante aconsejaría esa experiencia académica a otro alumno; la interfaz NO DEBE presentarla como una medida de facilidad, de carga ni de dificultad del curso.
 
 #### Lectura, edición y eliminación
 
 - **FR-034**: Los comentarios DEBEN mostrarse del más reciente al más antiguo.
-- **FR-035**: Cada comentario DEBE mostrar la puntuación asociada, la recomendación asociada, el texto y la fecha de publicación, sin identidad pública del autor.
+- **FR-035**: Cada comentario DEBE mostrar la puntuación asociada, la recomendación asociada, el texto y su fecha de publicación (FR-064), sin identidad pública del autor.
 - **FR-036**: Las reseñas sin comentario NO DEBEN generar elementos vacíos en la lista de comentarios.
 - **FR-037**: El autor DEBE poder editar la puntuación y añadir, modificar o eliminar el comentario de su reseña activa; una reseña eliminada por moderación NO DEBE poder editarse ni restaurarse por su autor, se haya aplicado o no una sanción.
 - **FR-038**: Una edición DEBE actualizar el promedio y los conteos sin aumentar la cantidad de puntuaciones ni consumir un cupo adicional del límite de publicación; añadir o editar texto mantiene los requisitos de perfil y compromiso de respeto.
 - **FR-039**: El autor DEBE poder eliminar su reseña después de una confirmación explícita.
 - **FR-040**: Una reseña eliminada DEBE dejar inmediatamente de participar en el promedio y en los conteos.
-- **FR-055**: Un comentario modificado después de publicarse DEBE mostrar la marca `editado` junto a su fecha. La fecha visible sigue siendo la de publicación (FR-033) y NO DEBE reemplazarse por la de la última edición.
+- **FR-055**: Un comentario modificado después de publicarse DEBE mostrar la marca `editado` junto a su fecha. La fecha visible sigue siendo la de su publicación (FR-064) y NO DEBE reemplazarse por la de la última edición.
+- **FR-064**: El sistema DEBE registrar por separado la fecha en que un comentario se publicó por primera vez, y esa es la que DEBE mostrarse junto a él. Cuando la puntuación y el comentario se publican juntos coincide con la fecha de la reseña (FR-033); cuando el comentario se añade después, NO DEBE mostrarse la fecha de la puntuación.
 - **FR-063**: La recomendación forma parte de la reseña y NO constituye una contribución independiente. Toda regla de unicidad, límite de publicación, edición, eliminación, moderación y sanción aplicable a la puntuación (FR-027, FR-030, FR-037, FR-038, FR-040, FR-048, FR-056) DEBE aplicarse igualmente a la recomendación, y el porcentaje DEBE recalcularse en los mismos momentos que el promedio.
 
 #### Normas, reportes y sanciones
