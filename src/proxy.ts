@@ -1,49 +1,34 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { getClientKey, isRateLimited, type RateLimitEntry } from '@/lib/rate-limit';
+import { updateSession } from '@/lib/supabase/proxy';
 
-// Simple in-memory storage for rate limiting
-// Note: In serverless environments, this is reset periodically, 
-// but for basic DDoS/abuse prevention on a small scale, it works.
-const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
+const rateLimitStore = new Map<string, RateLimitEntry>();
 
-const LIMIT = 1000; // Max requests
-const WINDOW_SIZE = 60 * 60 * 1000; // 1 hour in milliseconds
+/** Devuelve un 429 si corresponde, o null para dejar seguir el request. */
+function rateLimit(request: NextRequest): NextResponse | null {
+  // El límite es solo para /api; las páginas no lo consumen.
+  if (!request.nextUrl.pathname.startsWith('/api')) return null;
 
-export function proxy(request: NextRequest) {
-  // Only apply to API routes
-  if (!request.nextUrl.pathname.startsWith('/api')) {
-    return NextResponse.next();
+  if (!isRateLimited(rateLimitStore, getClientKey(request.headers), Date.now())) {
+    return null;
   }
 
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 
-             request.headers.get('x-real-ip') || 
-             'unknown';
-  const now = Date.now();
+  return NextResponse.json(
+    { error: 'Too many requests. Please try again later.' },
+    { status: 429 }
+  );
+}
 
-  const userRate = rateLimitMap.get(ip) || { count: 0, lastReset: now };
+export async function proxy(request: NextRequest) {
+  const limited = rateLimit(request);
+  if (limited) return limited;
 
-  // Reset counter if window has passed
-  if (now - userRate.lastReset > WINDOW_SIZE) {
-    userRate.count = 0;
-    userRate.lastReset = now;
-  }
-
-  userRate.count++;
-  rateLimitMap.set(ip, userRate);
-
-  if (userRate.count > LIMIT) {
-    return new NextResponse(
-      JSON.stringify({ error: 'Too many requests. Please try again later.' }),
-      { 
-        status: 429, 
-        headers: { 'Content-Type': 'application/json' } 
-      }
-    );
-  }
-
-  return NextResponse.next();
+  return updateSession(request);
 }
 
 export const config = {
-  matcher: '/api/:path*',
+  // Todo menos estáticos: el refresco de sesión tiene que correr también en las
+  // páginas, no solo en /api.
+  matcher: '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
 };
