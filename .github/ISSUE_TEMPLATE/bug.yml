@@ -1,0 +1,52 @@
+name: Reportar un bug
+description: Algo no funciona como debería. No necesita spec.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Los bugs no necesitan spec: describe el problema y, si puedes, manda el PR con el fix directo.
+
+  - type: textarea
+    id: what-happens
+    attributes:
+      label: Qué pasa
+      description: Qué comportamiento estás viendo.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Qué esperabas que pasara
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Cómo reproducirlo
+      placeholder: |
+        1. Agregar el curso …
+        2. Cambiar a la sección …
+        3. El calendario muestra …
+    validations:
+      required: true
+
+  - type: input
+    id: context
+    attributes:
+      label: Navegador y dispositivo
+      placeholder: Chrome 141 en Windows / Safari en iPhone
+    validations:
+      required: false
+
+  - type: input
+    id: courses
+    attributes:
+      label: Cursos involucrados
+      description: Códigos y secciones, si el bug depende de un horario concreto.
+      placeholder: CS2023 sec 9, MA1102 sec 3
+    validations:
+      required: false

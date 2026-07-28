@@ -93,6 +93,14 @@ Para cambiar de ciclo: reemplaza `consulta_horario.pdf`, corre el script y actua
 | `pnpm lint` | Linter (ESLint) |
 | `pnpm parse-pdf` | Regenera `courses.json` desde el PDF de horarios |
 
+## Cómo contribuir
+
+Este proyecto trabaja **guiado por spec**: las features se definen antes de implementarse. Abres un issue con la propuesta, se discute, y el PR de implementación incluye el spec acordado en `specs/NNN-slug/spec.md`.
+
+Los bugfixes, refactors y actualizaciones de datos del ciclo no necesitan spec — van directo a PR.
+
+Todos los detalles en [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Notas de dependencias
 
 - `pnpm-workspace.yaml` declara en `allowBuilds` los únicos paquetes autorizados a correr scripts de instalación (`sharp`, `unrs-resolver`). pnpm bloquea el resto por defecto como medida de seguridad.

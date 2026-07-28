@@ -1,0 +1,83 @@
+name: Propuesta de feature (spec)
+description: Propón una feature o un cambio de comportamiento, definiendo su spec.
+title: "[spec] "
+labels: ["spec", "feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Este proyecto trabaja **guiado por spec**: primero acordamos qué debe hacer el cambio, después se implementa.
+
+        Rellena lo que puedas — no hace falta que llegue perfecto. Lo terminamos de definir en la discusión de este issue, y el resultado final se sube como `specs/NNN-slug/spec.md` en el PR de implementación.
+
+        Antes de escribir, revisa [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md) y el ejemplo en [`specs/001-huecos-horario/spec.md`](../blob/main/specs/001-huecos-horario/spec.md).
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: Primary User Story
+      description: Una sola historia, la principal.
+      placeholder: Como estudiante de UTEC armando mi horario, quiero… para…
+    validations:
+      required: true
+
+  - type: textarea
+    id: scenarios
+    attributes:
+      label: Acceptance Scenarios
+      description: En Given/When/Then. Cada uno debe poder verificarse mirando la app.
+      placeholder: |
+        1. Given un día con clases de 07:00–09:00 y de 17:00–19:00, When se renderiza el calendario, Then aparece un bloque entre 09:00 y 17:00 etiquetado `hueco 8 h`.
+        2. Given …, When …, Then …
+    validations:
+      required: true
+
+  - type: textarea
+    id: edge-cases
+    attributes:
+      label: Edge Cases
+      description: Estados vacíos, valores límite, solapamientos, modo claro/oscuro.
+      placeholder: |
+        - Sin cursos seleccionados: …
+        - Clases contiguas: …
+    validations:
+      required: false
+
+  - type: textarea
+    id: requirements
+    attributes:
+      label: Functional Requirements
+      description: Uno por línea, en DEBE / NO DEBE, con valores concretos. Sin detalles de implementación.
+      placeholder: |
+        - FR-001: El sistema DEBE mostrar únicamente los huecos de duración mayor o igual a 120 minutos.
+        - FR-002: El contador NO DEBE mostrarse cuando no hay cursos seleccionados.
+    validations:
+      required: true
+
+  - type: textarea
+    id: non-goals
+    attributes:
+      label: Non-Goals
+      description: Qué queda explícitamente fuera. Delimitar esto ahorra discusiones en el review.
+      placeholder: |
+        - Sugerir secciones automáticamente para minimizar huecos.
+    validations:
+      required: false
+
+  - type: textarea
+    id: open-questions
+    attributes:
+      label: Dudas abiertas
+      description: Decisiones que no sabes cómo resolver. Se discuten aquí y su resolución termina como FR, escenario, edge case o Non-Goal en el spec final — nunca como una nota suelta.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Antes de enviar
+      options:
+        - label: Busqué issues existentes y este cambio no está propuesto ya.
+          required: true
+        - label: Mi propuesta describe QUÉ debe pasar y POR QUÉ, no cómo implementarlo.
+          required: true
