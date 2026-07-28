@@ -45,4 +45,6 @@ next-env.d.ts
 264056dc-5fa6-4bc2-934f-6dc8650f4bd2_copia.pdf
 
 # claude
-.claude/
+.claude/*
+# ...salvo las skills de Spec Kit, que sí se comparten con el repo
+!.claude/skills/
