@@ -64,6 +64,8 @@ El dominio se valida en tres capas: Google solo ofrece cuentas UTEC, el hook blo
 
 Rutas del flujo: `GET /auth/login` lleva a Google, `GET /auth/callback` cierra el intercambio y deja la sesión en cookies, `POST /auth/signout` la cierra.
 
+El porqué de cada decisión —las tres capas, los scopes de Google, por qué el login es opcional— está en [`docs/auth.md`](docs/auth.md).
+
 ## Estructura del proyecto
 
 ```
@@ -109,6 +111,9 @@ supabase/
 
 scripts/
 └── parse-pdf.js                # Parser del PDF de horarios (pdfjs-dist)
+
+docs/
+└── auth.md                     # Decisiones de autenticación y su porqué
 ```
 
 ## Actualización de datos
