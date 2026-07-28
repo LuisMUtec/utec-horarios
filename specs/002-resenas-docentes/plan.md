@@ -177,8 +177,12 @@ create table public.profiles (
   deactivated_at timestamptz,
   created_at     timestamptz not null default now(),
   updated_at     timestamptz not null default now(),
-  -- Un baneo sin motivo dejaría a FR-057 sin qué mostrar.
-  constraint ban_has_reason check ((banned_at is null) = (ban_reason is null))
+  -- Un baneo sin motivo dejaría a FR-057 sin qué mostrar, y `''` o unos
+  -- espacios son tan inútiles como un NULL: el check exige texto real.
+  constraint ban_has_reason check (
+    (banned_at is null and ban_reason is null)
+    or (banned_at is not null and nullif(btrim(ban_reason), '') is not null)
+  )
 );
 
 -- La oferta vigente, materializada. Es la lista blanca de pares reseñables.
