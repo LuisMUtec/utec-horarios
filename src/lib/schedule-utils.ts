@@ -226,6 +226,10 @@ export const DAY_LABELS: Record<string, string> = {
 export const START_HOUR = 7;
 export const END_HOUR = 22;
 
+// Separación horizontal de los bloques dentro de su columna. Clases y huecos
+// comparten el valor: si difieren, los bordes dejan de alinearse.
+export const BLOCK_PAD = 2;
+
 export const MIN_GAP_MINUTES = 120;
 
 export interface ScheduleGap {

@@ -2,7 +2,9 @@ import { SelectedCourse } from '@/types';
 
 const STORAGE_KEY = 'utec-horarios-selected';
 const ALLOW_CONFLICTS_KEY = 'utec-horarios-allow-conflicts';
-const SHOW_GAPS_KEY = 'utec-horarios-show-gaps';
+// Exportada, a diferencia de las otras dos: el script bloqueante de layout.tsx
+// la lee por su cuenta y un test la fija contra ese literal.
+export const SHOW_GAPS_KEY = 'utec-horarios-show-gaps';
 
 /**
  * Stores observables sobre localStorage, pensados para useSyncExternalStore.
@@ -119,6 +121,8 @@ export function setAllowConflicts(update: Updater<boolean>): boolean {
 // server snapshot sirve para todo el mundo. Igual que el tema, el valor real se
 // aplica al <html> antes del primer paint (script bloqueante de layout.tsx) y
 // globals.css oculta huecos y contador mientras esté la clase HIDE_GAPS_CLASS.
+// El script duplica SHOW_GAPS_KEY y HIDE_GAPS_CLASS: ambos están fijados por
+// tests, porque si se separan vuelve el parpadeo sin que nada más falle.
 
 export const HIDE_GAPS_CLASS = 'hide-gaps';
 

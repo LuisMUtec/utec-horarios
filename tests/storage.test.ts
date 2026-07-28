@@ -412,6 +412,13 @@ describe('showGaps — sincronización con el <html>', () => {
     expect(s.HIDE_GAPS_CLASS).toBe('hide-gaps');
   });
 
+  it('la clave coincide con la que lee el script bloqueante', async () => {
+    // El script de layout.tsx la tiene escrita a mano. Si el store la renombra,
+    // deja de encontrar la preferencia y vuelve el parpadeo: nada más falla.
+    const s = await freshStore();
+    expect(s.SHOW_GAPS_KEY).toBe('utec-horarios-show-gaps');
+  });
+
   it('sin document (SSR) no revienta', async () => {
     const s = await freshStore();
     expect(() => s.setShowGaps(false)).not.toThrow();
