@@ -7,7 +7,7 @@
 
 ## Execution Flow (main)
 
-```
+```text
 1. El estudiante busca un curso y despliega sus secciones (flujo existente)
 2. Junto a cada docente, ve su promedio de estrellas para ese curso, la cantidad de puntuaciones y la cantidad de comentarios
 3. El estudiante abre el detalle de reseñas sin abandonar el flujo de armado del horario
@@ -94,19 +94,21 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 
 **Reportes y moderación**
 
-28. **Given** un estudiante autenticado que considera que un comentario infringe las normas, **When** lo reporta, **Then** debe seleccionar un motivo y recibe confirmación de que el reporte será revisado.
+28. **Given** un estudiante autenticado que considera que una reseña con comentario infringe las normas, **When** la reporta, **Then** debe seleccionar un motivo y recibe confirmación de que el reporte será revisado.
 
-29. **Given** un estudiante que reportó un comentario, **When** vuelve a consultar el detalle, **Then** ese comentario queda oculto para él mientras se revisa, sin ocultarse automáticamente para los demás estudiantes.
+29. **Given** un estudiante que reportó una reseña, **When** vuelve a consultar el detalle, **Then** esa reseña queda oculta para él mientras se revisa, sin ocultarse automáticamente para los demás estudiantes.
 
-30. **Given** un estudiante que ya reportó una reseña, **When** intenta reportarla otra vez, **Then** no se crea un reporte duplicado.
+30. **Given** una reseña que solo contiene puntuación, **When** un estudiante consulta el detalle del docente, **Then** no aparece en la lista de comentarios y no ofrece la acción `Reportar`.
 
-31. **Given** una reseña reportada que no incumple las normas, **When** termina la revisión, **Then** se mantiene publicada y continúa participando en los conteos y el promedio.
+31. **Given** un estudiante que ya reportó una reseña, **When** intenta reportarla otra vez, **Then** no se crea un reporte duplicado.
 
-32. **Given** una reseña reportada que incumple las normas, **When** termina la revisión, **Then** se elimina, deja de participar en el promedio y sus conteos se actualizan.
+32. **Given** una reseña reportada que no incumple las normas, **When** termina la revisión, **Then** se mantiene publicada y continúa participando en los conteos y el promedio.
 
-33. **Given** un usuario que incurre en una infracción que amerita baneo permanente, **When** se aplica la sanción, **Then** pierde de forma permanente el acceso autenticado a comentarios, publicación, edición y reportes; los resúmenes públicos permanecen visibles para él.
+33. **Given** una reseña reportada que incumple las normas, **When** termina la revisión, **Then** se elimina, deja de participar en el promedio y sus conteos se actualizan.
 
-34. **Given** una reseña eliminada por moderación, **When** se consulta al docente, **Then** la reseña no puede restaurarse ni editarse desde la experiencia del estudiante sancionado.
+34. **Given** un usuario que incurre en una infracción que amerita baneo permanente, **When** se aplica la sanción, **Then** pierde de forma permanente el acceso autenticado a comentarios, publicación, edición y reportes; los resúmenes públicos permanecen visibles para él.
+
+35. **Given** una reseña eliminada por moderación, **When** su autor vuelve al detalle del docente, **Then** la reseña no puede restaurarse ni editarse, se haya aplicado o no una sanción a ese autor.
 
 ### Edge Cases
 
@@ -184,7 +186,7 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 - **FR-034**: Los comentarios DEBEN mostrarse del más reciente al más antiguo.
 - **FR-035**: Cada comentario DEBE mostrar la puntuación asociada, el texto y la fecha de publicación, sin identidad pública del autor.
 - **FR-036**: Las reseñas sin comentario NO DEBEN generar elementos vacíos en la lista de comentarios.
-- **FR-037**: El autor DEBE poder editar la puntuación y añadir, modificar o eliminar el comentario de su reseña.
+- **FR-037**: El autor DEBE poder editar la puntuación y añadir, modificar o eliminar el comentario de su reseña activa; una reseña eliminada por moderación NO DEBE poder editarse ni restaurarse por su autor, se haya aplicado o no una sanción.
 - **FR-038**: Una edición DEBE actualizar el promedio y los conteos sin aumentar la cantidad de puntuaciones ni consumir un cupo adicional del límite de publicación; añadir o editar texto mantiene los requisitos de perfil y compromiso de respeto.
 - **FR-039**: El autor DEBE poder eliminar su reseña después de una confirmación explícita.
 - **FR-040**: Una reseña eliminada DEBE dejar inmediatamente de participar en el promedio y en los conteos.
@@ -192,16 +194,17 @@ Como estudiante de UTEC que está armando su horario, quiero conocer la experien
 #### Normas, reportes y sanciones
 
 - **FR-041**: Las normas DEBEN prohibir insultos o ataques personales, acusaciones sobre la vida privada, publicación de datos personales, contenido falso o engañoso, spam, preguntas, solicitudes de información, expresiones de interés y cualquier contenido que no describa una experiencia académica con el docente en ese curso.
-- **FR-042**: Cada comentario DEBE ofrecer una acción `Reportar`.
+- **FR-042**: La unidad reportable DEBE ser la reseña. Cada reseña visible en el detalle DEBE ofrecer una acción `Reportar`; como las reseñas sin comentario no se listan (FR-036), NO DEBEN ofrecer esa acción.
 - **FR-043**: Para enviar un reporte, el estudiante DEBE elegir uno de estos motivos: `Insulto o ataque personal`, `Contenido falso o engañoso`, `Datos personales`, `No describe una experiencia con el docente`, `Spam o no relacionado` u `Otro`.
 - **FR-044**: Cuando el motivo sea `Otro`, el estudiante DEBE añadir una explicación.
 - **FR-045**: Cada estudiante DEBE poder reportar una reseña una sola vez.
 - **FR-046**: Una reseña reportada DEBE ocultarse para quien la reportó mientras se revisa y DEBE permanecer visible para los demás hasta que exista una decisión de moderación.
 - **FR-047**: La revisión de un reporte DEBE terminar en una de estas decisiones: mantener la reseña, eliminarla o eliminarla y banear permanentemente al autor.
-- **FR-048**: Una reseña eliminada por moderación DEBE dejar inmediatamente de participar en el promedio y en los conteos.
+- **FR-048**: Una reseña eliminada por moderación DEBE dejar inmediatamente de participar en el promedio y en los conteos, y su eliminación DEBE ser definitiva: ningún autor, sancionado o no, puede restaurarla ni editarla.
 - **FR-049**: Un usuario baneado permanentemente NO DEBE poder acceder a comentarios ni publicar, editar, eliminar o reportar reseñas con la cuenta sancionada.
 - **FR-050**: Un usuario baneado DEBE conservar únicamente el acceso a los promedios y conteos públicos disponibles para cualquier visitante.
 - **FR-051**: El MVP NO DEBE incluir una interfaz de administración; la revisión de reportes y la aplicación de sanciones se realizarán mediante las herramientas operativas existentes.
+- **FR-052**: Las reseñas sin comentario quedan fuera del flujo de reportes de estudiantes; si una puntuación resulta abusiva, DEBE poder eliminarse y sancionarse a su autor con las mismas decisiones de FR-047 aplicadas desde las herramientas operativas.
 
 ### Key Entities
 
