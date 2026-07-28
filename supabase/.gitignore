@@ -1,0 +1,12 @@
+# Supabase
+.branches
+.temp
+
+# dotenvx
+.env.keys
+.env.local
+.env.*.local
+
+# El .gitignore raíz excluye `.env*`, que se lleva por delante la plantilla.
+# Es solo documentación con placeholders, así que la rescatamos.
+!functions/.env.example

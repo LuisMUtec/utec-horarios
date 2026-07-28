@@ -16,6 +16,9 @@ const eslintConfig = defineConfig([
     "**/next-env.d.ts",
     // Worktrees de agentes: código ajeno y build output, ya ignorado por git.
     ".claude/**",
+    // Edge Functions: son Deno, no Next. Se revisan con `deno check`
+    // (ver supabase/functions/send-email/deno.json).
+    "supabase/functions/**",
   ]),
   {
     // Scripts de Node en CommonJS, no código de la app: require() es correcto acá.
