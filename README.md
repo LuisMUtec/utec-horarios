@@ -68,6 +68,58 @@ Rutas del flujo: `GET /auth/login` lleva a Google, `GET /auth/callback` cierra e
 
 El porqué de cada decisión —las tres capas, los scopes de Google, por qué el login es opcional— está en [`docs/auth.md`](docs/auth.md).
 
+## Supabase en local
+
+Para tocar el esquema no hace falta el proyecto de la nube: la CLI levanta un Postgres con Auth al lado, con las migraciones ya aplicadas.
+
+Requisitos: **Docker** corriendo y la [CLI de Supabase](https://supabase.com/docs/guides/local-development) (`brew install supabase/tap/supabase`).
+
+```bash
+supabase start      # levanta el stack
+supabase db reset   # recrea la base: aplica migrations/ y vuelve a correr seed.sql
+supabase stop       # apaga todo
+```
+
+Ojo con la diferencia: `supabase start` aplica migraciones y seed **solo la primera vez**. Después el estado vive en un volumen de Docker y sobrevive a `stop`/`start`, así que tras agregar una migración o tocar el seed lo que hace falta es `supabase db reset`.
+
+`supabase start` imprime las URLs del stack. Las dos que vas a usar:
+
+| | |
+|---|---|
+| **Studio** (explorar la base) | http://127.0.0.1:54323 |
+| **Mailpit** (los correos que "envía" Auth) | http://127.0.0.1:54324 |
+
+**El login con Google no está configurado en local**, por decisión, no por una limitación de Supabase: se podría habilitar con un bloque `[auth.external.google]` en `config.toml` y un client ID propio, pero eso pide credenciales de OAuth por cada quien desarrolla. Tal como está, local sirve para el esquema, las migraciones y los datos; para probar el flujo de login apunta el `.env.local` al proyecto remoto, como dice [Autenticación](#autenticación-opcional).
+
+El hook `before_user_created` sí está activo en local, enganchado desde `config.toml`. Es a propósito: si local aceptara cualquier dominio, el rechazo de las cuentas que no son de UTEC solo se descubriría en producción.
+
+### Cuentas de prueba
+
+`seed.sql` deja dos estudiantes ya confirmados, con contraseña, para tener filas de `auth.users` con las que trabajar sin pasar por Google:
+
+| Correo | Contraseña |
+|---|---|
+| `estudiante@utec.edu.pe` | `horarios123` |
+| `companera@utec.edu.pe` | `horarios123` |
+
+Son para consultas y pruebas desde la API o Studio, no para el botón de login, que es solo Google.
+
+Estas contraseñas son públicas: están en el repo. `supabase db push` sube solo migraciones, pero **`supabase db push --include-seed` sí ejecuta el seed contra la base remota** — no uses ese flag apuntando a producción o crearás estas cuentas allá.
+
+### Migraciones
+
+El esquema vive en `supabase/migrations/`, en archivos `<timestamp>_<slug>.sql` que se aplican en orden. Para una tabla o función nueva:
+
+```bash
+supabase migration new nombre_del_cambio   # crea el archivo vacío
+# … escribes el SQL …
+supabase db reset                          # lo aplica desde cero y valida que corre
+```
+
+El cambio viaja al PR como archivo. **No edites una migración ya mergeada**: en producción ya se aplicó y no se vuelve a correr, así que un arreglo va en una migración nueva.
+
+Para empujar a la nube: `supabase link --project-ref <ref>` y después `supabase db push`. Requiere estar logueado (`supabase login`) con una cuenta que tenga acceso al proyecto. Si `supabase projects list` no lo muestra, o estás en otra cuenta o esa cuenta no es miembro de la organización dueña del proyecto; en cualquiera de los dos casos el link falla.
+
 ## Estructura del proyecto
 
 ```
@@ -109,7 +161,10 @@ src/
 └── proxy.ts                    # Rate limiting en /api + refresco de sesión
 
 supabase/
-└── migrations/                 # Esquema y hooks de la base de datos
+├── config.toml                 # Config del stack local (puertos, auth, hooks)
+├── migrations/                 # Esquema y hooks de la base de datos
+├── seed.sql                    # Datos de desarrollo (solo local)
+└── functions/send-email/       # Edge Function: correos de Auth vía Resend
 
 scripts/
 └── parse-pdf.js                # Parser del PDF de horarios (pdfjs-dist)
@@ -155,6 +210,8 @@ pnpm test
 - **`tests/rate-limit.test.ts`** y **`tests/proxy.test.ts`** — el contador por IP, el 429 de `/api` y el matcher del proxy (si deja de excluir estáticos, el proxy corre en cada asset sin que falle nada más).
 
 Después de correr `pnpm parse-pdf` para un ciclo nuevo, `pnpm test` valida los datos generados antes de deployar.
+
+Las migraciones y el seed no se prueban con Vitest: los valida el job `supabase` del CI, que levanta el stack local y comprueba que un estudiante sembrado inicia sesión y que el hook de dominio rechaza cuentas ajenas. Cubre las dos cosas que se rompen en silencio: una migración que ya no aplica sobre una base limpia, y un seed que inserta datos que Auth después no puede leer.
 
 ## Cómo contribuir
 

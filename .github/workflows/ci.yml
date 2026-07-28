@@ -63,3 +63,61 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+
+  # Levanta la Supabase local igual que en una máquina de desarrollo y
+  # comprueba que el entorno que describe el README es el que sale. Cubre las
+  # dos cosas que se rompen en silencio: una migración que ya no aplica sobre
+  # una base limpia, y un seed que inserta datos que Auth después no puede leer.
+  supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      # Versión fija: sin esto el job depende de lo que publique Supabase ese
+      # día y una regresión de la CLI llegaría como un fallo en un PR ajeno.
+      - uses: supabase/setup-cli@v3
+        with:
+          version: 2.109.1
+      # Aplica migrations/ y seed.sql sobre una base recién creada.
+      - run: supabase start
+      - name: Verificar migraciones y seed
+        run: |
+          set -euo pipefail
+          eval "$(supabase status -o env | sed 's/^/export /')"
+          AUTH="$API_URL/auth/v1"
+          # Los signups de abajo son desechables: lo que se comprueba es el
+          # dominio, no la credencial. Una contraseña al azar evita dejar un
+          # par correo/contraseña escrito en el repo.
+          PASS=$(openssl rand -base64 18)
+
+          # La del seed sale del propio seed, por lo mismo y porque así este
+          # check sigue al archivo si alguien cambia la contraseña allá.
+          SEED_PASS=$(sed -n "s/.*extensions\.crypt('\([^']*\)'.*/\1/p" supabase/seed.sql | head -1)
+          [ -n "$SEED_PASS" ] || { echo "No pude leer la contraseña de supabase/seed.sql"; exit 1; }
+
+          echo "El estudiante sembrado inicia sesión"
+          # Login de verdad y no una lectura por la API admin: así el check
+          # cubre las dos formas de sembrar mal, un hash de contraseña
+          # inservible y las columnas de token en NULL, que a GoTrue le
+          # provocan un 500 al leer la fila.
+          # `// empty` cubre tanto el token nulo como la respuesta de error, que
+          # no trae la clave. Buscar el nombre del campo no alcanza: un
+          # access_token vacío también lo contiene.
+          token=$(curl -sS -X POST "$AUTH/token?grant_type=password" \
+            -H "apikey: $ANON_KEY" -H "Content-Type: application/json" \
+            -d "{\"email\":\"estudiante@utec.edu.pe\",\"password\":\"$SEED_PASS\"}" \
+            | jq -r '.access_token // empty')
+          [ -n "$token" ] || { echo "El login no devolvió un access_token"; exit 1; }
+
+          echo "El hook de dominio rechaza una cuenta que no es de UTEC"
+          codigo=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "$AUTH/signup" \
+            -H "apikey: $ANON_KEY" -H "Content-Type: application/json" \
+            -d "{\"email\":\"alguien@gmail.com\",\"password\":\"$PASS\"}")
+          [ "$codigo" = "403" ] || { echo "Se esperaba 403, llegó $codigo"; exit 1; }
+
+          echo "El hook de dominio acepta una cuenta de UTEC"
+          codigo=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "$AUTH/signup" \
+            -H "apikey: $ANON_KEY" -H "Content-Type: application/json" \
+            -d "{\"email\":\"nueva@utec.edu.pe\",\"password\":\"$PASS\"}")
+          [ "$codigo" = "200" ] || { echo "Se esperaba 200, llegó $codigo"; exit 1; }
