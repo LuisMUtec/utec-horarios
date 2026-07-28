@@ -40,9 +40,9 @@ specs/NNN-slug/spec.md
 
 - `NNN`: correlativo de tres dígitos (`001`, `002`, …).
 - `slug`: kebab-case corto y descriptivo.
-- La rama de trabajo se llama igual que la carpeta: `001-huecos-horario`.
+- La rama de trabajo se llama igual que la carpeta: `001-bloques-libres`.
 
-Ejemplo canónico, léelo antes de escribir el tuyo: [`specs/001-huecos-horario/spec.md`](specs/001-huecos-horario/spec.md).
+Ejemplo canónico, léelo antes de escribir el tuyo: [`specs/001-bloques-libres/spec.md`](specs/001-bloques-libres/spec.md).
 Plantilla para copiar y rellenar: [`specs/TEMPLATE.md`](specs/TEMPLATE.md).
 
 ### Estructura
@@ -69,7 +69,7 @@ Plantilla para copiar y rellenar: [`specs/TEMPLATE.md`](specs/TEMPLATE.md).
 
 ## El Pull Request
 
-- Rama con el mismo nombre que la carpeta del spec (`001-huecos-horario`), a partir de `main`.
+- Rama con el mismo nombre que la carpeta del spec (`001-bloques-libres`), a partir de `main`.
 - Commits en español siguiendo el historial: `feat:`, `fix:`, `docs:`.
 - El PR incluye el spec y enlaza el issue donde se discutió (`Closes #N`).
 - `pnpm lint` y `pnpm build` deben pasar.

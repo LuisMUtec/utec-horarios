@@ -11,22 +11,22 @@ import {
   findConflicts,
   computeOverlapLayout,
   formatDuration,
-  ScheduleGap,
+  ScheduleFreeBlock,
 } from '@/lib/schedule-utils';
 import CalendarBlock from './CalendarBlock';
-import GapBlock from './GapBlock';
+import FreeBlock from './FreeBlock';
 
 interface Props {
   events: CalendarEvent[];
   previewEvents?: CalendarEvent[];
-  gaps?: ScheduleGap[];
+  freeBlocks?: ScheduleFreeBlock[];
   calendarRef?: RefObject<HTMLDivElement | null>;
 }
 
 const HOUR_HEIGHT = 48; // px per hour
 const TOTAL_HOURS = END_HOUR - START_HOUR;
 
-export default function WeeklyCalendar({ events, previewEvents = [], gaps = [], calendarRef }: Props) {
+export default function WeeklyCalendar({ events, previewEvents = [], freeBlocks = [], calendarRef }: Props) {
   const conflicts = findConflicts(events);
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => START_HOUR + i);
 
@@ -83,19 +83,19 @@ export default function WeeklyCalendar({ events, previewEvents = [], gaps = [], 
                   />
                 ))}
 
-                {/* Gaps (debajo de clases y preview) */}
-                {gaps
-                  .filter(gap => gap.day === day)
-                  .map(gap => {
-                    const top = ((gap.startMinutes - START_HOUR * 60) / 60) * HOUR_HEIGHT;
-                    const height = (gap.durationMinutes / 60) * HOUR_HEIGHT;
+                {/* Bloques libres (debajo de clases y preview) */}
+                {freeBlocks
+                  .filter(freeBlock => freeBlock.day === day)
+                  .map(freeBlock => {
+                    const top = ((freeBlock.startMinutes - START_HOUR * 60) / 60) * HOUR_HEIGHT;
+                    const height = (freeBlock.durationMinutes / 60) * HOUR_HEIGHT;
 
                     return (
-                      <GapBlock
-                        key={`gap-${day}-${gap.startMinutes}`}
+                      <FreeBlock
+                        key={`free-block-${day}-${freeBlock.startMinutes}`}
                         top={top}
                         height={height}
-                        label={formatDuration(gap.durationMinutes)}
+                        label={formatDuration(freeBlock.durationMinutes)}
                       />
                     );
                   })}

@@ -226,28 +226,28 @@ export const DAY_LABELS: Record<string, string> = {
 export const START_HOUR = 7;
 export const END_HOUR = 22;
 
-// Separación horizontal de los bloques dentro de su columna. Clases y huecos
-// comparten el valor: si difieren, los bordes dejan de alinearse.
+// Separación horizontal de los bloques dentro de su columna. Clases y bloques
+// libres comparten el valor: si difieren, los bordes dejan de alinearse.
 export const BLOCK_PAD = 2;
 
-export const MIN_GAP_MINUTES = 120;
+export const MIN_FREE_BLOCK_MINUTES = 120;
 
-export interface ScheduleGap {
+export interface ScheduleFreeBlock {
   day: string;
   startMinutes: number;
   endMinutes: number;
   durationMinutes: number;
 }
 
-export function computeGaps(
+export function computeFreeBlocks(
   events: CalendarEvent[],
-  minDurationMinutes: number = MIN_GAP_MINUTES
-): ScheduleGap[] {
-  const gaps: ScheduleGap[] = [];
+  minDurationMinutes: number = MIN_FREE_BLOCK_MINUTES
+): ScheduleFreeBlock[] {
+  const freeBlocks: ScheduleFreeBlock[] = [];
 
   for (const day of DAYS) {
     const intervals = events
-      // Los eventos de preview no cuentan: el hover no altera los huecos.
+      // Los eventos de preview no cuentan: el hover no altera los bloques libres.
       .filter(event => !event.isPreview && event.session.day === day)
       .map(event => ({
         start: timeToMinutes(event.session.startTime),
@@ -274,16 +274,16 @@ export function computeGaps(
       const endMinutes = merged[i].start;
       const durationMinutes = endMinutes - startMinutes;
       if (durationMinutes >= minDurationMinutes) {
-        gaps.push({ day, startMinutes, endMinutes, durationMinutes });
+        freeBlocks.push({ day, startMinutes, endMinutes, durationMinutes });
       }
     }
   }
 
-  return gaps;
+  return freeBlocks;
 }
 
-export function sumGapMinutes(gaps: ScheduleGap[]): number {
-  return gaps.reduce((total, gap) => total + gap.durationMinutes, 0);
+export function sumFreeBlockMinutes(freeBlocks: ScheduleFreeBlock[]): number {
+  return freeBlocks.reduce((total, b) => total + b.durationMinutes, 0);
 }
 
 export function formatDuration(minutes: number): string {
