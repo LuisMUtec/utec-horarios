@@ -4,7 +4,7 @@
     "@types/react": "npm:@types/react@18.3.12",
     "@react-email/components": "npm:@react-email/components@0.0.22",
     "resend": "npm:resend@4.0.0",
-    "standardwebhooks": "https://esm.sh/standardwebhooks@1.0.0"
+    "standardwebhooks": "npm:standardwebhooks@1.0.0"
   },
   "compilerOptions": {
     "jsx": "react-jsx",

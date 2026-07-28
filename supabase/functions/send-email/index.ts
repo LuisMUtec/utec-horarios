@@ -123,7 +123,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { user, email_data } = payload;
+    const { email_data } = payload;
     const actionType = email_data.email_action_type;
     const copy = COPY[actionType] ?? FALLBACK_COPY;
 
@@ -134,7 +134,7 @@ Deno.serve(async (req) => {
 
     const emails = resolveRecipients(payload);
 
-    await Promise.all(
+    const results = await Promise.allSettled(
       emails.map(async ({ to, token, tokenHash }) => {
         const actionUrl = NOTIFICATION_ONLY.has(actionType)
           ? undefined
@@ -156,20 +156,32 @@ Deno.serve(async (req) => {
           html,
         });
         if (error) {
-          throw new Error(`Resend rechazó el envío a ${to}: ${error.message}`);
+          throw new Error(`Resend rechazó el envío: ${error.message}`);
         }
       }),
     );
 
-    console.log(
-      `Enviado "${actionType}" a ${emails.length} destinatario(s) (usuario ${user.email})`,
+    // allSettled y no all: en el cambio de correo van dos envíos y queremos ver
+    // los dos errores, no solo el del primero que rechace.
+    const failures = results.flatMap((result, i) =>
+      result.status === "rejected" ? [{ i, reason: result.reason }] : [],
     );
+    if (failures.length > 0) {
+      for (const { i, reason } of failures) {
+        // La posición, no la dirección: los logs no deberían guardar PII, y
+        // saber si falló el envío 1 o el 2 ya ubica cuál de los dos correos fue.
+        console.error(`Falló el envío ${i + 1}/${emails.length}:`, reason);
+      }
+      throw new Error(`${failures.length} de ${emails.length} envíos fallaron`);
+    }
+
+    console.log(`Enviado "${actionType}" a ${emails.length} destinatario(s)`);
   } catch (error) {
+    // El detalle solo al log: GoTrue le devuelve este cuerpo a quien llamó a
+    // Auth, y nuestros errores nombran variables de entorno y respuestas de
+    // Resend que no tienen por qué salir de aquí.
     console.error("No se pudo enviar el correo:", error);
-    return jsonError(
-      500,
-      error instanceof Error ? error.message : "Error desconocido",
-    );
+    return jsonError(500, "No se pudo enviar el correo");
   }
 
   // Supabase toma cualquier 200 con cuerpo vacío como éxito.
