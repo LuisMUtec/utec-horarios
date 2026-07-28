@@ -10,19 +10,23 @@ import {
   timeToMinutes,
   findConflicts,
   computeOverlapLayout,
+  formatDuration,
+  ScheduleGap,
 } from '@/lib/schedule-utils';
 import CalendarBlock from './CalendarBlock';
+import GapBlock from './GapBlock';
 
 interface Props {
   events: CalendarEvent[];
   previewEvents?: CalendarEvent[];
+  gaps?: ScheduleGap[];
   calendarRef?: RefObject<HTMLDivElement | null>;
 }
 
 const HOUR_HEIGHT = 48; // px per hour
 const TOTAL_HOURS = END_HOUR - START_HOUR;
 
-export default function WeeklyCalendar({ events, previewEvents = [], calendarRef }: Props) {
+export default function WeeklyCalendar({ events, previewEvents = [], gaps = [], calendarRef }: Props) {
   const conflicts = findConflicts(events);
   const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => START_HOUR + i);
 
@@ -78,6 +82,23 @@ export default function WeeklyCalendar({ events, previewEvents = [], calendarRef
                     style={{ top: (hour - START_HOUR) * HOUR_HEIGHT, height: HOUR_HEIGHT }}
                   />
                 ))}
+
+                {/* Gaps (debajo de clases y preview) */}
+                {gaps
+                  .filter(gap => gap.day === day)
+                  .map(gap => {
+                    const top = ((gap.startMinutes - START_HOUR * 60) / 60) * HOUR_HEIGHT;
+                    const height = (gap.durationMinutes / 60) * HOUR_HEIGHT;
+
+                    return (
+                      <GapBlock
+                        key={`gap-${day}-${gap.startMinutes}`}
+                        top={top}
+                        height={height}
+                        label={formatDuration(gap.durationMinutes)}
+                      />
+                    );
+                  })}
 
                 {/* Events */}
                 {(() => {

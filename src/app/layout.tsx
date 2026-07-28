@@ -46,6 +46,13 @@ export default function RootLayout({
                   document.documentElement.classList.remove('dark')
                 }
               } catch (_) {}
+              try {
+                if (localStorage['utec-horarios-show-gaps'] === 'false') {
+                  document.documentElement.classList.add('hide-gaps')
+                } else {
+                  document.documentElement.classList.remove('hide-gaps')
+                }
+              } catch (_) {}
             `,
           }}
         />

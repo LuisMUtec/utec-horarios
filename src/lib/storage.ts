@@ -2,6 +2,7 @@ import { SelectedCourse } from '@/types';
 
 const STORAGE_KEY = 'utec-horarios-selected';
 const ALLOW_CONFLICTS_KEY = 'utec-horarios-allow-conflicts';
+const SHOW_GAPS_KEY = 'utec-horarios-show-gaps';
 
 /**
  * Stores observables sobre localStorage, pensados para useSyncExternalStore.
@@ -110,4 +111,59 @@ export function setAllowConflicts(update: Updater<boolean>): boolean {
   const persisted = writeKey(ALLOW_CONFLICTS_KEY, next);
   allowConflictsListeners.forEach((listener) => listener());
   return persisted;
+}
+
+// --- Mostrar huecos ---
+//
+// A diferencia de las demás, esta preferencia arranca en true, así que ningún
+// server snapshot sirve para todo el mundo. Igual que el tema, el valor real se
+// aplica al <html> antes del primer paint (script bloqueante de layout.tsx) y
+// globals.css oculta huecos y contador mientras esté la clase HIDE_GAPS_CLASS.
+
+export const HIDE_GAPS_CLASS = 'hide-gaps';
+
+let showGapsCache: boolean | null = null;
+const showGapsListeners = new Set<() => void>();
+
+function readShowGaps(): boolean {
+  if (typeof window === 'undefined') return true;
+  try {
+    return localStorage.getItem(SHOW_GAPS_KEY) !== 'false';
+  } catch {
+    return true;
+  }
+}
+
+function syncShowGapsClass(show: boolean): void {
+  if (typeof document === 'undefined') return;
+  document.documentElement.classList.toggle(HIDE_GAPS_CLASS, !show);
+}
+
+export function subscribeShowGaps(listener: () => void): () => void {
+  showGapsListeners.add(listener);
+  return () => showGapsListeners.delete(listener);
+}
+
+export function getShowGapsSnapshot(): boolean {
+  showGapsCache ??= readShowGaps();
+  return showGapsCache;
+}
+
+export function getShowGapsServerSnapshot(): boolean {
+  return true;
+}
+
+export function setShowGaps(update: Updater<boolean>): void {
+  const next = applyUpdate(update, getShowGapsSnapshot());
+  if (next === showGapsCache) return;
+  showGapsCache = next;
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(SHOW_GAPS_KEY, JSON.stringify(next));
+    } catch {
+      // Ignore storage errors
+    }
+  }
+  syncShowGapsClass(next);
+  showGapsListeners.forEach((listener) => listener());
 }

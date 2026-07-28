@@ -226,6 +226,69 @@ export const DAY_LABELS: Record<string, string> = {
 export const START_HOUR = 7;
 export const END_HOUR = 22;
 
+export const MIN_GAP_MINUTES = 120;
+
+export interface ScheduleGap {
+  day: string;
+  startMinutes: number;
+  endMinutes: number;
+  durationMinutes: number;
+}
+
+export function computeGaps(
+  events: CalendarEvent[],
+  minDurationMinutes: number = MIN_GAP_MINUTES
+): ScheduleGap[] {
+  const gaps: ScheduleGap[] = [];
+
+  for (const day of DAYS) {
+    const intervals = events
+      .filter(event => event.session.day === day)
+      .map(event => ({
+        start: timeToMinutes(event.session.startTime),
+        end: timeToMinutes(event.session.endTime),
+      }))
+      .sort((a, b) => a.start - b.start || a.end - b.end);
+
+    if (intervals.length < 2) continue;
+
+    // Fusiona tramos ocupados solapados o contiguos
+    const merged: { start: number; end: number }[] = [{ ...intervals[0] }];
+    for (let i = 1; i < intervals.length; i++) {
+      const last = merged[merged.length - 1];
+      if (intervals[i].start <= last.end) {
+        last.end = Math.max(last.end, intervals[i].end);
+      } else {
+        merged.push({ ...intervals[i] });
+      }
+    }
+
+    // Solo los intervalos libres entre dos tramos ocupados
+    for (let i = 1; i < merged.length; i++) {
+      const startMinutes = merged[i - 1].end;
+      const endMinutes = merged[i].start;
+      const durationMinutes = endMinutes - startMinutes;
+      if (durationMinutes >= minDurationMinutes) {
+        gaps.push({ day, startMinutes, endMinutes, durationMinutes });
+      }
+    }
+  }
+
+  return gaps;
+}
+
+export function sumGapMinutes(gaps: ScheduleGap[]): number {
+  return gaps.reduce((total, gap) => total + gap.durationMinutes, 0);
+}
+
+export function formatDuration(minutes: number): string {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  if (mins === 0) return `${hours} h`;
+  if (hours === 0) return `${mins} min`;
+  return `${hours} h ${mins} min`;
+}
+
 function normalize(str: string): string {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 }
