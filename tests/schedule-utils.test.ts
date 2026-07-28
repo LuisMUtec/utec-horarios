@@ -228,6 +228,76 @@ describe('sumFreeBlockMinutes', () => {
  * slot no se pisan si cada una va en una de ellas. 117 de las 777 secciones de
  * la oferta usan A/B: tratarlas como cruce descartaba horarios válidos.
  */
+/**
+ * Bloques libres con semanas alternas.
+ *
+ * Se dibuja sólo el tiempo muerto que ocurre todas las semanas: un hueco que
+ * existe en la semana A pero que la semana B tiene ocupado no es tiempo libre
+ * que el alumno pueda contar.
+ */
+describe('computeFreeBlocks con semanas alternas', () => {
+  function claseSemana(day: string, startTime: string, endTime: string, frequency: string): CalendarEvent {
+    return {
+      courseCode: 'CS0000',
+      courseName: 'Curso',
+      color: '',
+      session: { day, startTime, endTime, frequency } as Session,
+    };
+  }
+
+  it('no dibuja el hueco que sólo existe en una de las dos semanas', () => {
+    // Semana A: 09-11 y 13-15, con hueco de 11 a 13.
+    // Semana B: 09-11 y 11-13 y 13-15, sin hueco.
+    const freeBlocks = computeFreeBlocks([
+      claseSemana('Lun', '09:00', '11:00', 'Semana General'),
+      claseSemana('Lun', '11:00', '13:00', 'Semana B'),
+      claseSemana('Lun', '13:00', '15:00', 'Semana General'),
+    ]);
+    expect(freeBlocks).toEqual([]);
+  });
+
+  it('dibuja el hueco que existe en ambas semanas', () => {
+    const freeBlocks = computeFreeBlocks([
+      claseSemana('Lun', '09:00', '11:00', 'Semana General'),
+      claseSemana('Lun', '13:00', '15:00', 'Semana General'),
+    ]);
+    expect(resumen(freeBlocks)).toEqual(['Lun 660-780 (2 h)']);
+  });
+
+  it('recorta el hueco a la parte compartida por las dos semanas', () => {
+    // Semana A: 08-09 y 15-16 → hueco de 09 a 15 (6 h).
+    // Semana B: 08-09, 12-13 y 15-16 → huecos de 09 a 12 y de 13 a 15.
+    // Compartido: 09-12 (3 h) y 13-15 (2 h).
+    const freeBlocks = computeFreeBlocks([
+      claseSemana('Lun', '08:00', '09:00', 'Semana General'),
+      claseSemana('Lun', '12:00', '13:00', 'Semana B'),
+      claseSemana('Lun', '15:00', '16:00', 'Semana General'),
+    ]);
+    expect(resumen(freeBlocks)).toEqual(['Lun 540-720 (3 h)', 'Lun 780-900 (2 h)']);
+  });
+
+  it('el umbral se aplica sobre el hueco ya recortado', () => {
+    // Semana A tiene un hueco de 09 a 14 (5 h), pero la semana B lo parte con
+    // una clase de 10 a 13: sólo quedan 09-10 y 13-14, ambos bajo el umbral.
+    const freeBlocks = computeFreeBlocks([
+      claseSemana('Lun', '08:00', '09:00', 'Semana General'),
+      claseSemana('Lun', '10:00', '13:00', 'Semana B'),
+      claseSemana('Lun', '14:00', '15:00', 'Semana General'),
+    ]);
+    expect(freeBlocks).toEqual([]);
+  });
+
+  it('dos clases en semanas opuestas dejan el día sin bloques libres', () => {
+    // Ninguna de las dos semanas llega a tener dos clases, así que no hay
+    // ningún tramo "entre clases" que contar.
+    const freeBlocks = computeFreeBlocks([
+      claseSemana('Lun', '09:00', '11:00', 'Semana A'),
+      claseSemana('Lun', '15:00', '17:00', 'Semana B'),
+    ]);
+    expect(freeBlocks).toEqual([]);
+  });
+});
+
 describe('hasConflict', () => {
   function sesion(day: string, startTime: string, endTime: string, frequency = 'Semana General'): Session {
     return { day, startTime, endTime, frequency } as Session;

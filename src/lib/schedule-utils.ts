@@ -257,42 +257,101 @@ export interface ScheduleFreeBlock {
   durationMinutes: number;
 }
 
+interface Interval {
+  start: number;
+  end: number;
+}
+
+/**
+ * Tramos libres entre la primera y la última clase, sin umbral. El tiempo
+ * anterior a la primera clase y el posterior a la última no cuentan.
+ */
+function gapsBetweenClasses(intervals: Interval[]): Interval[] {
+  if (intervals.length < 2) return [];
+
+  const sorted = [...intervals].sort((a, b) => a.start - b.start || a.end - b.end);
+
+  // Fusiona tramos ocupados solapados o contiguos
+  const merged: Interval[] = [{ ...sorted[0] }];
+  for (let i = 1; i < sorted.length; i++) {
+    const last = merged[merged.length - 1];
+    if (sorted[i].start <= last.end) {
+      last.end = Math.max(last.end, sorted[i].end);
+    } else {
+      merged.push({ ...sorted[i] });
+    }
+  }
+
+  const gaps: Interval[] = [];
+  for (let i = 1; i < merged.length; i++) {
+    gaps.push({ start: merged[i - 1].end, end: merged[i].start });
+  }
+  return gaps;
+}
+
+/** Intersección de dos listas de intervalos disjuntos y ordenados. */
+function intersectIntervals(a: Interval[], b: Interval[]): Interval[] {
+  const result: Interval[] = [];
+  let i = 0;
+  let j = 0;
+
+  while (i < a.length && j < b.length) {
+    const start = Math.max(a[i].start, b[j].start);
+    const end = Math.min(a[i].end, b[j].end);
+    if (start < end) result.push({ start, end });
+    if (a[i].end < b[j].end) i++;
+    else j++;
+  }
+
+  return result;
+}
+
+/**
+ * Bloques libres del día, calculados por separado para la semana A y la semana
+ * B y luego intersecados.
+ *
+ * Fusionar las clases de ambas semanas en un solo tramo ocupado escondía huecos
+ * reales: una clase de Semana B a las 13:00 no llena el hueco que la semana A
+ * tiene a esa hora. Se dibuja sólo el tiempo muerto que ocurre TODAS las
+ * semanas, así que el bloque nunca promete tiempo libre que el alumno no tiene.
+ * Sin sesiones de semanas alternas ambos planos son idénticos y el resultado no
+ * cambia respecto de calcular sobre el día entero.
+ *
+ * El umbral se aplica después de intersecar: lo que importa es cuánto dura el
+ * hueco que sobrevive en las dos semanas.
+ */
 export function computeFreeBlocks(
   events: CalendarEvent[],
   minDurationMinutes: number = MIN_FREE_BLOCK_MINUTES
 ): ScheduleFreeBlock[] {
   const freeBlocks: ScheduleFreeBlock[] = [];
 
+  const toInterval = (event: CalendarEvent): Interval => ({
+    start: timeToMinutes(event.session.startTime),
+    end: timeToMinutes(event.session.endTime),
+  });
+
   for (const day of DAYS) {
-    const intervals = events
-      // Los eventos de preview no cuentan: el hover no altera los bloques libres.
-      .filter(event => !event.isPreview && event.session.day === day)
-      .map(event => ({
-        start: timeToMinutes(event.session.startTime),
-        end: timeToMinutes(event.session.endTime),
-      }))
-      .sort((a, b) => a.start - b.start || a.end - b.end);
+    // Los eventos de preview no cuentan: el hover no altera los bloques libres.
+    const dayEvents = events.filter(event => !event.isPreview && event.session.day === day);
+    if (dayEvents.length < 2) continue;
 
-    if (intervals.length < 2) continue;
+    const weekA = gapsBetweenClasses(
+      dayEvents.filter(event => event.session.frequency !== WEEK_B).map(toInterval)
+    );
+    const weekB = gapsBetweenClasses(
+      dayEvents.filter(event => event.session.frequency !== WEEK_A).map(toInterval)
+    );
 
-    // Fusiona tramos ocupados solapados o contiguos
-    const merged: { start: number; end: number }[] = [{ ...intervals[0] }];
-    for (let i = 1; i < intervals.length; i++) {
-      const last = merged[merged.length - 1];
-      if (intervals[i].start <= last.end) {
-        last.end = Math.max(last.end, intervals[i].end);
-      } else {
-        merged.push({ ...intervals[i] });
-      }
-    }
-
-    // Solo los intervalos libres entre dos tramos ocupados
-    for (let i = 1; i < merged.length; i++) {
-      const startMinutes = merged[i - 1].end;
-      const endMinutes = merged[i].start;
-      const durationMinutes = endMinutes - startMinutes;
+    for (const gap of intersectIntervals(weekA, weekB)) {
+      const durationMinutes = gap.end - gap.start;
       if (durationMinutes >= minDurationMinutes) {
-        freeBlocks.push({ day, startMinutes, endMinutes, durationMinutes });
+        freeBlocks.push({
+          day,
+          startMinutes: gap.start,
+          endMinutes: gap.end,
+          durationMinutes,
+        });
       }
     }
   }
