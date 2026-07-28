@@ -18,6 +18,8 @@
     "parse-pdf": "node scripts/parse-pdf.js"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.3",
+    "@supabase/supabase-js": "^2.110.8",
     "@vercel/analytics": "^2.0.1",
     "html-to-image": "^1.11.13",
     "next": "16.1.6",
