@@ -13,7 +13,10 @@
 >    Mientras no exista, el documento afirma un borrado que no ocurre.
 > 3. **Revisión legal si te vas a apoyar en la Ley 29733 peruana.** El plazo de
 >    30 días y el alcance de los derechos están puestos con criterio de producto,
->    no verificados contra la norma.
+>    no verificados contra la norma. El punto más expuesto es la conservación
+>    indefinida del correo institucional de un usuario sancionado: es un dato
+>    personal que sobrevive a un pedido de eliminación, y la justificación —que
+>    sin él la expulsión no sería permanente— es de producto, no jurídica.
 
 ---
 
@@ -26,12 +29,17 @@ reseñas de docentes por curso. No es un servicio oficial de UTEC.
 
 ### Si nunca inicias sesión
 
-**Nada tuyo sale de tu navegador.** Los cursos que seleccionas, tu tema claro u
-oscuro y tus preferencias se guardan solo en tu propio navegador. Si borras los
-datos del sitio, desaparecen.
+**Tu horario no sale de tu navegador.** Los cursos que seleccionas, tu tema
+claro u oscuro y tus preferencias se guardan solo en tu propio navegador. Si
+borras los datos del sitio, desaparecen.
 
-Puedes ver los promedios y conteos de los docentes sin iniciar sesión y sin que
-guardemos nada sobre ti.
+Hay una excepción y preferimos que la sepas: cuando despliegas un curso para ver
+a sus docentes, tu navegador le pide a nuestro servidor las reseñas de ese
+curso. Viaja el curso que estás mirando, no la lista de los que elegiste. No
+abrimos una cuenta ni armamos un perfil tuyo con eso.
+
+Puedes ver los promedios, el porcentaje de recomendación y los conteos de los
+docentes sin iniciar sesión.
 
 ### Si subes tu PDF de Carga Hábil
 
@@ -52,8 +60,14 @@ Usamos el correo para una sola cosa: comprobar que eres de UTEC.
 
 ### Si publicas una reseña
 
-Guardamos tu puntuación, tu comentario si escribiste uno, y las fechas de
-publicación y de última edición, asociados a tu cuenta.
+Guardamos tu puntuación, tu respuesta a si recomendarías llevar ese curso con
+ese docente, tu comentario si escribiste uno, y las fechas de publicación y de
+última edición, asociados a tu cuenta.
+
+Guardamos también tu declaración de que llevaste el curso con ese docente. Es lo
+único que respalda tu reseña —no la comprobamos contra tu matrícula ni contra
+tus notas—, y por eso la conservamos: si alguien reporta esa reseña, forma parte
+de lo que se revisa.
 
 Para escribir un comentario te pedimos además tu **carrera** y tu **ciclo
 actual**. Los usamos como contexto interno de moderación. No se muestran nunca.
@@ -68,8 +82,9 @@ reseña.
 
 **Tu reseña es pública. Tu identidad no.**
 
-Junto a un comentario cualquiera puede ver las estrellas, el texto, la fecha de
-publicación y, si lo editaste, una marca de `editado`.
+Junto a un comentario cualquiera puede ver las estrellas, si recomendarías
+llevar el curso con ese docente, el texto, la fecha de publicación y, si lo
+editaste, una marca de `editado`.
 
 Nunca se muestra tu nombre, tu correo, tu carrera, tu ciclo, ni ningún
 identificador que permita saber que esa reseña es tuya. No existen perfiles
@@ -95,10 +110,10 @@ autenticación), **Vercel** (alojamiento y analítica de uso agregada) y
 - **Tus reseñas**, mientras las mantengas publicadas. Si eliminas una, deja de
   contar en el promedio de inmediato.
 - **Una reseña eliminada se conserva 30 días y después se borra por completo:**
-  texto, puntuación y su vínculo con tu cuenta. Durante esos 30 días ya no la ve
-  nadie y no cuenta en ningún promedio; solo sigue disponible para resolver un
-  reporte que estuviera abierto sobre ella y para que borrar y volver a publicar
-  no sirva para saltarse el límite de publicación.
+  texto, puntuación, recomendación y su vínculo con tu cuenta. Durante esos 30
+  días ya no la ve nadie y no cuenta en ningún promedio; solo sigue disponible
+  para resolver un reporte que estuviera abierto sobre ella y para que borrar y
+  volver a publicar no sirva para saltarse el límite de publicación.
 - **Si pides eliminar tu cuenta, se eliminan también todas tus reseñas**, con el
   mismo plazo de 30 días hasta el borrado definitivo.
 
@@ -124,11 +139,16 @@ aplicación, usa el botón de contacto de la propia app.
 Si incumples las normas de la comunidad podemos retirarte el acceso de forma
 permanente y eliminar todas tus reseñas. Te informaremos del motivo.
 
-Esto es **la única excepción** a todo lo anterior: el registro de la sanción —tu
-cuenta, el motivo y la fecha— se conserva de forma indefinida, y se conserva
-aunque pidas eliminar tu cuenta. Sin ese registro una expulsión permanente no
-sería permanente: bastaría con borrar la cuenta y volver a entrar. Tus reseñas
-sí se eliminan y se purgan con el plazo normal de 30 días.
+Esto es **la única excepción** a todo lo anterior: el registro de la sanción
+—**tu correo institucional**, el motivo y la fecha— se conserva de forma
+indefinida, y se conserva aunque pidas eliminar tu cuenta.
+
+Guardamos el correo y no un identificador interno a propósito, porque el
+identificador desaparece con la cuenta y el correo no. Sin ese registro una
+expulsión permanente no sería permanente: bastaría con borrar la cuenta y volver
+a entrar. Con él, además, ese correo no puede volver a registrarse.
+
+Tus reseñas sí se eliminan y se purgan con el plazo normal de 30 días.
 
 ## Cambios
 
