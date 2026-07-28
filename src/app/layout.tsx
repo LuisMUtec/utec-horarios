@@ -48,9 +48,9 @@ export default function RootLayout({
               } catch (_) {}
               try {
                 if (localStorage['utec-horarios-show-gaps'] === 'false') {
-                  document.documentElement.classList.add('hide-gaps')
+                  document.documentElement.classList.add('hide-free-blocks')
                 } else {
-                  document.documentElement.classList.remove('hide-gaps')
+                  document.documentElement.classList.remove('hide-free-blocks')
                 }
               } catch (_) {}
             `,

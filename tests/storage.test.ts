@@ -14,7 +14,7 @@ import type { SelectedCourse } from '@/types';
 
 const STORAGE_KEY = 'utec-horarios-selected';
 const ALLOW_CONFLICTS_KEY = 'utec-horarios-allow-conflicts';
-const SHOW_GAPS_KEY = 'utec-horarios-show-gaps';
+const SHOW_FREE_BLOCKS_KEY = 'utec-horarios-show-gaps';
 
 type Storage = typeof import('@/lib/storage');
 
@@ -37,7 +37,7 @@ function installLocalStorage() {
 }
 
 /**
- * Stub del <html> para los tests de showGaps, que además de React sincroniza una
+ * Stub del <html> para los tests de showFreeBlocks, que además de React sincroniza una
  * clase en el DOM. El entorno de vitest es 'node': sin esto no hay document.
  */
 function installDocument(clasesIniciales: string[] = []): Set<string> {
@@ -258,129 +258,129 @@ describe('allowConflicts', () => {
 });
 
 /**
- * showGaps es la única preferencia con default true, así que su lectura no puede
+ * showFreeBlocks es la única preferencia con default true, así que su lectura no puede
  * copiar el `=== 'true'` de allowConflicts: cualquier ausencia o basura en la
  * clave tiene que caer en true, y solo un 'false' explícito la apaga. El server
  * snapshot vale true por lo mismo (FR-022 del spec).
  */
-describe('showGaps — lectura', () => {
+describe('showFreeBlocks — lectura', () => {
   it('por defecto es true', async () => {
     const s = await freshStore();
-    expect(s.getShowGapsSnapshot()).toBe(true);
+    expect(s.getShowFreeBlocksSnapshot()).toBe(true);
   });
 
   it('lee false de localStorage', async () => {
-    const s = await freshStore({ [SHOW_GAPS_KEY]: 'false' });
-    expect(s.getShowGapsSnapshot()).toBe(false);
+    const s = await freshStore({ [SHOW_FREE_BLOCKS_KEY]: 'false' });
+    expect(s.getShowFreeBlocksSnapshot()).toBe(false);
   });
 
   it('lee true de localStorage', async () => {
-    const s = await freshStore({ [SHOW_GAPS_KEY]: 'true' });
-    expect(s.getShowGapsSnapshot()).toBe(true);
+    const s = await freshStore({ [SHOW_FREE_BLOCKS_KEY]: 'true' });
+    expect(s.getShowFreeBlocksSnapshot()).toBe(true);
   });
 
   it.each(['basura', '', '0', 'null', 'False'])(
     'un valor corrupto (%j) cae en el default true',
     async valor => {
-      const s = await freshStore({ [SHOW_GAPS_KEY]: valor });
-      expect(s.getShowGapsSnapshot()).toBe(true);
+      const s = await freshStore({ [SHOW_FREE_BLOCKS_KEY]: valor });
+      expect(s.getShowFreeBlocksSnapshot()).toBe(true);
     }
   );
 
   it('getSnapshot devuelve la misma referencia entre llamadas', async () => {
-    const s = await freshStore({ [SHOW_GAPS_KEY]: 'false' });
-    expect(s.getShowGapsSnapshot()).toBe(s.getShowGapsSnapshot());
+    const s = await freshStore({ [SHOW_FREE_BLOCKS_KEY]: 'false' });
+    expect(s.getShowFreeBlocksSnapshot()).toBe(s.getShowFreeBlocksSnapshot());
   });
 
   it('getServerSnapshot es true, no false como las demás preferencias', async () => {
-    const s = await freshStore({ [SHOW_GAPS_KEY]: 'false' });
-    expect(s.getShowGapsServerSnapshot()).toBe(true);
+    const s = await freshStore({ [SHOW_FREE_BLOCKS_KEY]: 'false' });
+    expect(s.getShowFreeBlocksServerSnapshot()).toBe(true);
     expect(s.getAllowConflictsServerSnapshot()).toBe(false);
   });
 
   it('sin window (SSR) devuelve el default true', async () => {
     installLocalStorage();
-    mem.set(SHOW_GAPS_KEY, 'false');
+    mem.set(SHOW_FREE_BLOCKS_KEY, 'false');
     vi.stubGlobal('window', undefined);
     vi.resetModules();
     const s: Storage = await import('@/lib/storage');
-    expect(s.getShowGapsSnapshot()).toBe(true);
+    expect(s.getShowFreeBlocksSnapshot()).toBe(true);
   });
 });
 
-describe('showGaps — escritura', () => {
+describe('showFreeBlocks — escritura', () => {
   it('persiste con el mismo formato que espera la lectura', async () => {
     // Se escribe con JSON.stringify y se lee comparando contra 'false':
     // si alguien cambia uno de los dos lados, el toggle deja de persistir.
     const s = await freshStore();
-    expect(s.setShowGaps(false)).toBe(true);
-    expect(mem.get(SHOW_GAPS_KEY)).toBe('false');
+    expect(s.setShowFreeBlocks(false)).toBe(true);
+    expect(mem.get(SHOW_FREE_BLOCKS_KEY)).toBe('false');
 
-    const recargado = await freshStore({ [SHOW_GAPS_KEY]: mem.get(SHOW_GAPS_KEY)! });
-    expect(recargado.getShowGapsSnapshot()).toBe(false);
+    const recargado = await freshStore({ [SHOW_FREE_BLOCKS_KEY]: mem.get(SHOW_FREE_BLOCKS_KEY)! });
+    expect(recargado.getShowFreeBlocksSnapshot()).toBe(false);
   });
 
   it('volver a activarlo persiste true y sobrevive a la recarga', async () => {
-    const s = await freshStore({ [SHOW_GAPS_KEY]: 'false' });
-    s.setShowGaps(true);
-    expect(mem.get(SHOW_GAPS_KEY)).toBe('true');
+    const s = await freshStore({ [SHOW_FREE_BLOCKS_KEY]: 'false' });
+    s.setShowFreeBlocks(true);
+    expect(mem.get(SHOW_FREE_BLOCKS_KEY)).toBe('true');
 
-    const recargado = await freshStore({ [SHOW_GAPS_KEY]: mem.get(SHOW_GAPS_KEY)! });
-    expect(recargado.getShowGapsSnapshot()).toBe(true);
+    const recargado = await freshStore({ [SHOW_FREE_BLOCKS_KEY]: mem.get(SHOW_FREE_BLOCKS_KEY)! });
+    expect(recargado.getShowFreeBlocksSnapshot()).toBe(true);
   });
 
   it('acepta la forma updater con el valor previo', async () => {
     const s = await freshStore();
-    s.setShowGaps(prev => !prev);
-    expect(s.getShowGapsSnapshot()).toBe(false);
+    s.setShowFreeBlocks(prev => !prev);
+    expect(s.getShowFreeBlocksSnapshot()).toBe(false);
   });
 
   it('notifica al cambiar y no en un no-op', async () => {
     const s = await freshStore();
     const listener = vi.fn();
-    s.subscribeShowGaps(listener);
-    s.setShowGaps(false);
+    s.subscribeShowFreeBlocks(listener);
+    s.setShowFreeBlocks(false);
     expect(listener).toHaveBeenCalledOnce();
-    s.setShowGaps(false);
+    s.setShowFreeBlocks(false);
     expect(listener).toHaveBeenCalledOnce();
   });
 
   it('deja de notificar tras desuscribirse', async () => {
     const s = await freshStore();
     const listener = vi.fn();
-    const unsub = s.subscribeShowGaps(listener);
-    s.setShowGaps(false);
+    const unsub = s.subscribeShowFreeBlocks(listener);
+    s.setShowFreeBlocks(false);
     unsub();
-    s.setShowGaps(true);
+    s.setShowFreeBlocks(true);
     expect(listener).toHaveBeenCalledOnce();
   });
 
   it('tiene listeners independientes de las otras preferencias', async () => {
     const s = await freshStore();
-    const huecos = vi.fn();
+    const libres = vi.fn();
     const cruces = vi.fn();
-    s.subscribeShowGaps(huecos);
+    s.subscribeShowFreeBlocks(libres);
     s.subscribeAllowConflicts(cruces);
-    s.setShowGaps(false);
-    expect(huecos).toHaveBeenCalledOnce();
+    s.setShowFreeBlocks(false);
+    expect(libres).toHaveBeenCalledOnce();
     expect(cruces).not.toHaveBeenCalled();
   });
 });
 
-describe('showGaps — fallo de persistencia', () => {
+describe('showFreeBlocks — fallo de persistencia', () => {
   it('devuelve false cuando localStorage rechaza la escritura', async () => {
     const s = await freshStore();
     failWrites = true;
-    expect(s.setShowGaps(false)).toBe(false);
+    expect(s.setShowFreeBlocks(false)).toBe(false);
   });
 
   it('igual actualiza el estado en memoria para no romper la sesión', async () => {
     const s = await freshStore();
     const listener = vi.fn();
-    s.subscribeShowGaps(listener);
+    s.subscribeShowFreeBlocks(listener);
     failWrites = true;
-    s.setShowGaps(false);
-    expect(s.getShowGapsSnapshot()).toBe(false);
+    s.setShowFreeBlocks(false);
+    expect(s.getShowFreeBlocksSnapshot()).toBe(false);
     expect(listener).toHaveBeenCalledOnce();
   });
 });
@@ -388,39 +388,39 @@ describe('showGaps — fallo de persistencia', () => {
 /**
  * La clase del <html> es lo que evita el parpadeo (FR-024): el script bloqueante
  * de layout.tsx la pone antes del primer paint y globals.css oculta los bloques.
- * setShowGaps debe mantenerla en sincronía, o al apagar el toggle en caliente el
+ * setShowFreeBlocks debe mantenerla en sincronía, o al apagar el toggle en caliente el
  * CSS y React quedarían en desacuerdo hasta la siguiente recarga.
  */
-describe('showGaps — sincronización con el <html>', () => {
-  it('apagarlo marca la clase hide-gaps', async () => {
+describe('showFreeBlocks — sincronización con el <html>', () => {
+  it('apagarlo marca la clase hide-free-blocks', async () => {
     const s = await freshStore();
     const clases = installDocument();
-    s.setShowGaps(false);
-    expect(clases.has(s.HIDE_GAPS_CLASS)).toBe(true);
+    s.setShowFreeBlocks(false);
+    expect(clases.has(s.HIDE_FREE_BLOCKS_CLASS)).toBe(true);
   });
 
   it('encenderlo la quita', async () => {
-    const s = await freshStore({ [SHOW_GAPS_KEY]: 'false' });
+    const s = await freshStore({ [SHOW_FREE_BLOCKS_KEY]: 'false' });
     // El script bloqueante ya la había puesto en esta carga.
-    const clases = installDocument(['hide-gaps']);
-    s.setShowGaps(true);
-    expect(clases.has(s.HIDE_GAPS_CLASS)).toBe(false);
+    const clases = installDocument(['hide-free-blocks']);
+    s.setShowFreeBlocks(true);
+    expect(clases.has(s.HIDE_FREE_BLOCKS_CLASS)).toBe(false);
   });
 
   it('la clase coincide con el literal que usa el script bloqueante', async () => {
     const s = await freshStore();
-    expect(s.HIDE_GAPS_CLASS).toBe('hide-gaps');
+    expect(s.HIDE_FREE_BLOCKS_CLASS).toBe('hide-free-blocks');
   });
 
   it('la clave coincide con la que lee el script bloqueante', async () => {
     // El script de layout.tsx la tiene escrita a mano. Si el store la renombra,
     // deja de encontrar la preferencia y vuelve el parpadeo: nada más falla.
     const s = await freshStore();
-    expect(s.SHOW_GAPS_KEY).toBe('utec-horarios-show-gaps');
+    expect(s.SHOW_FREE_BLOCKS_KEY).toBe('utec-horarios-show-gaps');
   });
 
   it('sin document (SSR) no revienta', async () => {
     const s = await freshStore();
-    expect(() => s.setShowGaps(false)).not.toThrow();
+    expect(() => s.setShowFreeBlocks(false)).not.toThrow();
   });
 });

@@ -8,10 +8,10 @@ import {
   getCalendarEvents,
   getPreviewEvents,
   checkNewCourseConflict,
-  computeGaps,
-  sumGapMinutes,
+  computeFreeBlocks,
+  sumFreeBlockMinutes,
   formatDuration,
-  ScheduleGap,
+  ScheduleFreeBlock,
 } from '@/lib/schedule-utils';
 import {
   subscribeSelectedCourses,
@@ -22,10 +22,10 @@ import {
   getAllowConflictsSnapshot,
   getAllowConflictsServerSnapshot,
   setAllowConflicts,
-  subscribeShowGaps,
-  getShowGapsSnapshot,
-  getShowGapsServerSnapshot,
-  setShowGaps,
+  subscribeShowFreeBlocks,
+  getShowFreeBlocksSnapshot,
+  getShowFreeBlocksServerSnapshot,
+  setShowFreeBlocks,
 } from '@/lib/storage';
 import { analyzeSection } from '@/lib/subsession-utils';
 import CourseSearch from '@/components/CourseSearch';
@@ -40,7 +40,7 @@ const courses = coursesData as Course[];
 // Constante a nivel de módulo para que la referencia sea estable: devolver []
 // desde el useMemo haría que WeeklyCalendar viera un array nuevo en cada render.
 const EMPTY_EVENTS: CalendarEvent[] = [];
-const EMPTY_GAPS: ScheduleGap[] = [];
+const EMPTY_FREE_BLOCKS: ScheduleFreeBlock[] = [];
 
 function autoAssignSubsession(selected: SelectedCourse): SelectedCourse {
   if (selected.subsessionId) return selected;
@@ -74,10 +74,10 @@ export default function Home() {
     getAllowConflictsServerSnapshot
   );
 
-  const showGaps = useSyncExternalStore(
-    subscribeShowGaps,
-    getShowGapsSnapshot,
-    getShowGapsServerSnapshot
+  const showFreeBlocks = useSyncExternalStore(
+    subscribeShowFreeBlocks,
+    getShowFreeBlocksSnapshot,
+    getShowFreeBlocksServerSnapshot
   );
 
   const [previewSection, setPreviewSection] = useState<{courseCode: string, sectionNumber: number, subsessionId?: string} | null>(null);
@@ -107,8 +107,8 @@ export default function Home() {
     warnIfNotPersisted(setAllowConflicts(value));
   }, [warnIfNotPersisted]);
 
-  const handleToggleGaps = useCallback((value: boolean) => {
-    warnIfNotPersisted(setShowGaps(value));
+  const handleToggleFreeBlocks = useCallback((value: boolean) => {
+    warnIfNotPersisted(setShowFreeBlocks(value));
   }, [warnIfNotPersisted]);
 
   const handleAddCourse = useCallback((courseCode: string, sectionNumber: number, subsessionId?: string) => {
@@ -155,10 +155,11 @@ export default function Home() {
     [selectedCourses]
   );
 
-  // Solo los cursos seleccionados: la preview no altera el cálculo de huecos.
-  const gaps = useMemo(
-    () => (showGaps ? computeGaps(events) : EMPTY_GAPS),
-    [showGaps, events]
+  // Solo los cursos seleccionados: la preview no altera el cálculo de bloques
+  // libres.
+  const freeBlocks = useMemo(
+    () => (showFreeBlocks ? computeFreeBlocks(events) : EMPTY_FREE_BLOCKS),
+    [showFreeBlocks, events]
   );
 
   const previewEvents = useMemo(() => {
@@ -346,21 +347,21 @@ export default function Home() {
                 </button>
               </label>
               <label className="flex items-center justify-between cursor-pointer">
-                <span className="text-xs text-gray-600 dark:text-gray-300">Mostrar huecos</span>
-                {/* Las variantes gaps-off: corrigen el switch antes de que React
-                    hidrate, igual que las dark: de ThemeToggle. */}
+                <span className="text-xs text-gray-600 dark:text-gray-300">Mostrar bloques libres</span>
+                {/* Las variantes free-blocks-off: corrigen el switch antes de
+                    que React hidrate, igual que las dark: de ThemeToggle. */}
                 <button
                   type="button"
                   role="switch"
-                  aria-checked={showGaps}
-                  onClick={() => handleToggleGaps(!showGaps)}
-                  className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors gaps-off:bg-gray-300 dark:gaps-off:bg-gray-600 ${
-                    showGaps ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                  aria-checked={showFreeBlocks}
+                  onClick={() => handleToggleFreeBlocks(!showFreeBlocks)}
+                  className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors free-blocks-off:bg-gray-300 dark:free-blocks-off:bg-gray-600 ${
+                    showFreeBlocks ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
                   }`}
                 >
                   <span
-                    className={`inline-block h-3.5 w-3.5 rounded-full bg-white shadow-sm transition-transform gaps-off:translate-x-[3px] ${
-                      showGaps ? 'translate-x-[18px]' : 'translate-x-[3px]'
+                    className={`inline-block h-3.5 w-3.5 rounded-full bg-white shadow-sm transition-transform free-blocks-off:translate-x-[3px] ${
+                      showFreeBlocks ? 'translate-x-[18px]' : 'translate-x-[3px]'
                     }`}
                   />
                 </button>
@@ -393,9 +394,9 @@ export default function Home() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">Horario semanal</h2>
-                {showGaps && events.length > 0 && (
-                  <span className="gap-summary text-[11px] font-medium px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
-                    {formatDuration(sumGapMinutes(gaps))} de tiempo muerto
+                {showFreeBlocks && events.length > 0 && (
+                  <span className="free-block-summary text-[11px] font-medium px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
+                    {formatDuration(sumFreeBlockMinutes(freeBlocks))} en bloques libres
                   </span>
                 )}
               </div>
@@ -424,7 +425,7 @@ export default function Home() {
                 </button>
               )}
             </div>
-            <WeeklyCalendar events={events} previewEvents={previewEvents} gaps={gaps} calendarRef={calendarRef} />
+            <WeeklyCalendar events={events} previewEvents={previewEvents} freeBlocks={freeBlocks} calendarRef={calendarRef} />
           </div>
         </div>
       </main>

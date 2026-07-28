@@ -4,7 +4,9 @@ const STORAGE_KEY = 'utec-horarios-selected';
 const ALLOW_CONFLICTS_KEY = 'utec-horarios-allow-conflicts';
 // Exportada, a diferencia de las otras dos: el script bloqueante de layout.tsx
 // la lee por su cuenta y un test la fija contra ese literal.
-export const SHOW_GAPS_KEY = 'utec-horarios-show-gaps';
+// El literal sigue diciendo "gaps", el nombre que tenía la feature: cambiarlo
+// descartaría en silencio la preferencia de quien ya apagó el toggle.
+export const SHOW_FREE_BLOCKS_KEY = 'utec-horarios-show-gaps';
 
 /**
  * Stores observables sobre localStorage, pensados para useSyncExternalStore.
@@ -115,56 +117,57 @@ export function setAllowConflicts(update: Updater<boolean>): boolean {
   return persisted;
 }
 
-// --- Mostrar huecos ---
+// --- Mostrar bloques libres ---
 //
 // A diferencia de las demás, esta preferencia arranca en true, así que ningún
 // server snapshot sirve para todo el mundo. Igual que el tema, el valor real se
 // aplica al <html> antes del primer paint (script bloqueante de layout.tsx) y
-// globals.css oculta huecos y contador mientras esté la clase HIDE_GAPS_CLASS.
-// El script duplica SHOW_GAPS_KEY y HIDE_GAPS_CLASS: ambos están fijados por
-// tests, porque si se separan vuelve el parpadeo sin que nada más falle.
+// globals.css oculta bloques libres y contador mientras esté la clase
+// HIDE_FREE_BLOCKS_CLASS. El script duplica SHOW_FREE_BLOCKS_KEY y
+// HIDE_FREE_BLOCKS_CLASS: ambos están fijados por tests, porque si se separan
+// vuelve el parpadeo sin que nada más falle.
 
-export const HIDE_GAPS_CLASS = 'hide-gaps';
+export const HIDE_FREE_BLOCKS_CLASS = 'hide-free-blocks';
 
-let showGapsCache: boolean | null = null;
-const showGapsListeners = new Set<() => void>();
+let showFreeBlocksCache: boolean | null = null;
+const showFreeBlocksListeners = new Set<() => void>();
 
-function readShowGaps(): boolean {
+function readShowFreeBlocks(): boolean {
   if (typeof window === 'undefined') return true;
   try {
-    return localStorage.getItem(SHOW_GAPS_KEY) !== 'false';
+    return localStorage.getItem(SHOW_FREE_BLOCKS_KEY) !== 'false';
   } catch {
     return true;
   }
 }
 
-function syncShowGapsClass(show: boolean): void {
+function syncShowFreeBlocksClass(show: boolean): void {
   if (typeof document === 'undefined') return;
-  document.documentElement.classList.toggle(HIDE_GAPS_CLASS, !show);
+  document.documentElement.classList.toggle(HIDE_FREE_BLOCKS_CLASS, !show);
 }
 
-export function subscribeShowGaps(listener: () => void): () => void {
-  showGapsListeners.add(listener);
-  return () => showGapsListeners.delete(listener);
+export function subscribeShowFreeBlocks(listener: () => void): () => void {
+  showFreeBlocksListeners.add(listener);
+  return () => showFreeBlocksListeners.delete(listener);
 }
 
-export function getShowGapsSnapshot(): boolean {
-  showGapsCache ??= readShowGaps();
-  return showGapsCache;
+export function getShowFreeBlocksSnapshot(): boolean {
+  showFreeBlocksCache ??= readShowFreeBlocks();
+  return showFreeBlocksCache;
 }
 
-export function getShowGapsServerSnapshot(): boolean {
+export function getShowFreeBlocksServerSnapshot(): boolean {
   return true;
 }
 
 /** Devuelve false si no se pudo persistir (Safari privado, cuota llena). */
-export function setShowGaps(update: Updater<boolean>): boolean {
-  const next = applyUpdate(update, getShowGapsSnapshot());
-  if (next === showGapsCache) return true;
-  showGapsCache = next;
-  const persisted = writeKey(SHOW_GAPS_KEY, next);
+export function setShowFreeBlocks(update: Updater<boolean>): boolean {
+  const next = applyUpdate(update, getShowFreeBlocksSnapshot());
+  if (next === showFreeBlocksCache) return true;
+  showFreeBlocksCache = next;
+  const persisted = writeKey(SHOW_FREE_BLOCKS_KEY, next);
   // Antes de notificar: el CSS debe estar acorde cuando React vuelva a pintar.
-  syncShowGapsClass(next);
-  showGapsListeners.forEach((listener) => listener());
+  syncShowFreeBlocksClass(next);
+  showFreeBlocksListeners.forEach((listener) => listener());
   return persisted;
 }
