@@ -347,7 +347,7 @@ export default function Home() {
                 </button>
               </label>
               <label className="flex items-center justify-between cursor-pointer">
-                <span className="text-xs text-gray-600 dark:text-gray-300">Mostrar Bloques Libres</span>
+                <span className="text-xs text-gray-600 dark:text-gray-300">Mostrar bloques libres</span>
                 {/* Las variantes free-blocks-off: corrigen el switch antes de
                     que React hidrate, igual que las dark: de ThemeToggle. */}
                 <button
@@ -396,7 +396,7 @@ export default function Home() {
                 <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">Horario semanal</h2>
                 {showFreeBlocks && events.length > 0 && (
                   <span className="free-block-summary text-[11px] font-medium px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
-                    {formatDuration(sumFreeBlockMinutes(freeBlocks))} en Bloques Libres
+                    {formatDuration(sumFreeBlockMinutes(freeBlocks))} en bloques libres
                   </span>
                 )}
               </div>

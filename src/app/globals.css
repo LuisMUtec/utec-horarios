@@ -7,7 +7,7 @@
 }
 
 /* El script bloqueante de layout.tsx marca <html class="hide-free-blocks">
-   antes del primer paint cuando el usuario desactivó "Mostrar Bloques Libres",
+   antes del primer paint cuando el usuario desactivó "Mostrar bloques libres",
    para que nunca lleguen a verse aunque React todavía no haya leído la
    preferencia. */
 .hide-free-blocks :is(.free-block, .free-block-summary) {

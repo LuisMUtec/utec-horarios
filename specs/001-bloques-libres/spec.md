@@ -60,7 +60,7 @@ Como estudiante de UTEC armando mi horario, quiero ver de un vistazo cuánto tie
 
 14. **Given** un usuario que nunca cambió la preferencia, **When** abre la aplicación, **Then** la visualización de bloques libres está activada.
 
-15. **Given** un horario con bloques libres, **When** el usuario desactiva el toggle "Mostrar Bloques Libres", **Then** los bloques libres y el contador desaparecen inmediatamente, sin afectar los bloques de clase.
+15. **Given** un horario con bloques libres, **When** el usuario desactiva el toggle "Mostrar bloques libres", **Then** los bloques libres y el contador desaparecen inmediatamente, sin afectar los bloques de clase.
 
 16. **Given** el usuario desactivó el toggle, **When** recarga la página, **Then** el toggle sigue desactivado y no hay un parpadeo inicial de bloques libres.
 
@@ -113,7 +113,7 @@ Como estudiante de UTEC armando mi horario, quiero ver de un vistazo cuánto tie
 
 #### Control de usuario
 
-- **FR-019**: El sistema DEBE ofrecer un toggle "Mostrar Bloques Libres" con el mismo patrón visual e interacción que el toggle existente "Permitir cruces de horario".
+- **FR-019**: El sistema DEBE ofrecer un toggle "Mostrar bloques libres" con el mismo patrón visual e interacción que el toggle existente "Permitir cruces de horario".
 - **FR-020**: El toggle DEBE ubicarse en la misma tarjeta que "Permitir cruces de horario", como una segunda opción del mismo grupo.
 - **FR-021**: La preferencia del toggle DEBE persistir en el navegador entre sesiones, con el mismo mecanismo que las demás preferencias.
 - **FR-022**: El estado por defecto para un usuario nuevo DEBE ser **activado**.
