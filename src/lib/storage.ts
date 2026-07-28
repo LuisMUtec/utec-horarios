@@ -153,17 +153,14 @@ export function getShowGapsServerSnapshot(): boolean {
   return true;
 }
 
-export function setShowGaps(update: Updater<boolean>): void {
+/** Devuelve false si no se pudo persistir (Safari privado, cuota llena). */
+export function setShowGaps(update: Updater<boolean>): boolean {
   const next = applyUpdate(update, getShowGapsSnapshot());
-  if (next === showGapsCache) return;
+  if (next === showGapsCache) return true;
   showGapsCache = next;
-  if (typeof window !== 'undefined') {
-    try {
-      localStorage.setItem(SHOW_GAPS_KEY, JSON.stringify(next));
-    } catch {
-      // Ignore storage errors
-    }
-  }
+  const persisted = writeKey(SHOW_GAPS_KEY, next);
+  // Antes de notificar: el CSS debe estar acorde cuando React vuelva a pintar.
   syncShowGapsClass(next);
   showGapsListeners.forEach((listener) => listener());
+  return persisted;
 }

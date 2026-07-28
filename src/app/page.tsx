@@ -108,8 +108,8 @@ export default function Home() {
   }, [warnIfNotPersisted]);
 
   const handleToggleGaps = useCallback((value: boolean) => {
-    setShowGaps(value);
-  }, []);
+    warnIfNotPersisted(setShowGaps(value));
+  }, [warnIfNotPersisted]);
 
   const handleAddCourse = useCallback((courseCode: string, sectionNumber: number, subsessionId?: string) => {
     warnIfNotPersisted(setSelectedCourses(prevStored => {

@@ -14,6 +14,7 @@ import type { SelectedCourse } from '@/types';
 
 const STORAGE_KEY = 'utec-horarios-selected';
 const ALLOW_CONFLICTS_KEY = 'utec-horarios-allow-conflicts';
+const SHOW_GAPS_KEY = 'utec-horarios-show-gaps';
 
 type Storage = typeof import('@/lib/storage');
 
@@ -33,6 +34,25 @@ function installLocalStorage() {
   };
   vi.stubGlobal('window', globalThis);
   vi.stubGlobal('localStorage', stub);
+}
+
+/**
+ * Stub del <html> para los tests de showGaps, que además de React sincroniza una
+ * clase en el DOM. El entorno de vitest es 'node': sin esto no hay document.
+ */
+function installDocument(clasesIniciales: string[] = []): Set<string> {
+  const clases = new Set(clasesIniciales);
+  vi.stubGlobal('document', {
+    documentElement: {
+      classList: {
+        toggle: (nombre: string, forzar: boolean) => {
+          if (forzar) clases.add(nombre);
+          else clases.delete(nombre);
+        },
+      },
+    },
+  });
+  return clases;
 }
 
 /** Importa el store recién inicializado, opcionalmente con datos ya persistidos. */
@@ -234,5 +254,166 @@ describe('allowConflicts', () => {
     s.setAllowConflicts(true);
     expect(cruces).toHaveBeenCalledOnce();
     expect(cursos).not.toHaveBeenCalled();
+  });
+});
+
+/**
+ * showGaps es la única preferencia con default true, así que su lectura no puede
+ * copiar el `=== 'true'` de allowConflicts: cualquier ausencia o basura en la
+ * clave tiene que caer en true, y solo un 'false' explícito la apaga. El server
+ * snapshot vale true por lo mismo (FR-022 del spec).
+ */
+describe('showGaps — lectura', () => {
+  it('por defecto es true', async () => {
+    const s = await freshStore();
+    expect(s.getShowGapsSnapshot()).toBe(true);
+  });
+
+  it('lee false de localStorage', async () => {
+    const s = await freshStore({ [SHOW_GAPS_KEY]: 'false' });
+    expect(s.getShowGapsSnapshot()).toBe(false);
+  });
+
+  it('lee true de localStorage', async () => {
+    const s = await freshStore({ [SHOW_GAPS_KEY]: 'true' });
+    expect(s.getShowGapsSnapshot()).toBe(true);
+  });
+
+  it.each(['basura', '', '0', 'null', 'False'])(
+    'un valor corrupto (%j) cae en el default true',
+    async valor => {
+      const s = await freshStore({ [SHOW_GAPS_KEY]: valor });
+      expect(s.getShowGapsSnapshot()).toBe(true);
+    }
+  );
+
+  it('getSnapshot devuelve la misma referencia entre llamadas', async () => {
+    const s = await freshStore({ [SHOW_GAPS_KEY]: 'false' });
+    expect(s.getShowGapsSnapshot()).toBe(s.getShowGapsSnapshot());
+  });
+
+  it('getServerSnapshot es true, no false como las demás preferencias', async () => {
+    const s = await freshStore({ [SHOW_GAPS_KEY]: 'false' });
+    expect(s.getShowGapsServerSnapshot()).toBe(true);
+    expect(s.getAllowConflictsServerSnapshot()).toBe(false);
+  });
+
+  it('sin window (SSR) devuelve el default true', async () => {
+    installLocalStorage();
+    mem.set(SHOW_GAPS_KEY, 'false');
+    vi.stubGlobal('window', undefined);
+    vi.resetModules();
+    const s: Storage = await import('@/lib/storage');
+    expect(s.getShowGapsSnapshot()).toBe(true);
+  });
+});
+
+describe('showGaps — escritura', () => {
+  it('persiste con el mismo formato que espera la lectura', async () => {
+    // Se escribe con JSON.stringify y se lee comparando contra 'false':
+    // si alguien cambia uno de los dos lados, el toggle deja de persistir.
+    const s = await freshStore();
+    expect(s.setShowGaps(false)).toBe(true);
+    expect(mem.get(SHOW_GAPS_KEY)).toBe('false');
+
+    const recargado = await freshStore({ [SHOW_GAPS_KEY]: mem.get(SHOW_GAPS_KEY)! });
+    expect(recargado.getShowGapsSnapshot()).toBe(false);
+  });
+
+  it('volver a activarlo persiste true y sobrevive a la recarga', async () => {
+    const s = await freshStore({ [SHOW_GAPS_KEY]: 'false' });
+    s.setShowGaps(true);
+    expect(mem.get(SHOW_GAPS_KEY)).toBe('true');
+
+    const recargado = await freshStore({ [SHOW_GAPS_KEY]: mem.get(SHOW_GAPS_KEY)! });
+    expect(recargado.getShowGapsSnapshot()).toBe(true);
+  });
+
+  it('acepta la forma updater con el valor previo', async () => {
+    const s = await freshStore();
+    s.setShowGaps(prev => !prev);
+    expect(s.getShowGapsSnapshot()).toBe(false);
+  });
+
+  it('notifica al cambiar y no en un no-op', async () => {
+    const s = await freshStore();
+    const listener = vi.fn();
+    s.subscribeShowGaps(listener);
+    s.setShowGaps(false);
+    expect(listener).toHaveBeenCalledOnce();
+    s.setShowGaps(false);
+    expect(listener).toHaveBeenCalledOnce();
+  });
+
+  it('deja de notificar tras desuscribirse', async () => {
+    const s = await freshStore();
+    const listener = vi.fn();
+    const unsub = s.subscribeShowGaps(listener);
+    s.setShowGaps(false);
+    unsub();
+    s.setShowGaps(true);
+    expect(listener).toHaveBeenCalledOnce();
+  });
+
+  it('tiene listeners independientes de las otras preferencias', async () => {
+    const s = await freshStore();
+    const huecos = vi.fn();
+    const cruces = vi.fn();
+    s.subscribeShowGaps(huecos);
+    s.subscribeAllowConflicts(cruces);
+    s.setShowGaps(false);
+    expect(huecos).toHaveBeenCalledOnce();
+    expect(cruces).not.toHaveBeenCalled();
+  });
+});
+
+describe('showGaps — fallo de persistencia', () => {
+  it('devuelve false cuando localStorage rechaza la escritura', async () => {
+    const s = await freshStore();
+    failWrites = true;
+    expect(s.setShowGaps(false)).toBe(false);
+  });
+
+  it('igual actualiza el estado en memoria para no romper la sesión', async () => {
+    const s = await freshStore();
+    const listener = vi.fn();
+    s.subscribeShowGaps(listener);
+    failWrites = true;
+    s.setShowGaps(false);
+    expect(s.getShowGapsSnapshot()).toBe(false);
+    expect(listener).toHaveBeenCalledOnce();
+  });
+});
+
+/**
+ * La clase del <html> es lo que evita el parpadeo (FR-024): el script bloqueante
+ * de layout.tsx la pone antes del primer paint y globals.css oculta los bloques.
+ * setShowGaps debe mantenerla en sincronía, o al apagar el toggle en caliente el
+ * CSS y React quedarían en desacuerdo hasta la siguiente recarga.
+ */
+describe('showGaps — sincronización con el <html>', () => {
+  it('apagarlo marca la clase hide-gaps', async () => {
+    const s = await freshStore();
+    const clases = installDocument();
+    s.setShowGaps(false);
+    expect(clases.has(s.HIDE_GAPS_CLASS)).toBe(true);
+  });
+
+  it('encenderlo la quita', async () => {
+    const s = await freshStore({ [SHOW_GAPS_KEY]: 'false' });
+    // El script bloqueante ya la había puesto en esta carga.
+    const clases = installDocument(['hide-gaps']);
+    s.setShowGaps(true);
+    expect(clases.has(s.HIDE_GAPS_CLASS)).toBe(false);
+  });
+
+  it('la clase coincide con el literal que usa el script bloqueante', async () => {
+    const s = await freshStore();
+    expect(s.HIDE_GAPS_CLASS).toBe('hide-gaps');
+  });
+
+  it('sin document (SSR) no revienta', async () => {
+    const s = await freshStore();
+    expect(() => s.setShowGaps(false)).not.toThrow();
   });
 });

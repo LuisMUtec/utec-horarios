@@ -243,7 +243,8 @@ export function computeGaps(
 
   for (const day of DAYS) {
     const intervals = events
-      .filter(event => event.session.day === day)
+      // Los eventos de preview no cuentan: el hover no altera los huecos.
+      .filter(event => !event.isPreview && event.session.day === day)
       .map(event => ({
         start: timeToMinutes(event.session.startTime),
         end: timeToMinutes(event.session.endTime),
