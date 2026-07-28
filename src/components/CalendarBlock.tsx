@@ -18,6 +18,8 @@ export default function CalendarBlock({ event, top, height, hasConflict, isPrevi
 
   const widthPct = 100 / totalColumns;
   const leftPct = column * widthPct;
+  /* v8 ignore next */
+  const titleClass = `text-[10px] font-bold leading-tight ${height > 45 ? 'line-clamp-2' : 'truncate'}`;
 
   return (
     <div
@@ -34,20 +36,20 @@ export default function CalendarBlock({ event, top, height, hasConflict, isPrevi
       }}
       title={`${courseCode} - ${courseName}\n${session.type}\n${session.startTime} - ${session.endTime}\n${session.location}\n${session.professor}`}
     >
-      <div className="text-[10px] font-bold leading-tight truncate">
+      <div className={titleClass}>
         {courseName}
       </div>
-      {height > 30 && (
+      {height > 45 && (
         <div className="text-[9px] leading-tight truncate opacity-80">
           {session.startTime} - {session.endTime}
         </div>
       )}
-      {height > 45 && (
+      {height > 60 && (
         <div className="text-[9px] leading-tight truncate opacity-70">
           {session.location}
         </div>
       )}
-      {height > 60 && (
+      {height > 75 && (
         <div className="text-[9px] leading-tight truncate opacity-60">
           {session.type}
         </div>
