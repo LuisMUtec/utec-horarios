@@ -9,7 +9,7 @@ const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
 const LIMIT = 1000; // Max requests
 const WINDOW_SIZE = 60 * 60 * 1000; // 1 hour in milliseconds
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Only apply to API routes
   if (!request.nextUrl.pathname.startsWith('/api')) {
     return NextResponse.next();
@@ -44,7 +44,6 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
   matcher: '/api/:path*',
 };

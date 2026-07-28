@@ -12,5 +12,27 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['tests/**/*.test.ts'],
+    coverage: {
+      provider: 'v8',
+      // Trinquete: el piso es el coverage medido, no un número elegido. Con
+      // `autoUpdate` vitest reescribe estos valores cuando el coverage sube, y
+      // el CI falla si baja. Así el coverage sólo puede avanzar, sin fijar hoy
+      // una meta que la app no puede cumplir (los componentes React están en 0%
+      // y no hay jsdom ni testing-library montados).
+      //
+      // El `autoUpdate` sólo persiste cuando alguien corre coverage en local y
+      // commitea el archivo: en el runner la reescritura se descarta.
+      thresholds: {
+        autoUpdate: true,
+        lines: 19.7,
+        statements: 18.92,
+        functions: 16.05,
+        branches: 10.88,
+      },
+      reporter: ['text', 'json-summary'],
+      include: ['src/**/*.{ts,tsx}'],
+      // Datos generados y tipos no aportan señal de coverage.
+      exclude: ['src/data/**', 'src/types/**'],
+    },
   },
 });
