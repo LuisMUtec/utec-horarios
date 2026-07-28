@@ -101,10 +101,14 @@ jobs:
           # cubre las dos formas de sembrar mal, un hash de contraseña
           # inservible y las columnas de token en NULL, que a GoTrue le
           # provocan un 500 al leer la fila.
-          curl -sS -X POST "$AUTH/token?grant_type=password" \
+          # `// empty` cubre tanto el token nulo como la respuesta de error, que
+          # no trae la clave. Buscar el nombre del campo no alcanza: un
+          # access_token vacío también lo contiene.
+          token=$(curl -sS -X POST "$AUTH/token?grant_type=password" \
             -H "apikey: $ANON_KEY" -H "Content-Type: application/json" \
             -d "{\"email\":\"estudiante@utec.edu.pe\",\"password\":\"$SEED_PASS\"}" \
-            | grep -q access_token
+            | jq -r '.access_token // empty')
+          [ -n "$token" ] || { echo "El login no devolvió un access_token"; exit 1; }
 
           echo "El hook de dominio rechaza una cuenta que no es de UTEC"
           codigo=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "$AUTH/signup" \
