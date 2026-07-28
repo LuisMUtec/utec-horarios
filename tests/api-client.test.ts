@@ -1,5 +1,13 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { fetchCourseSummaries, invalidateCourse, clearSummaryCache } from '@/lib/api-client';
+import {
+  clearCareersCache,
+  clearSummaryCache,
+  fetchCareers,
+  fetchCourseSummaries,
+  invalidateCourse,
+  updateProfile,
+} from '@/lib/api-client';
+import type { Career } from '@/lib/careers';
 import type { TeacherSummary } from '@/types/reviews';
 
 const SUMMARY: TeacherSummary = {
@@ -34,6 +42,7 @@ let fetchMock: ReturnType<typeof vi.fn>;
 
 beforeEach(() => {
   clearSummaryCache();
+  clearCareersCache();
   fetchMock = vi.fn();
   vi.stubGlobal('fetch', fetchMock);
 });
@@ -171,5 +180,102 @@ describe('clearSummaryCache', () => {
     await fetchCourseSummaries('CS2023');
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+});
+
+const CAREERS: Career[] = [{ slug: 'fisica', name: 'Física', faculty: 'Ciencias Básicas' }];
+
+describe('fetchCareers', () => {
+  it('pide el catálogo una sola vez por pestaña', async () => {
+    fetchMock.mockResolvedValue({ ok: true, status: 200, json: async () => ({ careers: CAREERS }) });
+
+    await expect(fetchCareers()).resolves.toEqual(CAREERS);
+    await fetchCareers();
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledWith('/api/careers');
+  });
+
+  it('engancha dos llamadas concurrentes al mismo request', async () => {
+    const inFlight = deferredResponse();
+    fetchMock.mockReturnValue(inFlight.promise);
+
+    const first = fetchCareers();
+    const second = fetchCareers();
+    inFlight.settle({ ok: true, status: 200, json: async () => ({ careers: CAREERS }) });
+
+    expect(await first).toEqual(CAREERS);
+    expect(await second).toEqual(CAREERS);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('no cachea un fallo', async () => {
+    fetchMock.mockResolvedValueOnce(errorResponse(503));
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: async () => ({ careers: CAREERS }),
+    });
+
+    await expect(fetchCareers()).rejects.toThrow('503');
+    await expect(fetchCareers()).resolves.toEqual(CAREERS);
+  });
+});
+
+const PROFILE = { careerSlug: 'fisica', careerName: 'Física', term: 5 };
+
+function profileResponse(status: number, body: unknown) {
+  return { ok: status >= 200 && status < 300, status, json: async () => body };
+}
+
+describe('updateProfile', () => {
+  it('manda un PATCH con el cuerpo en JSON y devuelve el perfil guardado', async () => {
+    fetchMock.mockResolvedValue(profileResponse(200, { banned: false, profile: PROFILE }));
+
+    await expect(updateProfile({ term: 5 })).resolves.toEqual({ ok: true, profile: PROFILE });
+    expect(fetchMock).toHaveBeenCalledWith('/api/profile', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: '{"term":5}',
+    });
+  });
+
+  it('un 400 devuelve los errores por campo, no una excepción', async () => {
+    fetchMock.mockResolvedValue(
+      profileResponse(400, { errors: { term: 'El ciclo va del 1 al 10.' } })
+    );
+
+    await expect(updateProfile({ term: 99 })).resolves.toEqual({
+      ok: false,
+      errors: { term: 'El ciclo va del 1 al 10.' },
+    });
+  });
+
+  it('un 400 sin cuerpo útil no rompe el formulario', async () => {
+    fetchMock.mockResolvedValue(profileResponse(400, {}));
+    await expect(updateProfile({ term: 99 })).resolves.toEqual({ ok: false, errors: {} });
+  });
+
+  // FR-057: quien fue sancionado con la página abierta tiene que leer el motivo.
+  it('un 403 devuelve el mensaje y el motivo que mandó el servidor', async () => {
+    fetchMock.mockResolvedValue(
+      profileResponse(403, {
+        error: 'Tu acceso a las reseñas fue retirado de forma permanente.',
+        banned: true,
+        reason: 'Insultos hacia un docente.',
+      })
+    );
+
+    const result = await updateProfile({ term: 5 });
+
+    expect(result.ok).toBe(false);
+    expect(result.ok === false && result.errors.form).toBe(
+      'Tu acceso a las reseñas fue retirado de forma permanente. Motivo: Insultos hacia un docente.'
+    );
+  });
+
+  it('lanza cuando el servidor falla de verdad', async () => {
+    fetchMock.mockResolvedValue(profileResponse(503, {}));
+    await expect(updateProfile({ term: 5 })).rejects.toThrow('503');
   });
 });

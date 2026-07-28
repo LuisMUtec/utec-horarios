@@ -885,7 +885,8 @@ parseado.
 - [x] D1 … D6 documentadas y acordadas
 - [x] Política de privacidad alineada con el diseño (sigue siendo borrador)
 - [ ] **Plan revisado y aprobado**
-- [ ] Las tres condiciones de publicación de la política, cumplidas
+- [ ] Las tres condiciones de publicación de la política, cumplidas. La segunda —la purga a los 30 días— ya está implementada; siguen abiertas el buzón `privacidad@mail.luismaquera.dev` y la revisión legal. Mientras tanto `/privacidad` existe y responde 404 (T099)
 - [x] R6 resuelto: qué pasa con las reseñas de un docente reemplazado (se apagan con el par y reaparecen si vuelve a la oferta)
-- [x] R1 medido con el primer componente: **no se disparó**. Con los cuatro `.tsx` de US1 dentro, el piso subió de `33.22 / 33.28 / 29.12 / 25.86` a `39.29 / 39.12 / 35.74 / 33.93`. Lo que lo sostiene es la regla de no dejar lógica testeable en el JSX: `src/lib/` quedó en 70.64 % y los componentes en 0 %, así que cada `.tsx` nuevo llega acompañado de un módulo que compensa de sobra. jsdom sigue sin hacer falta.
+- [x] R1 medido con el primer componente: **no se disparó**. Con los cuatro `.tsx` de US1 dentro, el piso subió de `33.22 / 33.28 / 29.12 / 25.86` a `39.29 / 39.12 / 35.74 / 33.93`. Lo que lo sostiene es la regla de no dejar lógica testeable en el JSX: `src/lib/` quedó en 70.64 % y los componentes en 0 %, así que cada `.tsx` nuevo llega acompañado de un módulo que compensa de sobra. jsdom sigue sin hacer falta. Con US2 el piso volvió a subir, a `40.65 / 40.58 / 38.29 / 40.89`, y eso que entraron cuatro páginas y dos componentes más: `src/lib/` está en 77.36 %
 - [x] Reparto en PRs (tabla en [tasks.md](tasks.md#reparto-en-prs))
+- [ ] Esquema en producción. El proyecto ya está enlazado a `rlsswhwrigdgsboqakyw` y `supabase migration list` da las ocho migraciones pendientes; falta correr `supabase db push` (nunca con `--include-seed`)

@@ -24,10 +24,10 @@ export default defineConfig({
       // commitea el archivo: en el runner la reescritura se descarta.
       thresholds: {
         autoUpdate: true,
-        lines: 39.29,
-        statements: 39.12,
-        functions: 35.74,
-        branches: 33.93,
+        lines: 40.65,
+        statements: 40.58,
+        functions: 38.29,
+        branches: 40.89,
       },
       reporter: ['text', 'json-summary'],
       include: ['src/**/*.{ts,tsx}'],
