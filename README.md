@@ -75,10 +75,12 @@ Para tocar el esquema no hace falta el proyecto de la nube: la CLI levanta un Po
 Requisitos: **Docker** corriendo y la [CLI de Supabase](https://supabase.com/docs/guides/local-development) (`brew install supabase/tap/supabase`).
 
 ```bash
-supabase start      # aplica migrations/ y seed.sql sobre una base limpia
-supabase db reset   # vuelve a esa base limpia cuando quieras
+supabase start      # levanta el stack
+supabase db reset   # recrea la base: aplica migrations/ y vuelve a correr seed.sql
 supabase stop       # apaga todo
 ```
+
+Ojo con la diferencia: `supabase start` aplica migraciones y seed **solo la primera vez**. Después el estado vive en un volumen de Docker y sobrevive a `stop`/`start`, así que tras agregar una migración o tocar el seed lo que hace falta es `supabase db reset`.
 
 `supabase start` imprime las URLs del stack. Las dos que vas a usar:
 
@@ -116,7 +118,7 @@ supabase db reset                          # lo aplica desde cero y valida que c
 
 El cambio viaja al PR como archivo. **No edites una migración ya mergeada**: en producción ya se aplicó y no se vuelve a correr, así que un arreglo va en una migración nueva.
 
-Para empujar a la nube: `supabase link --project-ref <ref>` y después `supabase db push`. Requiere estar logueado (`supabase login`) con la cuenta dueña del proyecto; si `supabase projects list` no lo muestra, estás en otra cuenta y el link falla.
+Para empujar a la nube: `supabase link --project-ref <ref>` y después `supabase db push`. Requiere estar logueado (`supabase login`) con una cuenta que tenga acceso al proyecto. Si `supabase projects list` no lo muestra, o estás en otra cuenta o esa cuenta no es miembro de la organización dueña del proyecto; en cualquiera de los dos casos el link falla.
 
 ## Estructura del proyecto
 

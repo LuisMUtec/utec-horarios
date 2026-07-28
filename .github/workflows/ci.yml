@@ -91,13 +91,20 @@ jobs:
           # par correo/contraseña escrito en el repo.
           PASS=$(openssl rand -base64 18)
 
-          echo "Auth puede leer el estudiante sembrado"
-          # Vía admin en lugar de un login: un seed que deje columnas de token
-          # en NULL rompe igual esta lectura, y así no hace falta contraseña.
-          curl -sS "$AUTH/admin/users" \
-            -H "apikey: $SERVICE_ROLE_KEY" \
-            -H "Authorization: Bearer $SERVICE_ROLE_KEY" \
-            | grep -q 'estudiante@utec.edu.pe'
+          # La del seed sale del propio seed, por lo mismo y porque así este
+          # check sigue al archivo si alguien cambia la contraseña allá.
+          SEED_PASS=$(sed -n "s/.*extensions\.crypt('\([^']*\)'.*/\1/p" supabase/seed.sql | head -1)
+          [ -n "$SEED_PASS" ] || { echo "No pude leer la contraseña de supabase/seed.sql"; exit 1; }
+
+          echo "El estudiante sembrado inicia sesión"
+          # Login de verdad y no una lectura por la API admin: así el check
+          # cubre las dos formas de sembrar mal, un hash de contraseña
+          # inservible y las columnas de token en NULL, que a GoTrue le
+          # provocan un 500 al leer la fila.
+          curl -sS -X POST "$AUTH/token?grant_type=password" \
+            -H "apikey: $ANON_KEY" -H "Content-Type: application/json" \
+            -d "{\"email\":\"estudiante@utec.edu.pe\",\"password\":\"$SEED_PASS\"}" \
+            | grep -q access_token
 
           echo "El hook de dominio rechaza una cuenta que no es de UTEC"
           codigo=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "$AUTH/signup" \
