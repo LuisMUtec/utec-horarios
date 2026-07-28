@@ -78,7 +78,7 @@ create type public.report_status as enum ('pending', 'kept', 'removed');
 create table public.review_reports (
   id          uuid primary key default gen_random_uuid(),
   review_id   uuid not null references public.reviews(id) on delete cascade,
-  reporter_id uuid not null references auth.users(id) on delete cascade,
+  reporter_id uuid not null references auth.users(id) on delete restrict,
   reason      public.report_reason not null,
   details     text,
   status      public.report_status not null default 'pending',

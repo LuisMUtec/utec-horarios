@@ -4,7 +4,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path to extensions, public;
 
-select plan(23);
+select plan(25);
 
 -- Fixtures propias en TEST401 y todo acotado a ellas: seed.sql ya llenó la base.
 insert into auth.users (id, aud, role, email) values
@@ -28,7 +28,9 @@ insert into public.course_teachers (id, course_code, teacher_email, teacher_name
   ('00000000-0000-0000-0000-0000004010c3', 'TEST401', 'm-d3@utec.edu.pe', 'Docente 401-3'),
   ('00000000-0000-0000-0000-0000004010c4', 'TEST401', 'm-d4@utec.edu.pe', 'Docente 401-4'),
   ('00000000-0000-0000-0000-0000004010c5', 'TEST401', 'm-d5@utec.edu.pe', 'Docente 401-5'),
-  ('00000000-0000-0000-0000-0000004010c6', 'TEST401', 'm-d6@utec.edu.pe', 'Docente 401-6');
+  ('00000000-0000-0000-0000-0000004010c6', 'TEST401', 'm-d6@utec.edu.pe', 'Docente 401-6'),
+  ('00000000-0000-0000-0000-0000004010c7', 'TEST401', 'm-d7@utec.edu.pe', 'Docente 401-7'),
+  ('00000000-0000-0000-0000-0000004010c8', 'TEST401', 'm-d8@utec.edu.pe', 'Docente 401-8');
 
 insert into public.reviews (id, author_id, course_teacher_id, rating, recommends, comment,
                             declared_attendance, respect_acknowledged) values
@@ -50,7 +52,13 @@ insert into public.reviews (id, author_id, course_teacher_id, rating, recommends
   ('00000000-0000-0000-0000-0000004010f6', '00000000-0000-0000-0000-000000401005',
    '00000000-0000-0000-0000-0000004010c5', 3, true,  null,                        true, false),
   ('00000000-0000-0000-0000-0000004010f7', '00000000-0000-0000-0000-000000401005',
-   '00000000-0000-0000-0000-0000004010c6', 5, true,  null,                        true, false);
+   '00000000-0000-0000-0000-0000004010c6', 5, true,  null,                        true, false),
+  -- Con comentario porque solo eso es reportable (FR-042): son las que llevan el
+  -- reporte que el baneo y la baja tienen que resolver de arrastre.
+  ('00000000-0000-0000-0000-0000004010f9', '00000000-0000-0000-0000-000000401004',
+   '00000000-0000-0000-0000-0000004010c7', 1, false, 'Otra reseña del sancionado.', true, true),
+  ('00000000-0000-0000-0000-0000004010fa', '00000000-0000-0000-0000-000000401005',
+   '00000000-0000-0000-0000-0000004010c8', 3, true,  'Reseña de quien pide la baja.', true, true);
 
 insert into public.review_reports (id, review_id, reporter_id, reason) values
   ('00000000-0000-0000-0000-0000004010e1', '00000000-0000-0000-0000-0000004010f1',
@@ -62,7 +70,13 @@ insert into public.review_reports (id, review_id, reporter_id, reason) values
   ('00000000-0000-0000-0000-0000004010e4', '00000000-0000-0000-0000-0000004010f4',
    '00000000-0000-0000-0000-000000401002', 'insult'),
   ('00000000-0000-0000-0000-0000004010e5', '00000000-0000-0000-0000-0000004010f1',
-   '00000000-0000-0000-0000-000000401003', 'spam');
+   '00000000-0000-0000-0000-000000401003', 'spam'),
+  -- Sobre las reseñas que el baneo y la baja arrastran de refilón: ahí es donde
+  -- queda el pendiente huérfano si solo se resuelve la reseña revisada.
+  ('00000000-0000-0000-0000-0000004010e6', '00000000-0000-0000-0000-0000004010f9',
+   '00000000-0000-0000-0000-000000401001', 'spam'),
+  ('00000000-0000-0000-0000-0000004010e7', '00000000-0000-0000-0000-0000004010fa',
+   '00000000-0000-0000-0000-000000401001', 'spam');
 
 -- ---------------------------------------------------------------------------
 -- moderation_keep (FR-047, escenario 33)
@@ -179,8 +193,20 @@ select results_eq(
   $$select id, state::text from public.reviews
     where author_id = '00000000-0000-0000-0000-000000401004' order by id$$,
   $$values ('00000000-0000-0000-0000-0000004010f4'::uuid, 'removed_by_moderation'),
-          ('00000000-0000-0000-0000-0000004010f5'::uuid, 'removed_by_moderation')$$,
+          ('00000000-0000-0000-0000-0000004010f5'::uuid, 'removed_by_moderation'),
+          ('00000000-0000-0000-0000-0000004010f9'::uuid, 'removed_by_moderation')$$,
   'y elimina todas las reseñas del autor, incluida la de otro par que nadie reportó (FR-056)'
+);
+
+-- El reporte de una reseña que el baneo arrastró: si sigue pendiente, la bandeja
+-- de FR-051 acumula entradas de reseñas que ya no se ven.
+select results_eq(
+  $$select id, status::text from public.review_reports
+    where id in ('00000000-0000-0000-0000-0000004010e4',
+                 '00000000-0000-0000-0000-0000004010e6') order by id$$,
+  $$values ('00000000-0000-0000-0000-0000004010e4'::uuid, 'removed'),
+          ('00000000-0000-0000-0000-0000004010e6'::uuid, 'removed')$$,
+  'y resuelve los reportes de todas ellas, no solo el que se revisó'
 );
 
 set local role authenticated;
@@ -213,8 +239,16 @@ select results_eq(
   $$select id, state::text, purge_after is not null from public.reviews
     where author_id = '00000000-0000-0000-0000-000000401005' order by id$$,
   $$values ('00000000-0000-0000-0000-0000004010f6'::uuid, 'deleted_by_author', true),
-          ('00000000-0000-0000-0000-0000004010f7'::uuid, 'deleted_by_author', true)$$,
+          ('00000000-0000-0000-0000-0000004010f7'::uuid, 'deleted_by_author', true),
+          ('00000000-0000-0000-0000-0000004010fa'::uuid, 'deleted_by_author', true)$$,
   'la baja elimina todas las reseñas del usuario y les sella purge_after'
+);
+
+select results_eq(
+  $$select status::text from public.review_reports
+    where id = '00000000-0000-0000-0000-0000004010e7'$$,
+  $$values ('removed')$$,
+  'y resuelve los reportes que quedaban sobre ellas'
 );
 
 select results_eq(
@@ -292,7 +326,9 @@ select results_eq(
           ('00000000-0000-0000-0000-0000004010f4'::uuid),
           ('00000000-0000-0000-0000-0000004010f5'::uuid),
           ('00000000-0000-0000-0000-0000004010f7'::uuid),
-          ('00000000-0000-0000-0000-0000004010f8'::uuid)$$,
+          ('00000000-0000-0000-0000-0000004010f8'::uuid),
+          ('00000000-0000-0000-0000-0000004010f9'::uuid),
+          ('00000000-0000-0000-0000-0000004010fa'::uuid)$$,
   'y deja intactas las activas, las sancionadas y la eliminada que aún no vence'
 );
 

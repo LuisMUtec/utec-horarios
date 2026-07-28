@@ -49,14 +49,13 @@ create or replace function private.moderation_ban(report_id uuid, reason text)
 returns void
 language plpgsql security definer set search_path = '' as $$
 declare
-  v_review_id uuid;
   v_author_id uuid;
 begin
   if nullif(btrim(reason), '') is null then
     raise exception 'La sanción necesita un motivo: es lo que se le muestra al usuario.';
   end if;
 
-  select rp.review_id, r.author_id into v_review_id, v_author_id
+  select r.author_id into v_author_id
   from public.review_reports rp
   join public.reviews r on r.id = rp.review_id
   where rp.id = report_id and rp.status = 'pending';
@@ -73,9 +72,13 @@ begin
   set state = 'removed_by_moderation'
   where author_id = v_author_id and state = 'active';
 
-  update public.review_reports
+  -- Sobre todas las reseñas del autor, no solo la reportada: las demás también
+  -- dejaron de existir para el lector, y un pendiente sobre una reseña que ya
+  -- no se ve solo ensucia la bandeja.
+  update public.review_reports rp
   set status = 'removed', resolved_at = now()
-  where review_id = v_review_id and status = 'pending';
+  from public.reviews r
+  where r.id = rp.review_id and r.author_id = v_author_id and rp.status = 'pending';
 end;
 $$;
 
@@ -96,6 +99,11 @@ begin
   update public.reviews
   set state = 'deleted_by_author'
   where author_id = user_id and state = 'active';
+
+  update public.review_reports rp
+  set status = 'removed', resolved_at = now()
+  from public.reviews r
+  where r.id = rp.review_id and r.author_id = user_id and rp.status = 'pending';
 
   update public.profiles
   set career_id = null, term = null, deactivated_at = now()

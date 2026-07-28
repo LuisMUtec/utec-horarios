@@ -12,6 +12,9 @@ begin
   where purge_after is not null and purge_after < now();
 
   get diagnostics v_deleted = row_count;
+  -- cron.job_run_details no guarda el valor de retorno: sin esto, la única
+  -- huella de la corrida nocturna es que el job no falló.
+  raise log 'purge_expired_reviews: % reseñas borradas', v_deleted;
   return v_deleted;
 end;
 $$;

@@ -59,6 +59,10 @@ declare
   v_count  int;
   v_oldest timestamptz;
 begin
+  -- Contar y después decidir no es atómico: dos inserts concurrentes del mismo
+  -- autor leen 7 los dos y comprometen 9. El lock los serializa por autor.
+  perform pg_advisory_xact_lock(hashtextextended(new.author_id::text, 0));
+
   select count(*), min(published_at)
     into v_count, v_oldest
   from public.reviews

@@ -171,6 +171,8 @@ supabase/
 ├── tests/                      # Tests pgTAP (RLS, reglas, moderación)
 └── functions/send-email/       # Edge Function: correos de Auth vía Resend
 
+tests/                          # Tests de Vitest (*.test.ts)
+
 scripts/
 ├── parse-pdf.js                # Parser del PDF de horarios (pdfjs-dist)
 └── generate-offer-migration.mts # Migración de la oferta docente–curso
@@ -236,9 +238,13 @@ Las migraciones y el seed no se prueban con Vitest: los valida el job `supabase`
 Lo que sí depende del motor —las políticas RLS, las reglas de las reseñas, las funciones de moderación— se prueba con pgTAP, en `supabase/tests/`. El mismo job del CI los corre, y en local:
 
 ```bash
-supabase start   # si no está levantado
+supabase db reset   # imprescindible si cambiaron migrations/ o seed.sql
 pnpm test:db
 ```
+
+`supabase start` aplica migraciones y seed solo cuando crea el volumen: sobre un
+stack ya levantado, los tests corren contra el esquema anterior y pasan o fallan
+por el motivo equivocado.
 
 ## Cómo contribuir
 

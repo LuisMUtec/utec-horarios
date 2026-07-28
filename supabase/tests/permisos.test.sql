@@ -4,7 +4,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path to extensions, public;
 
-select plan(21);
+select plan(23);
 
 -- ---------------------------------------------------------------------------
 -- superficie del esquema private
@@ -189,6 +189,22 @@ select ok(
   and not has_function_privilege('anon', 'public.delete_own_review(uuid)', 'execute')
   and not has_function_privilege('public', 'public.delete_own_review(uuid)', 'execute'),
   'eliminar es delete_own_review y solo con sesión; state no se toca a mano (FR-039, FR-048)'
+);
+
+-- profiles corre el mismo riesgo por la misma razón: su `with check` fija `id` y
+-- `banned_at`, y con update de tabla el resto de la fila queda escribible —
+-- entre otras, borrar la marca de una baja ya pedida.
+select is_empty(
+  $$select c from unnest(array['id', 'banned_at', 'ban_reason', 'deactivated_at',
+                               'created_at', 'updated_at']) c
+    where has_column_privilege('authenticated', 'public.profiles', c, 'update')$$,
+  'authenticated no actualiza ninguna columna de sanción ni de baja de profiles (FR-057, D3)'
+);
+
+select is_empty(
+  $$select c from unnest(array['career_id', 'term']) c
+    where not has_column_privilege('authenticated', 'public.profiles', c, 'update')$$,
+  'y sí carrera y ciclo, que es lo único que edita el formulario de perfil (FR-017)'
 );
 
 -- ---------------------------------------------------------------------------

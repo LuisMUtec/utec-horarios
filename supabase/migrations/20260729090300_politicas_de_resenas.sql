@@ -14,7 +14,7 @@ alter table public.careers         enable row level security;
 
 grant select         on public.careers         to anon, authenticated;
 grant select         on public.course_teachers to anon, authenticated;
-grant select, update on public.profiles        to authenticated;
+grant select         on public.profiles        to authenticated;
 grant select         on public.reviews         to authenticated;
 grant select, insert on public.review_reports  to authenticated;
 
@@ -38,11 +38,19 @@ grant insert (author_id, course_teacher_id, rating, recommends, comment,
 grant update (rating, recommends, comment, respect_acknowledged)
   on public.reviews to authenticated;
 
+-- Igual en profiles, donde FR-017 solo necesita dos columnas: con update de
+-- tabla quedan escribibles `ban_reason`, `deactivated_at` y `created_at`, y el
+-- `with check` de la política únicamente fija `id` y `banned_at`.
+grant update (career_id, term) on public.profiles to authenticated;
+
 grant all on public.careers, public.course_teachers, public.profiles,
              public.reviews, public.review_reports
   to service_role;
 
 -- Catálogos: lectura pública, escritura solo por service_role (sin política).
+--
+-- `is_active` no filtra acá a propósito: un perfil que apunta a una carrera dada
+-- de baja tiene que seguir resolviendo su nombre. Lo que acota es el selector.
 create policy "careers son públicas" on public.careers
   for select to anon, authenticated using (true);
 
