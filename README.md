@@ -6,13 +6,14 @@ Aplicación web para planificar y armar tu horario de clases en UTEC (Universida
 
 - **Búsqueda de cursos** por código o nombre
 - **Calendario semanal** interactivo con bloques de horario por curso
-- **Detección de conflictos** automática al agregar cursos o cambiar secciones
+- **Detección de conflictos** automática al agregar cursos o cambiar secciones, con opción de **permitir cruces** (los bloques solapados se renderizan lado a lado)
 - **Previsualización** de secciones antes de seleccionarlas
 - **Subsesiones** — selección independiente de laboratorios, teorías, etc.
 - **Carga Hábil** — sube tu PDF de carga hábil para filtrar solo los cursos que puedes llevar
+- **Exportar horario** como imagen PNG (al portapapeles o descarga)
 - **Persistencia** en localStorage (tu horario se guarda entre sesiones)
 - **Modo oscuro/claro**
-- **431 cursos**, 744 secciones y 1806 sesiones (período 2026-1)
+- **445 cursos**, 777 secciones y 1821 sesiones (período 2026-2)
 
 ## Tech Stack
 
@@ -20,6 +21,9 @@ Aplicación web para planificar y armar tu horario de clases en UTEC (Universida
 - **React 19**
 - **TypeScript**
 - **Tailwind CSS 4**
+- **pdfjs-dist / pdf-parse** — extracción de datos de los PDFs
+- **html-to-image** — exportar el calendario como PNG
+- **Vercel Analytics**
 
 ## Inicio rápido
 
@@ -38,38 +42,44 @@ Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 ```
 src/
 ├── app/
-│   ├── page.tsx              # Página principal con estado global
-│   └── api/parse-pdf/        # API para procesar PDF de Carga Hábil
+│   ├── layout.tsx              # Layout raíz, metadata y Analytics
+│   ├── page.tsx                # Página principal con estado global
+│   ├── globals.css             # Estilos globales (Tailwind)
+│   └── api/parse-pdf/          # API para procesar PDF de Carga Hábil
 ├── components/
-│   ├── CourseSearch.tsx       # Buscador de cursos
-│   ├── SectionSelector.tsx   # Selector de secciones y subsesiones
-│   ├── WeeklyCalendar.tsx    # Calendario semanal
-│   ├── CalendarBlock.tsx     # Bloque individual en el calendario
+│   ├── CourseSearch.tsx        # Buscador de cursos
+│   ├── SectionSelector.tsx     # Selector de secciones y subsesiones
+│   ├── WeeklyCalendar.tsx      # Calendario semanal
+│   ├── CalendarBlock.tsx       # Bloque individual en el calendario
 │   ├── SelectedCoursesList.tsx # Lista de cursos seleccionados
-│   ├── ThemeToggle.tsx       # Toggle modo oscuro/claro
-│   └── ToastAlert.tsx        # Notificaciones toast
+│   ├── ThemeToggle.tsx         # Toggle modo oscuro/claro
+│   ├── ToastAlert.tsx          # Notificaciones toast
+│   └── FeedbackButton.tsx      # Botón flotante al grupo de ayuda
 ├── lib/
-│   ├── schedule-utils.ts     # Colores, conflictos, búsqueda, constantes
-│   ├── subsession-utils.ts   # Análisis de subsesiones (labs, teorías)
-│   └── storage.ts            # Helpers de localStorage
+│   ├── schedule-utils.ts       # Colores, conflictos, búsqueda, constantes
+│   ├── subsession-utils.ts     # Análisis de subsesiones (labs, teorías)
+│   └── storage.ts              # Helpers de localStorage
 ├── data/
-│   └── courses.json          # Datos de cursos extraídos del PDF
-└── types/
-    └── index.ts              # Tipos: Course, Section, Session, etc.
+│   └── courses.json            # Datos de cursos extraídos del PDF
+├── types/
+│   └── index.ts                # Tipos: Course, Section, Session, etc.
+└── middleware.ts               # Rate limiting en las rutas /api
 
 scripts/
-└── parse-pdf.js              # Parser del PDF de horarios (pdfjs-dist)
+└── parse-pdf.js                # Parser del PDF de horarios (pdfjs-dist)
 ```
 
 ## Actualización de datos
 
-Los datos de cursos se extraen del PDF oficial de horarios de UTEC usando el script de parsing:
+Los datos de cursos se extraen del PDF oficial de horarios de UTEC (`consulta_horario.pdf`, en la raíz del repo) usando el script de parsing:
 
 ```bash
 node scripts/parse-pdf.js
 ```
 
 El script usa `pdfjs-dist` con extracción basada en posición (no texto) para manejar campos concatenados en el PDF. Genera `src/data/courses.json`.
+
+Para cambiar de ciclo: reemplaza `consulta_horario.pdf`, corre el script y actualiza el período en `src/app/layout.tsx` (título) y `src/app/page.tsx` (header).
 
 ## Scripts disponibles
 
