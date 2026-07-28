@@ -275,10 +275,13 @@ max_frequency = "5s"
 # Force log out if the user has been inactive longer than the specified duration.
 # inactivity_timeout = "8h"
 
-# This hook runs before a new user is created and allows developers to reject the request based on the incoming user object.
-# [auth.hook.before_user_created]
-# enabled = true
-# uri = "pg-functions://postgres/auth/before-user-created-hook"
+# Auth Hook "Before User Created": rechaza el alta de cuentas que no sean
+# @utec.edu.pe. Está activo en producción, así que también acá: si local
+# aceptara cualquier correo, el rechazo del dominio solo se descubriría en prod.
+# La función la crea la migración `restringir_signup_a_utec`.
+[auth.hook.before_user_created]
+enabled = true
+uri = "pg-functions://postgres/public/hook_restrict_signup_to_utec"
 
 # This hook runs before a token is issued and allows you to add additional claims based on the authentication method used.
 # [auth.hook.custom_access_token]
@@ -385,8 +388,12 @@ deno_version = 2
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 
+# Logflare local. Apagado: no lo usamos para nada y arrastra el contenedor
+# `vector`, que monta el socket de Docker y no arranca sobre Colima
+# ("operation not supported" al montar ~/.colima/.../docker.sock). Los logs de
+# las funciones se ven igual con `supabase functions serve` y `docker logs`.
 [analytics]
-enabled = true
+enabled = false
 port = 54327
 # Configure one of the supported backends: `postgres`, `bigquery`.
 backend = "postgres"
