@@ -25,7 +25,7 @@ El spec no se queda en el issue: viaja en el PR como archivo. El issue es la con
 
 - Bugfixes.
 - Refactors sin cambio de comportamiento.
-- Actualización de datos del ciclo (`consulta_horario.pdf` → `courses.json`).
+- Actualización de datos del ciclo (`consulta_horario.pdf` → `courses.json` → migración de oferta).
 - Typos, documentación, tooling y CI.
 
 Si dudas, abre el issue igual: es barato y evita implementar tres días sobre un supuesto equivocado.
@@ -72,7 +72,7 @@ Plantilla para copiar y rellenar: [`specs/TEMPLATE.md`](specs/TEMPLATE.md).
 - Rama con el mismo nombre que la carpeta del spec (`001-bloques-libres`), a partir de `main`.
 - Commits en español siguiendo el historial: `feat:`, `fix:`, `docs:`.
 - El PR incluye el spec y enlaza el issue donde se discutió (`Closes #N`).
-- `pnpm lint` y `pnpm build` deben pasar.
+- `pnpm lint`, `pnpm typecheck`, `pnpm test` y `pnpm build` deben pasar. Si el PR toca `supabase/`, también `pnpm test:db`, que corre los tests pgTAP contra el stack local y necesita un `supabase start` previo.
 - El cuerpo del PR **no repite el spec** — el spec ya viaja en el propio PR y quien revisa lo tiene al lado. Nada de tablas que mapeen cada `FR-` a su archivo: envejecen mal y no dicen nada que el diff no diga. El cuerpo cuenta lo que *no* está en el spec:
   - qué se implementó, en un párrafo;
   - las decisiones de implementación que el spec no cubría, y por qué se tomaron así;

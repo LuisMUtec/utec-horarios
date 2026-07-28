@@ -48,3 +48,6 @@ next-env.d.ts
 .claude/*
 # ...salvo las skills de Spec Kit, que sí se comparten con el repo
 !.claude/skills/
+
+# Estado local de Spec Kit: apunta a la feature en curso de cada quien.
+.specify/feature.json
