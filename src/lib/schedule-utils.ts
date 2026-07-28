@@ -54,8 +54,26 @@ export function timeToMinutes(time: string): number {
   return h * 60 + m;
 }
 
+/**
+ * Semana A y Semana B son semanas alternadas: nunca ocurren la misma semana.
+ * "Semana General" ocurre todas, así que convive con cualquiera de las tres.
+ */
+export const WEEK_A = 'Semana A';
+export const WEEK_B = 'Semana B';
+
+/** false sólo cuando una sesión es de Semana A y la otra de Semana B. */
+export function sharesWeek(a: Session, b: Session): boolean {
+  return !(
+    (a.frequency === WEEK_A && b.frequency === WEEK_B) ||
+    (a.frequency === WEEK_B && b.frequency === WEEK_A)
+  );
+}
+
 export function hasConflict(a: Session, b: Session): boolean {
   if (a.day !== b.day) return false;
+  // Dos clases en el mismo horario no se pisan si una va en semana A y la otra
+  // en semana B: el alumno asiste a cada una en semanas distintas.
+  if (!sharesWeek(a, b)) return false;
   const aStart = timeToMinutes(a.startTime);
   const aEnd = timeToMinutes(a.endTime);
   const bStart = timeToMinutes(b.startTime);

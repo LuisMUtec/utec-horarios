@@ -3,9 +3,12 @@ import {
   computeFreeBlocks,
   sumFreeBlockMinutes,
   formatDuration,
+  hasConflict,
+  findConflicts,
+  checkNewCourseConflict,
   MIN_FREE_BLOCK_MINUTES,
 } from '@/lib/schedule-utils';
-import type { CalendarEvent, Session } from '@/types';
+import type { CalendarEvent, Course, Session } from '@/types';
 
 /**
  * Bloques libres entre clases (specs/001-bloques-libres/spec.md).
@@ -215,6 +218,105 @@ describe('sumFreeBlockMinutes', () => {
     ]);
     expect(sumFreeBlockMinutes(freeBlocks)).toBe(315);
     expect(formatDuration(sumFreeBlockMinutes(freeBlocks))).toBe('5 h 15 min');
+  });
+});
+
+/**
+ * Cruces de horario.
+ *
+ * Semana A y Semana B son semanas alternadas, así que dos clases en el mismo
+ * slot no se pisan si cada una va en una de ellas. 117 de las 777 secciones de
+ * la oferta usan A/B: tratarlas como cruce descartaba horarios válidos.
+ */
+describe('hasConflict', () => {
+  function sesion(day: string, startTime: string, endTime: string, frequency = 'Semana General'): Session {
+    return { day, startTime, endTime, frequency } as Session;
+  }
+
+  it('dos clases solapadas el mismo día se cruzan', () => {
+    expect(hasConflict(sesion('Lun', '09:00', '11:00'), sesion('Lun', '10:00', '12:00'))).toBe(true);
+  });
+
+  it('dos clases en días distintos no se cruzan', () => {
+    expect(hasConflict(sesion('Lun', '09:00', '11:00'), sesion('Mar', '09:00', '11:00'))).toBe(false);
+  });
+
+  it('dos clases contiguas no se cruzan', () => {
+    expect(hasConflict(sesion('Lun', '09:00', '11:00'), sesion('Lun', '11:00', '13:00'))).toBe(false);
+  });
+
+  it('Semana A y Semana B en el mismo slot NO se cruzan', () => {
+    expect(hasConflict(
+      sesion('Lun', '09:00', '11:00', 'Semana A'),
+      sesion('Lun', '09:00', '11:00', 'Semana B')
+    )).toBe(false);
+  });
+
+  it('el orden de los argumentos no importa', () => {
+    expect(hasConflict(
+      sesion('Lun', '09:00', '11:00', 'Semana B'),
+      sesion('Lun', '09:00', '11:00', 'Semana A')
+    )).toBe(false);
+  });
+
+  it('dos clases de la misma semana alterna sí se cruzan', () => {
+    expect(hasConflict(
+      sesion('Lun', '09:00', '11:00', 'Semana A'),
+      sesion('Lun', '10:00', '12:00', 'Semana A')
+    )).toBe(true);
+  });
+
+  it('Semana General se cruza con Semana A y con Semana B', () => {
+    for (const frequency of ['Semana A', 'Semana B']) {
+      expect(hasConflict(
+        sesion('Lun', '09:00', '11:00'),
+        sesion('Lun', '09:00', '11:00', frequency)
+      )).toBe(true);
+    }
+  });
+});
+
+describe('findConflicts y checkNewCourseConflict con semanas alternas', () => {
+  function evento(courseCode: string, day: string, startTime: string, endTime: string, frequency: string): CalendarEvent {
+    return {
+      courseCode,
+      courseName: `Curso ${courseCode}`,
+      color: '',
+      session: { day, startTime, endTime, frequency } as Session,
+    };
+  }
+
+  it('el calendario no marca en rojo dos clases de semanas alternas', () => {
+    const conflictos = findConflicts([
+      evento('AA', 'Lun', '09:00', '11:00', 'Semana A'),
+      evento('BB', 'Lun', '09:00', '11:00', 'Semana B'),
+    ]);
+    expect(conflictos.size).toBe(0);
+  });
+
+  it('el calendario sigue marcando en rojo el cruce real', () => {
+    const conflictos = findConflicts([
+      evento('AA', 'Lun', '09:00', '11:00', 'Semana A'),
+      evento('BB', 'Lun', '09:00', '11:00', 'Semana A'),
+    ]);
+    expect(conflictos.size).toBe(2);
+  });
+
+  it('agregar un curso de Semana B sobre uno de Semana A no se bloquea', () => {
+    const courses: Course[] = [
+      {
+        code: 'AA',
+        name: 'Curso AA',
+        sections: [{ number: 1, sessions: [{ type: 'TEORÍA 1', capacity: 30, day: 'Lun', startTime: '09:00', endTime: '11:00', frequency: 'Semana A' } as Session] }],
+      },
+      {
+        code: 'BB',
+        name: 'Curso BB',
+        sections: [{ number: 1, sessions: [{ type: 'TEORÍA 1', capacity: 30, day: 'Lun', startTime: '09:00', endTime: '11:00', frequency: 'Semana B' } as Session] }],
+      },
+    ];
+    const check = checkNewCourseConflict(courses, [{ courseCode: 'AA', sectionNumber: 1 }], 'BB', 1);
+    expect(check.hasConflict).toBe(false);
   });
 });
 
