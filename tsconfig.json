@@ -11,6 +11,10 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    // scripts/generate-offer-migration.ts corre con `node` a secas, y el type
+    // stripping nativo exige la extensión .ts en el import. Sin esta opción
+    // `tsc --noEmit` rechazaría el único import que el script necesita.
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
