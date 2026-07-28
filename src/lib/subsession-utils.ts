@@ -34,7 +34,26 @@ function parseSessionType(type: string): { base: string; num: string } {
   return { base, num };
 }
 
+/**
+ * Caché del análisis por sección.
+ *
+ * analyzeSection no es barato (regex por sesión + armado de Maps) y se llama
+ * desde SectionSelector, SelectedCoursesList y getFilteredSessions, todos los
+ * cuales re-renderizan al pasar el mouse por una sección. Las secciones vienen
+ * de courses.json importado, así que su identidad es estable y el resultado
+ * nunca cambia para la misma sección; un WeakMap deja que el GC haga su trabajo.
+ */
+const analysisCache = new WeakMap<Section, SectionAnalysis>();
+
 export function analyzeSection(section: Section): SectionAnalysis {
+  const cached = analysisCache.get(section);
+  if (cached) return cached;
+  const analysis = computeSectionAnalysis(section);
+  analysisCache.set(section, analysis);
+  return analysis;
+}
+
+function computeSectionAnalysis(section: Section): SectionAnalysis {
   const sessions = section.sessions;
 
   // Group sessions by full parsed number, so 22, 22.01 and 22.02 remain separate options.

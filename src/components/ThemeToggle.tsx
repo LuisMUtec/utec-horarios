@@ -1,59 +1,47 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
-
-// El tema vive en el DOM (<html class="dark">), no en React: el script bloqueante
-// de layout.tsx ya lo aplica antes del primer paint. Acá solo lo leemos.
-function subscribeToTheme(onChange: () => void): () => void {
-  const observer = new MutationObserver(onChange);
-  observer.observe(document.documentElement, { attributeFilter: ['class'] });
-  return () => observer.disconnect();
-}
-
-function getThemeSnapshot(): boolean {
-  return document.documentElement.classList.contains('dark');
-}
-
-function getThemeServerSnapshot(): boolean {
-  return false;
-}
-
+/**
+ * El tema vive en el DOM (<html class="dark">), aplicado por el script bloqueante
+ * de layout.tsx antes del primer paint.
+ *
+ * Por eso este componente no suscribe a nada: los iconos se resuelven con las
+ * variantes dark: de Tailwind (puro CSS, correctas ya en el primer paint) y el
+ * estado actual se lee del DOM recién al hacer click. Sin estado de React no hay
+ * mismatch de hidratación ni el parpadeo de pintar el icono equivocado hasta que
+ * React hidrate.
+ */
 export default function ThemeToggle() {
-  const isDark = useSyncExternalStore(
-    subscribeToTheme,
-    getThemeSnapshot,
-    getThemeServerSnapshot
-  );
-
-  // Solo escribe en el DOM y localStorage: el MutationObserver dispara el re-render.
   const toggleTheme = () => {
-    const root = window.document.documentElement;
-    if (isDark) {
-      root.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    } else {
-      root.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+    const root = document.documentElement;
+    const isDark = root.classList.contains('dark');
+    root.classList.toggle('dark', !isDark);
+    try {
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    } catch {
+      // Safari en modo privado: el tema igual cambia en esta sesión.
     }
   };
 
   return (
     <button
       onClick={toggleTheme}
-      className={`
+      className="
         relative inline-flex h-10 w-10 items-center justify-center rounded-full
         transition-all duration-300 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500
         hover:scale-110 active:scale-95
-        ${isDark ? 'bg-gray-800 text-yellow-300 shadow-[0_0_15px_rgba(253,224,71,0.3)]' : 'bg-gray-100 text-blue-900 shadow-sm'}
-      `}
+        bg-gray-100 text-blue-900 shadow-sm
+        dark:bg-gray-800 dark:text-yellow-300 dark:shadow-[0_0_15px_rgba(253,224,71,0.3)]
+      "
       aria-label="Toggle Dark Mode"
     >
       <div className="relative w-5 h-5 overflow-hidden">
         {/* Sun */}
         <svg
-          className={`absolute inset-0 w-full h-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-            isDark ? 'translate-y-full opacity-0 scale-50 rotate-90' : 'translate-y-0 opacity-100 scale-100 rotate-0'
-          }`}
+          className="
+            absolute inset-0 w-full h-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
+            translate-y-0 opacity-100 scale-100 rotate-0
+            dark:translate-y-full dark:opacity-0 dark:scale-50 dark:rotate-90
+          "
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -63,9 +51,11 @@ export default function ThemeToggle() {
 
         {/* Moon */}
         <svg
-          className={`absolute inset-0 w-full h-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-            isDark ? 'translate-y-0 opacity-100 scale-100 rotate-0' : '-translate-y-full opacity-0 scale-50 -rotate-90'
-          }`}
+          className="
+            absolute inset-0 w-full h-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
+            -translate-y-full opacity-0 scale-50 -rotate-90
+            dark:translate-y-0 dark:opacity-100 dark:scale-100 dark:rotate-0
+          "
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

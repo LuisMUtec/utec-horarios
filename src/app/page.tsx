@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
 import { toBlob } from 'html-to-image';
 import coursesData from '@/data/courses.json';
-import { Course, SelectedCourse } from '@/types';
+import { CalendarEvent, Course, SelectedCourse } from '@/types';
 import { getCalendarEvents, getPreviewEvents, checkNewCourseConflict } from '@/lib/schedule-utils';
 import {
   subscribeSelectedCourses,
@@ -24,6 +24,10 @@ import ToastAlert from '@/components/ToastAlert';
 import FeedbackButton from '@/components/FeedbackButton';
 
 const courses = coursesData as Course[];
+
+// Constante a nivel de módulo para que la referencia sea estable: devolver []
+// desde el useMemo haría que WeeklyCalendar viera un array nuevo en cada render.
+const EMPTY_EVENTS: CalendarEvent[] = [];
 
 function autoAssignSubsession(selected: SelectedCourse): SelectedCourse {
   if (selected.subsessionId) return selected;
@@ -121,20 +125,24 @@ export default function Home() {
     warnIfNotPersisted(setSelectedCourses(prev => prev.filter(s => s.courseCode !== courseCode)));
   }, [warnIfNotPersisted]);
 
-  const events = getCalendarEvents(courses, selectedCourses);
+  // previewSection cambia en cada mouseenter/mouseleave sobre una sección, así
+  // que sin memo esto recalcularía el calendario entero en cada hover.
+  const events = useMemo(
+    () => getCalendarEvents(courses, selectedCourses),
+    [selectedCourses]
+  );
 
-  const previewEvents = previewSection
-    ? getPreviewEvents(
-        courses,
-        previewSection.courseCode,
-        previewSection.sectionNumber,
-        (() => {
-          const idx = selectedCourses.findIndex(s => s.courseCode === previewSection.courseCode);
-          return idx >= 0 ? idx : selectedCourses.length;
-        })(),
-        previewSection.subsessionId
-      )
-    : [];
+  const previewEvents = useMemo(() => {
+    if (!previewSection) return EMPTY_EVENTS;
+    const idx = selectedCourses.findIndex(s => s.courseCode === previewSection.courseCode);
+    return getPreviewEvents(
+      courses,
+      previewSection.courseCode,
+      previewSection.sectionNumber,
+      idx >= 0 ? idx : selectedCourses.length,
+      previewSection.subsessionId
+    );
+  }, [previewSection, selectedCourses]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
