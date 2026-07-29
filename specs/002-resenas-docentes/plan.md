@@ -40,7 +40,7 @@ El plan se apoya en tres decisiones que ordenan todo lo demás:
 | **Tests** | vitest 4, `environment: 'node'` por defecto y jsdom por archivo con `// @vitest-environment jsdom` (montado en US3, ver [R1](#r1-el-trinquete-de-coverage-bloquea-el-ci)). Trinquete de coverage con `autoUpdate` |
 | **CI** | `pnpm lint`, `pnpm typecheck`, `pnpm test --coverage`, `pnpm build`. **Sin secretos** |
 | **Runtime** | Vercel Fluid Compute. Cliente de Supabase por request, nunca en scope de módulo |
-| **Escala** | 1821 sesiones, ~700 cursos-sección, 619 pares docente–curso reseñables. Alumnado del orden de miles |
+| **Escala** | 1904 sesiones, 798 cursos-sección, 757 pares docente–curso reseñables. Alumnado del orden de miles |
 
 **Restricción heredada que condiciona el diseño**: `docs/auth.md` fija que *"sin variables
 de entorno la app corre igual"* y el job `build` del CI no tiene secretos. Toda la UI de
@@ -312,8 +312,11 @@ Tres cosas que esta vista resuelve de una vez:
   `anon` obtiene agregados sin que exista ninguna política de select sobre `reviews` para
   `anon`. No hay fila que filtrar porque no hay fila que devolver.
 - **SC-005 (sin ventana de datos viejos)**: es una vista normal, no materializada. Un
-  `insert` se ve en la consulta siguiente. Con 619 pares y miles de filas el agregado es
-  irrelevante en costo; materializarla solo agregaría el desfase que SC-005 prohíbe.
+  `insert` se ve en la consulta siguiente. El costo del agregado sobre 757 pares **no está
+  medido**: hoy `reviews` está vacía y no hay volumen que medir. La decisión de no
+  materializarla no se apoya en ese costo, sino en que el desfase que introduciría es
+  justo lo que SC-005 prohíbe. Queda pendiente un `EXPLAIN ANALYZE` cuando haya filas
+  reales; si ahí el agregado resultara caro, la salida es un índice, no materializar.
 - **FR-003, FR-005, FR-006, FR-058, FR-059, FR-060**: promedio con un decimal, conteo de
   puntuaciones sobre todas las activas, conteo de comentarios solo sobre las que tienen
   texto (`count(comment)` ignora nulos) y porcentaje entero de recomendación. Las seis
@@ -841,7 +844,7 @@ pipeline y la CLI como dependencia nueva del runner.
 
 ### R4. Arranque en frío
 
-Al deployar hay 619 pares en `Sin puntuaciones` y ninguna reseña. Los Non-Goals descartan
+Al deployar hay 757 pares en `Sin puntuaciones` y ninguna reseña. Los Non-Goals descartan
 campañas e incentivos; SC-009 solo deja la consulta para medirlo.
 
 ### R5. Dependencias externas sin cerrar
@@ -895,4 +898,4 @@ parseado.
 - [x] R6 resuelto: qué pasa con las reseñas de un docente reemplazado (se apagan con el par y reaparecen si vuelve a la oferta)
 - [x] R1 medido, y **disparado en US3**. No se disparó con US1 (`33.22 / 33.28 / 29.12 / 25.86` → `39.29 / 39.12 / 35.74 / 33.93`) ni con US2 (→ `40.65 / 40.58 / 38.29 / 40.89`): lo sostuvo la regla de no dejar lógica testeable en el JSX. En US3 no alcanzó —`ReviewsPanel` y `CommentList` sumaron ~90 líneas de `.tsx` y el piso quedó corto por 0,37 puntos en líneas—, así que se montó jsdom + `@testing-library/react`, con el entorno pedido por archivo para no pagarlo en los tests de node. El piso pasó a `50.39 / 50.03 / 48.84 / 51.53` y de paso quedaron cubiertos los huecos de montaje que US1 (T039) y US2 (`SessionMenu`, `ProfileForm`) habían dejado abiertos
 - [x] Reparto en PRs (tabla en [tasks.md](tasks.md#reparto-en-prs))
-- [ ] Esquema en producción. El proyecto ya está enlazado a `rlsswhwrigdgsboqakyw` y `supabase migration list` da las ocho migraciones pendientes; falta correr `supabase db push` (nunca con `--include-seed`)
+- [x] Esquema en producción. Las diez migraciones están aplicadas en `rlsswhwrigdgsboqakyw` (`supabase db push --linked`, nunca con `--include-seed`). La última en entrar fue la oferta del export vigente: `course_teachers` pasó de 619 a **757 pares vigentes, 0 apagados** —los 619 eran subconjunto, así que ningún par salió de la oferta—. Comprobado también después del push: **0 reseñas huérfanas**, o sea filas de `reviews` colgadas de un par con `is_current = false`. Hoy ese cero es trivial porque `reviews` está vacía; el chequeo que vale es el del próximo cambio de oferta, ya con reseñas publicadas, y es el que R6 describe. Hasta ese push los ~138 pares nuevos no tenían resumen y habrían sido irreseñables por FR-028
