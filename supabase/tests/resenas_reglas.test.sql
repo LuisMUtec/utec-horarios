@@ -6,7 +6,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path to extensions, public;
 
-select plan(36);
+select plan(37);
 
 -- ---------------------------------------------------------------------------
 -- Inventario
@@ -43,6 +43,17 @@ insert into auth.users (id, aud, role, email) values
   ('00000000-0000-0000-0000-000000301007', 'authenticated', 'authenticated', 't301a7@utec.edu.pe'),
   ('00000000-0000-0000-0000-000000301008', 'authenticated', 'authenticated', 't301a8@utec.edu.pe'),
   ('00000000-0000-0000-0000-000000301009', 'authenticated', 'authenticated', 't301a9@utec.edu.pe');
+
+-- El trigger cubre a quien firma después de que existe, y no a quien ya tenía
+-- cuenta: esos usuarios se quedaron sin perfil y recibían un 503 en cada
+-- handler restringido. La migración de backfill los alcanzó; esta aserción es
+-- la que se rompe si mañana entran usuarios por otra vía que lo esquive.
+select is_empty(
+  $$select u.id from auth.users u
+    left join public.profiles p on p.id = u.id
+    where p.id is null$$,
+  'ningún usuario se queda sin perfil'
+);
 
 -- Carrera propia: tomarla del seed ataría estas aserciones a lo que ese archivo
 -- traiga ese día.

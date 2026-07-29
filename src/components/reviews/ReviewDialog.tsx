@@ -168,8 +168,7 @@ export default function ReviewDialog({
     return (
       <div>
         <p className={NOTE}>
-          Inicia sesión con tu cuenta UTEC para puntuar a este docente. Los promedios se
-          ven sin iniciar sesión.
+          Inicia sesión con tu cuenta de UTEC para poder puntuar.
         </p>
         {/* `<a>` y no `<Link>`: /auth/login arranca el OAuth con Google y el
             prefetch de Link lo dispararía con solo pasar el mouse. */}
