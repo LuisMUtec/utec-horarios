@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from 'vitest';
+import { useState } from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import Modal from '@/components/Modal';
 
@@ -73,6 +74,33 @@ describe('Modal — cerrar', () => {
 });
 
 describe('Modal — foco y desplazamiento', () => {
+  /** Como TeacherRow: se re-renderiza solo y pasa una flecha nueva cada vez. */
+  function Padre() {
+    const [tick, setTick] = useState(0);
+    return (
+      <div>
+        <button onClick={() => setTick(tick + 1)}>re-render</button>
+        <Modal title="Docente" onClose={() => {}}>
+          <input aria-label="comentario" />
+        </Modal>
+      </div>
+    );
+  }
+
+  // El padre se re-renderiza con el hover sobre las secciones. Si el efecto
+  // depende de `onClose`, cada re-render vuelve a enfocar el diálogo y saca al
+  // estudiante del control que estaba usando con el teclado.
+  it('un re-render del padre no le roba el foco a quien escribe', () => {
+    render(<Padre />);
+
+    const campo = screen.getByLabelText('comentario');
+    campo.focus();
+
+    fireEvent.click(screen.getByRole('button', { name: 're-render' }));
+
+    expect(document.activeElement).toBe(campo);
+  });
+
   it('se lleva el foco al abrirse', () => {
     mount();
     expect(document.activeElement).toBe(screen.getByRole('dialog'));

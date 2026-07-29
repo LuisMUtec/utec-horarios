@@ -29,7 +29,7 @@ Cierra el punto abierto *Reparto en PRs* del Progress Tracking del plan.
 | 2 | US1 (P1) 🎯 MVP | Resumen público junto a cada docente en el horario | T028–T040 |
 | 3 | US2 (P2) | Sesión institucional, perfil, normas y privacidad | T041–T055 |
 | 4 | US3 (P3) | Lectura de comentarios | T056–T064 |
-| 5 | US4a (P4) | Puntuar y recomendar, sin comentario | T065–T071, T073–T077, T103 |
+| 5 | US4a (P4) | Puntuar y recomendar, sin comentario | T065–T071, T073–T077, T103, T110, T111 |
 | 6 | US5 (P5) | Editar y eliminar la reseña propia | T078–T085 |
 | 7 | US4b (P4) | Añadir el comentario al formulario y volver a mostrarlos | T104–T109 |
 | 8 | US6 (P6) | Reportar y sanción visible | T086–T095 |

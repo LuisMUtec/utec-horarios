@@ -27,6 +27,11 @@ SEED_PASS=$(sed -n "s/.*extensions\.crypt('\([^']*\)'.*/\1/p" supabase/seed.sql 
 ESTUDIANTE='00000000-0000-0000-0000-00000000da01'
 fallos=0
 
+# `mktemp` y no una ruta fija: un archivo o enlace dejado por otra corrida en
+# /tmp podría interceptar el cuerpo de la respuesta antes de que se lea.
+CUERPO=$(mktemp)
+trap 'rm -f "$CUERPO"' EXIT
+
 # --- utilidades -------------------------------------------------------------
 
 # Lo que escribe @supabase/ssr en la cookie: `base64-` y el JSON de la sesión en
@@ -50,12 +55,12 @@ cookie_de() {
 # Ejecuta una petición y devuelve "código<TAB>cuerpo".
 pedir() {
   local metodo="$1" ruta="$2" cookie="${3:-}" cuerpo="${4:-}"
-  local args=(-sS -o /tmp/resenas-body -w '%{http_code}' -X "$metodo" "$APP$ruta")
+  local args=(-sS -o "$CUERPO" -w '%{http_code}' -X "$metodo" "$APP$ruta")
   [ -n "$cookie" ] && args+=(-H "Cookie: $cookie")
   [ -n "$cuerpo" ] && args+=(-H 'Content-Type: application/json' -d "$cuerpo")
   # Con salto final: sin él `read` devuelve 1 al llegar a EOF y `set -e` corta
   # el script en la primera comprobación.
-  printf '%s\t%s\n' "$(curl "${args[@]}")" "$(cat /tmp/resenas-body)"
+  printf '%s\t%s\n' "$(curl "${args[@]}")" "$(cat "$CUERPO")"
 }
 
 comprobar() {

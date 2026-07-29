@@ -20,6 +20,18 @@ export default function Modal({ title, onClose, children }: Props) {
   const titleId = useId();
   const dialog = useRef<HTMLDivElement>(null);
 
+  /**
+   * `onClose` llega como una flecha nueva en cada render del padre, y el padre
+   * se re-renderiza solo —el hover sobre las secciones, sin ir más lejos—. Con
+   * ella en las dependencias, el efecto de abajo se volvía a ejecutar y le
+   * robaba el foco al control que el estudiante estuviera usando.
+   */
+  const cerrar = useRef(onClose);
+  useEffect(() => {
+    cerrar.current = onClose;
+  }, [onClose]);
+
+  // Sin dependencias: esto es lo que pasa al abrir y al cerrar, una sola vez.
   useEffect(() => {
     // Quién tenía el foco antes de abrir, para devolvérselo al cerrar: si no,
     // el foco vuelve al principio de la página y se pierde la sección que se
@@ -28,7 +40,7 @@ export default function Modal({ title, onClose, children }: Props) {
     dialog.current?.focus();
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') onClose();
+      if (event.key === 'Escape') cerrar.current();
     }
 
     document.addEventListener('keydown', onKeyDown);
@@ -41,7 +53,7 @@ export default function Modal({ title, onClose, children }: Props) {
       document.body.style.overflow = overflow;
       opener?.focus?.();
     };
-  }, [onClose]);
+  }, []);
 
   return (
     <div
