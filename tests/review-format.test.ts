@@ -186,13 +186,15 @@ describe('etiquetas de los estados', () => {
 describe('formatSummaryAriaLabel', () => {
   const NAME = 'Ojeda Rios, Brenner Humberto';
 
+  // El conteo de comentarios queda fuera mientras `COMMENTS_ENABLED` sea falso:
+  // el texto equivalente dice exactamente lo que hay en pantalla, ni más.
   it('dice el resumen completo, que en pantalla está partido en fragmentos', () => {
     expect(formatSummaryAriaLabel(NAME, { kind: 'summary', summary: SUMMARY })).toBe(
-      `${NAME}: 4.3 de 5 estrellas, 7 puntuaciones, 86% ${RECOMMEND_LABEL}, 2 comentarios.`
+      `${NAME}: 4.3 de 5 estrellas, 7 puntuaciones, 86% ${RECOMMEND_LABEL}.`
     );
   });
 
-  it('usa el singular y el estado vacío también acá', () => {
+  it('usa el singular también acá', () => {
     const single: TeacherSummary = {
       ...SUMMARY,
       averageRating: 5,
@@ -202,7 +204,7 @@ describe('formatSummaryAriaLabel', () => {
     };
 
     expect(formatSummaryAriaLabel(NAME, { kind: 'summary', summary: single })).toBe(
-      `${NAME}: 5.0 de 5 estrellas, 1 puntuación, 100% ${RECOMMEND_LABEL}, Aún no hay comentarios.`
+      `${NAME}: 5.0 de 5 estrellas, 1 puntuación, 100% ${RECOMMEND_LABEL}.`
     );
   });
 

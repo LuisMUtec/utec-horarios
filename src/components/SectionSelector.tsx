@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useId, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Course } from '@/types';
 import { DAY_LABELS } from '@/lib/schedule-utils';
 import { analyzeSection } from '@/lib/subsession-utils';
@@ -14,8 +14,11 @@ import {
   sectionTeachers,
   teacherSummaryState,
 } from '@/lib/section-teachers';
+import { PUBLISHED_MESSAGE } from '@/lib/review-submit';
+import Modal from './Modal';
+import ToastAlert from './ToastAlert';
 import TeacherSummary from './reviews/TeacherSummary';
-import ReviewsPanel from './reviews/ReviewsPanel';
+import ReviewDialog from './reviews/ReviewDialog';
 
 interface Props {
   course: Course;
@@ -66,18 +69,19 @@ interface TeacherRowProps {
 }
 
 /**
- * Un docente y, si se despliega, sus comentarios. El estado de apertura es por
- * fila y no del curso: dos docentes de la misma sección se comparan mejor con
- * los dos detalles abiertos.
+ * Un docente, su resumen y el diálogo para puntuarlo. El estado de apertura es
+ * por fila: cada docente abre el suyo.
+ *
+ * La confirmación de publicación vive acá y no en el diálogo porque el diálogo
+ * se cierra al publicar, y un aviso que se va con quien lo muestra no se llega
+ * a leer.
  */
 function TeacherRow({ courseCode, teacher, summaries, withNames, onPublished }: TeacherRowProps) {
-  const [expanded, setExpanded] = useState(false);
-  const panelId = useId();
+  const [open, setOpen] = useState(false);
+  const [published, setPublished] = useState(false);
 
   const state = teacherSummaryState(teacher, summaries);
-  const detail = canOpenDetail(teacher, state)
-    ? { expanded, panelId, onToggle: () => setExpanded(open => !open) }
-    : undefined;
+  const detail = canOpenDetail(teacher, state) ? { onOpen: () => setOpen(true) } : undefined;
 
   return (
     <div>
@@ -85,15 +89,28 @@ function TeacherRow({ courseCode, teacher, summaries, withNames, onPublished }: 
         <div className="text-xs text-gray-500 dark:text-gray-400">{teacher.name}</div>
       )}
       {state && <TeacherSummary teacherName={teacher.name} state={state} detail={detail} />}
-      {expanded && teacher.email && (
-        <div id={panelId}>
-          <ReviewsPanel
+
+      {open && teacher.email && (
+        <Modal title={teacher.name || 'Docente'} onClose={() => setOpen(false)}>
+          <ReviewDialog
             courseCode={courseCode}
             teacherEmail={teacher.email}
             teacherName={teacher.name}
-            onPublished={onPublished}
+            onPublished={() => {
+              setOpen(false);
+              setPublished(true);
+              onPublished();
+            }}
           />
-        </div>
+        </Modal>
+      )}
+
+      {published && (
+        <ToastAlert
+          message={PUBLISHED_MESSAGE}
+          type="success"
+          onClose={() => setPublished(false)}
+        />
       )}
     </div>
   );

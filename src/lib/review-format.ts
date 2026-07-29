@@ -36,11 +36,20 @@ export const OWN_RECOMMEND_LABELS = {
   no: 'No lo recomiendo',
 } as const;
 
-/** El detalle ya no es solo comentarios: también es donde se puntúa. */
-export const DETAIL_TOGGLE_LABELS = {
-  open: 'Ver reseñas',
-  close: 'Ocultar reseñas',
-} as const;
+/**
+ * Los comentarios están construidos —US3 los lee— pero **nadie puede escribir
+ * uno todavía**: publicar texto llega con US4b. Mostrar el conteo y la lista
+ * significa enseñarle a todo el mundo `Aún no hay comentarios` en los 757
+ * pares, para siempre, sin manera de arreglarlo.
+ *
+ * Es un interruptor y no un borrado porque el código de US3 está probado y
+ * entero: US4b lo pone en `true` y vuelve todo, incluidos sus tests.
+ */
+export const COMMENTS_ENABLED = false;
+
+/** Lo que abre el diálogo. No dice «ver reseñas» porque el resumen ya está a la
+ *  vista: lo que hay detrás es la puntuación propia. */
+export const RATE_ACTION_LABEL = 'Puntuar';
 
 /** FR-055. */
 export const EDITED_LABEL = 'editado';
@@ -139,7 +148,7 @@ function summaryAriaParts(summary: TeacherSummary): string {
     average === null ? null : `${average} de ${RATING_SCALE_MAX} estrellas`,
     formatRatingCount(summary.ratingCount),
     percentage === null ? null : `${percentage} ${RECOMMEND_LABEL}`,
-    formatCommentCount(summary.commentCount),
+    COMMENTS_ENABLED ? formatCommentCount(summary.commentCount) : null,
   ]
     .filter((part): part is string => part !== null)
     .join(', ');

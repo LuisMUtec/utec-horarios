@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import ReviewsPanel from '@/components/reviews/ReviewsPanel';
+import ReviewDialog from '@/components/reviews/ReviewDialog';
 import { fetchPairReviews, publishReview } from '@/lib/api-client';
 import type { OwnReview, PairReviewsResponse } from '@/types/reviews';
 
@@ -34,6 +34,7 @@ const ownReview: OwnReview = {
   commentEditedAt: null,
 };
 
+/** Un comentario en la respuesta: no debe llegar a la pantalla todavía. */
 const comment = {
   id: 'r-1',
   rating: 4,
@@ -43,29 +44,29 @@ const comment = {
   editedAt: null,
 };
 
-function mount(onPublished?: () => void) {
-  return render(
-    <ReviewsPanel
+function mount(onPublished = vi.fn()) {
+  const view = render(
+    <ReviewDialog
       courseCode="CS2023"
       teacherEmail="bojeda@utec.edu.pe"
       teacherName="Ojeda Rios, Brenner Humberto"
       onPublished={onPublished}
     />
   );
+  return { onPublished, container: view.container };
 }
 
-describe('ReviewsPanel', () => {
+describe('ReviewDialog — carga', () => {
   it('pide el par que recibe', async () => {
     fetchMock.mockResolvedValue({ kind: 'ok', reviews: reviews() });
 
     mount();
 
     expect(fetchMock).toHaveBeenCalledWith('CS2023', 'bojeda@utec.edu.pe');
-    await screen.findByText('Aún no hay comentarios');
+    await screen.findByRole('button', { name: 'Publicar' });
   });
 
-  // SC-002 en su versión del detalle: cargando no puede leerse como vacío.
-  it('mientras carga no dice que no hay comentarios', async () => {
+  it('mientras carga no muestra el formulario', async () => {
     let settle!: (value: { kind: 'ok'; reviews: PairReviewsResponse }) => void;
     fetchMock.mockReturnValue(
       new Promise((resolve) => {
@@ -75,47 +76,60 @@ describe('ReviewsPanel', () => {
 
     mount();
 
-    expect(screen.getByText('Cargando comentarios')).toBeDefined();
-    expect(screen.queryByText('Aún no hay comentarios')).toBeNull();
+    expect(screen.getByText('Cargando')).toBeDefined();
+    expect(screen.queryByRole('button', { name: 'Publicar' })).toBeNull();
 
     settle({ kind: 'ok', reviews: reviews() });
-    expect(await screen.findByText('Aún no hay comentarios')).toBeDefined();
+    expect(await screen.findByRole('button', { name: 'Publicar' })).toBeDefined();
   });
 
-  it('lista los comentarios que llegan', async () => {
-    fetchMock.mockResolvedValue({ kind: 'ok', reviews: reviews({ comments: [comment] }) });
+  // Un fallo de red no puede parecerse a un docente sin reseñas (SC-002).
+  it('un fallo se distingue del estado vacío', async () => {
+    fetchMock.mockImplementation(() => Promise.reject(new Error('red caída')));
 
     mount();
 
-    expect(await screen.findByText(/Explica con calma/)).toBeDefined();
-    expect(screen.queryByText('Aún no hay comentarios')).toBeNull();
+    expect(await screen.findByText(/No se pudieron cargar las reseñas/)).toBeDefined();
+    expect(screen.queryByRole('button', { name: 'Publicar' })).toBeNull();
+  });
+});
+
+describe('ReviewDialog — comentarios ocultos hasta US4b', () => {
+  // Escribir comentarios no existe todavía: mostrarlos dejaría a los 757 pares
+  // en «Aún no hay comentarios» para siempre, sin forma de arreglarlo.
+  it('no lista los comentarios que llegan en la respuesta', async () => {
+    fetchMock.mockResolvedValue({ kind: 'ok', reviews: reviews({ comments: [comment] }) });
+
+    const { container } = mount();
+
+    await screen.findByRole('button', { name: 'Publicar' });
+    expect(screen.queryByText(/Explica con calma/)).toBeNull();
+    expect(container.textContent).not.toMatch(/comentario/i);
   });
 
-  // Escenario 27: el promedio vive en el resumen, que no se reemplaza al abrir;
-  // acá no se rellena con nada ni se pide contribuir.
-  it('sin comentarios lo dice y no invita a escribir', async () => {
+  it('sin comentarios tampoco dice que no los hay', async () => {
     fetchMock.mockResolvedValue({ kind: 'ok', reviews: reviews() });
 
     const { container } = mount();
 
-    expect(await screen.findByText('Aún no hay comentarios')).toBeDefined();
-    // El formulario sí está —es la contribución de US4a—, pero el estado vacío
-    // no ruega ni finge comentarios.
-    expect(container.textContent).not.toMatch(/sé el primero|todavía nadie se anima/i);
+    await screen.findByRole('button', { name: 'Publicar' });
+    expect(container.textContent).not.toMatch(/Aún no hay comentarios/);
   });
+});
 
-  // FR-013, escenario 8.
-  it('sin sesión invita a iniciarla y no muestra lista', async () => {
+describe('ReviewDialog — acceso', () => {
+  // FR-013, escenario 8: la invitación a iniciar sesión vive en el diálogo.
+  it('sin sesión invita a iniciarla y no ofrece el formulario', async () => {
     fetchMock.mockResolvedValue({ kind: 'anonymous' });
 
     mount();
 
     const login = await screen.findByRole('link', { name: 'Iniciar sesión' });
     expect(login.getAttribute('href')).toBe('/auth/login');
-    expect(screen.queryByRole('list')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Publicar' })).toBeNull();
   });
 
-  // FR-057: el motivo, cada vez que intente leer comentarios.
+  // FR-057: el motivo, cada vez que intente usar la funcionalidad.
   it('con la cuenta sancionada muestra el motivo', async () => {
     fetchMock.mockResolvedValue({ kind: 'banned', reason: 'Insultos hacia un docente.' });
 
@@ -123,7 +137,6 @@ describe('ReviewsPanel', () => {
 
     expect(await screen.findByText(/retirado de forma permanente/)).toBeDefined();
     expect(screen.getByText(/Insultos hacia un docente\./)).toBeDefined();
-    expect(screen.queryByRole('list')).toBeNull();
   });
 
   it('sin motivo no deja un «Motivo:» colgando', async () => {
@@ -143,7 +156,9 @@ describe('ReviewsPanel', () => {
 
     expect(await screen.findByText('Este docente ya no dicta este curso.')).toBeDefined();
   });
+});
 
+describe('ReviewDialog — reseña propia', () => {
   // SC-003: puntuar y recomendar no pide carrera, ciclo ni compromiso.
   it('sin reseña propia ofrece el formulario, y no pide perfil ni compromiso', async () => {
     fetchMock.mockResolvedValue({ kind: 'ok', reviews: reviews() });
@@ -154,29 +169,28 @@ describe('ReviewsPanel', () => {
     expect(container.textContent).not.toMatch(/carrera|ciclo|normas de respeto/i);
   });
 
-  // FR-027 y T103: sin edición todavía, ver lo publicado es lo que evita el
-  // callejón sin salida.
-  it('con reseña propia la muestra en solo lectura y no ofrece el formulario', async () => {
+  // FR-027 y T103: sin edición todavía, ver lo publicado evita el callejón.
+  it('con reseña propia la muestra en solo lectura y sin prometer edición', async () => {
     fetchMock.mockResolvedValue({ kind: 'ok', reviews: reviews({ own: ownReview }) });
 
-    mount();
+    const { container } = mount();
 
     expect(await screen.findByText('Tu reseña')).toBeDefined();
     expect(screen.getByText('4 de 5 estrellas')).toBeDefined();
+    expect(screen.getByText('Lo recomiendo')).toBeDefined();
     expect(screen.queryByRole('button', { name: 'Publicar' })).toBeNull();
+    expect(container.textContent).not.toMatch(/editar|eliminar/i);
   });
 
-  // Un fallo de red no puede parecerse a un docente sin comentarios (SC-002).
-  it('un fallo se distingue del estado vacío', async () => {
-    // `mockRejectedValue` arma el rechazo al configurarse y queda sin manejar
-    // hasta que el componente lo tome; con una implementación se crea recién en
-    // la llamada.
-    fetchMock.mockImplementation(() => Promise.reject(new Error('red caída')));
+  it('un «No» propio se muestra, a diferencia de la lista de comentarios', async () => {
+    fetchMock.mockResolvedValue({
+      kind: 'ok',
+      reviews: reviews({ own: { ...ownReview, recommends: false } }),
+    });
 
     mount();
 
-    expect(await screen.findByText(/No se pudieron cargar los comentarios/)).toBeDefined();
-    expect(screen.queryByText('Aún no hay comentarios')).toBeNull();
+    expect(await screen.findByText('No lo recomiendo')).toBeDefined();
   });
 });
 
@@ -188,24 +202,21 @@ async function publishDraft() {
   fireEvent.click(screen.getByRole('button', { name: 'Publicar' }));
 }
 
-describe('ReviewsPanel — publicar', () => {
+describe('ReviewDialog — publicar', () => {
   beforeEach(() => {
     fetchMock.mockResolvedValue({ kind: 'ok', reviews: reviews() });
   });
 
-  // Escenario 19 y SC-005: confirmación, reseña ya reflejada y aviso al padre
-  // para que el resumen de arriba deje de estar viejo.
-  it('confirma, muestra la reseña y avisa para refrescar el resumen', async () => {
+  // El diálogo se cierra al publicar, así que la confirmación la muestra quien
+  // lo abrió: un aviso dentro del diálogo se iría con él antes de leerse.
+  it('avisa al padre en vez de confirmar por su cuenta', async () => {
     publishMock.mockResolvedValue({ kind: 'published', review: ownReview });
-    const onPublished = vi.fn();
+    const { onPublished } = mount();
 
-    mount(onPublished);
     await publishDraft();
 
-    expect(await screen.findByText(/ya cuenta en el promedio/)).toBeDefined();
-    expect(screen.getByText('Tu reseña')).toBeDefined();
-    expect(screen.queryByRole('button', { name: 'Publicar' })).toBeNull();
-    expect(onPublished).toHaveBeenCalledTimes(1);
+    await vi.waitFor(() => expect(onPublished).toHaveBeenCalledTimes(1));
+    expect(screen.queryByText(/ya cuenta en el promedio/)).toBeNull();
   });
 
   it('publica contra el par que recibió', async () => {
@@ -222,14 +233,28 @@ describe('ReviewsPanel — publicar', () => {
   });
 
   // FR-027, escenario 16: quien ya reseñó ve lo que publicó, no un error seco.
-  it('ante un duplicado muestra la reseña que ya existía', async () => {
+  it('ante un duplicado muestra la reseña que ya existía y no cierra', async () => {
     publishMock.mockResolvedValue({ kind: 'duplicate', own: ownReview });
+    const { onPublished } = mount();
+
+    await publishDraft();
+
+    expect(await screen.findByText('Tu reseña')).toBeDefined();
+    expect(onPublished).not.toHaveBeenCalled();
+  });
+
+  // Si el servidor rechaza un campo, gana su mensaje: es la validación que
+  // cuenta, y la del formulario solo evita el viaje.
+  it('muestra los errores de campo que devuelve el servidor', async () => {
+    publishMock.mockResolvedValue({
+      kind: 'invalid',
+      errors: { recommends: 'Responde si recomendarías llevar este curso.' },
+    });
 
     mount();
     await publishDraft();
 
-    expect(await screen.findByText('Tu reseña')).toBeDefined();
-    expect(screen.queryByRole('button', { name: 'Publicar' })).toBeNull();
+    expect(await screen.findByText('Responde si recomendarías llevar este curso.')).toBeDefined();
   });
 
   // FR-030 y FR-031: el texto lleva el instante de liberación.
@@ -244,7 +269,6 @@ describe('ReviewsPanel — publicar', () => {
     await publishDraft();
 
     expect(await screen.findByText(/Podrás volver a publicar el 30 de julio/)).toBeDefined();
-    // El formulario sigue en pantalla: el bloqueo es temporal.
     expect(screen.getByRole('button', { name: 'Publicar' })).toBeDefined();
   });
 
@@ -269,7 +293,6 @@ describe('ReviewsPanel — publicar', () => {
     await publishDraft();
 
     expect(await screen.findByText(/retirado de forma permanente/)).toBeDefined();
-    expect(screen.getByText(/Datos personales de un tercero\./)).toBeDefined();
     expect(screen.queryByRole('button', { name: 'Publicar' })).toBeNull();
   });
 

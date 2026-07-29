@@ -48,7 +48,8 @@ export const MISSING_RECOMMENDATION_MESSAGE =
 export const SESSION_LOST_MESSAGE =
   'Tu sesión se cerró antes de publicar. Inicia sesión y vuelve a intentarlo: lo que elegiste sigue acá.';
 
-/** Escenario 19: la confirmación de que entró. */
+/** Escenario 19: la confirmación de que entró. Es momentánea —va en un aviso
+ *  que se cierra solo—, porque lo permanente ya es el promedio actualizado. */
 export const PUBLISHED_MESSAGE = 'Listo. Tu puntuación ya cuenta en el promedio de este docente.';
 
 /** FR-027, escenario 16. Lo levanta el índice único, no una comprobación previa. */
@@ -56,7 +57,6 @@ export const DUPLICATE_REVIEW_MESSAGE = 'Ya publicaste una reseña de este docen
 
 /** FR-027: quien ya contribuyó ve lo que publicó. Editarlo llega con US5. */
 export const OWN_REVIEW_TITLE = 'Tu reseña';
-export const OWN_REVIEW_NOTE = 'Todavía no se puede editar ni eliminar.';
 
 /** Lo que el formulario tiene en pantalla. Los tres arrancan sin elegir. */
 export interface ReviewDraft {
