@@ -29,6 +29,7 @@ import {
   setShowFreeBlocks,
 } from '@/lib/storage';
 import { analyzeSection } from '@/lib/subsession-utils';
+import { solveSchedule } from '@/lib/solver';
 import CourseSearch from '@/components/CourseSearch';
 import SelectedCoursesList from '@/components/SelectedCoursesList';
 import WeeklyCalendar from '@/components/WeeklyCalendar';
@@ -91,6 +92,7 @@ export default function Home() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
   const [capturing, setCapturing] = useState(false);
+  const [optimizing, setOptimizing] = useState(false);
 
   const showToast = useCallback((message: string, type: 'error' | 'success' | 'info' = 'error') => {
     setToast({ message, type, id: Date.now() });
@@ -149,6 +151,54 @@ export default function Home() {
   const handleRemoveCourse = useCallback((courseCode: string) => {
     warnIfNotPersisted(setSelectedCourses(prev => prev.filter(s => s.courseCode !== courseCode)));
   }, [warnIfNotPersisted]);
+
+  // Reemplaza las secciones elegidas por la combinación con menos tiempo muerto,
+  // conservando la lista de cursos: el alumno decide qué lleva, el solver cómo.
+  const handleOptimize = useCallback(() => {
+    const codes = [...new Set(selectedCourses.map(s => s.courseCode))];
+    if (codes.length === 0 || optimizing) return;
+
+    setOptimizing(true);
+    // La búsqueda es síncrona y bloquea el hilo. Ceder un frame deja que el
+    // botón se pinte deshabilitado antes, igual que hace handleCapture.
+    requestAnimationFrame(() => {
+      try {
+        const result = solveSchedule(courses, codes);
+        const best = result.candidates[0];
+
+        if (!best) {
+          const pair = result.blockingPair;
+          // Sin búsqueda completa no se probó que no exista solución, sólo que
+          // no apareció ninguna antes del tope.
+          showToast(
+            !result.exhaustive
+              ? 'La búsqueda se cortó antes de terminar sin encontrar un horario sin cruces. Puede que exista uno.'
+              : pair
+                ? `No hay horario sin cruces: ${pair.courseCodeA} y ${pair.courseCodeB} se cruzan en todas sus secciones.`
+                : 'No hay ninguna combinación de secciones sin cruces para estos cursos.',
+            'error'
+          );
+          return;
+        }
+
+        // El solver ignora los códigos que ya no están en courses.json, así que
+        // su selección puede ser más corta que la del alumno. Escribirla entera
+        // borraría esos cursos del horario guardado.
+        const optimizado = new Map(best.selection.map(s => [s.courseCode, s]));
+        warnIfNotPersisted(setSelectedCourses(prev =>
+          prev.map(s => optimizado.get(s.courseCode) ?? s)
+        ));
+
+        const parcial = result.exhaustive ? '' : ' (búsqueda parcial)';
+        showToast(
+          `${formatDuration(best.deadMinutes)} de tiempo muerto en ${best.daysWithClass} día${best.daysWithClass === 1 ? '' : 's'} de clase.${parcial}`,
+          'success'
+        );
+      } finally {
+        setOptimizing(false);
+      }
+    });
+  }, [selectedCourses, optimizing, showToast, warnIfNotPersisted]);
 
   // previewSection cambia en cada mouseenter/mouseleave sobre una sección, así
   // que sin memo esto recalcularía el calendario entero en cada hover.
@@ -379,12 +429,21 @@ export default function Home() {
                   Cursos seleccionados ({selectedCourses.length})
                 </h2>
                 {selectedCourses.length > 0 && (
-                  <button
-                    onClick={() => warnIfNotPersisted(setSelectedCourses([]))}
-                    className="text-xs text-red-500 hover:text-red-700"
-                  >
-                    Limpiar todo
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={handleOptimize}
+                      disabled={optimizing}
+                      className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {optimizing ? 'Optimizando...' : 'Optimizar secciones'}
+                    </button>
+                    <button
+                      onClick={() => warnIfNotPersisted(setSelectedCourses([]))}
+                      className="text-xs text-red-500 hover:text-red-700"
+                    >
+                      Limpiar todo
+                    </button>
+                  </div>
                 )}
               </div>
               <SelectedCoursesList
