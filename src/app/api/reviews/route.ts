@@ -6,6 +6,7 @@ import { normalizeTeacherEmail } from '@/lib/teacher-email';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
 import { createClient } from '@/lib/supabase/server';
 import type { PairReviewsResponse, PublishedReviewResponse } from '@/types/reviews';
+import { getPostHogClient } from '@/lib/posthog-server';
 
 /** Misma forma que los códigos de src/data/courses.json. */
 const COURSE_CODE = /^[A-Z]{2}\d{4}$/;
@@ -62,6 +63,19 @@ export async function GET(request: Request) {
       getPairComments(supabase, course, teacher),
       getOwnReview(supabase, courseTeacherId),
     ]);
+
+    try {
+      const ph = getPostHogClient();
+      ph.capture({
+        distinctId: guard.student.userId,
+        event: 'reviews_viewed',
+        properties: {
+          course_code: course,
+          comment_count: comments.length,
+        },
+      });
+      await ph.flush();
+    } catch { /* PostHog no debe bloquear la respuesta */ }
 
     return NextResponse.json({
       courseTeacherId,

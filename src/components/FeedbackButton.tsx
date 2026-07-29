@@ -1,3 +1,5 @@
+import posthog from 'posthog-js';
+
 const WHATSAPP_LINK = "https://chat.whatsapp.com/LrTT67wC0yZ2Y6WX1Ib0gT";
 
 export default function FeedbackButton() {
@@ -7,6 +9,7 @@ export default function FeedbackButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Unirse al grupo de ayuda en WhatsApp"
+      onClick={() => posthog.capture('feedback_link_clicked')}
       className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-blue-600 px-4 py-3 text-white shadow-lg transition-transform hover:scale-110 dark:bg-blue-700"
     >
       <svg

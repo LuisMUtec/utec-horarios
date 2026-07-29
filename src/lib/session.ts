@@ -7,7 +7,7 @@
 export type SessionState =
   | { kind: 'unknown' }
   | { kind: 'anonymous' }
-  | { kind: 'student'; email: string; label: string };
+  | { kind: 'student'; sub: string; email: string; label: string };
 
 /** Etiqueta corta para la cabecera; el correo completo va en el `title`. */
 export function accountLabel(email: string): string {
@@ -29,6 +29,7 @@ export function sessionFromClaims(claims: unknown): SessionState {
 
   return {
     kind: 'student',
+    sub,
     email: address,
     label: address ? accountLabel(address) : 'Mi cuenta',
   };

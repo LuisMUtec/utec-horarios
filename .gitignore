@@ -54,3 +54,4 @@ next-env.d.ts
 
 # Exportaciones personales del horario: llevan el código del alumno en el nombre.
 Consulta_Horario-*.xlsx
+.env.local

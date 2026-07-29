@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
+import posthog from 'posthog-js';
 import { toBlob } from 'html-to-image';
 import coursesData from '@/data/courses.json';
 import { CalendarEvent, Course, SelectedCourse } from '@/types';
@@ -138,6 +139,14 @@ export default function Home() {
         }
       }
 
+      const course = courses.find(c => c.code === courseCode);
+      posthog.capture('course_added', {
+        course_code: courseCode,
+        section_number: sectionNumber,
+        is_replacement: existing >= 0,
+        course_name: course?.name,
+      });
+
       if (existing >= 0) {
         const updated = [...prev];
         updated[existing] = withSubsession;
@@ -148,6 +157,7 @@ export default function Home() {
   }, [showToast, allowConflicts, warnIfNotPersisted]);
 
   const handleRemoveCourse = useCallback((courseCode: string) => {
+    posthog.capture('course_removed', { course_code: courseCode });
     warnIfNotPersisted(setSelectedCourses(prev => prev.filter(s => s.courseCode !== courseCode)));
   }, [warnIfNotPersisted]);
 
@@ -169,6 +179,11 @@ export default function Home() {
           const pair = result.blockingPair;
           // Sin búsqueda completa no se probó que no exista solución, sólo que
           // no apareció ninguna antes del tope.
+          posthog.capture('schedule_optimized', {
+            success: false,
+            course_count: codes.length,
+            exhaustive: result.exhaustive,
+          });
           showToast(
             !result.exhaustive
               ? 'La búsqueda se cortó antes de terminar sin encontrar un horario sin cruces. Puede que exista uno.'
@@ -188,6 +203,13 @@ export default function Home() {
           prev.map(s => optimizado.get(s.courseCode) ?? s)
         ));
 
+        posthog.capture('schedule_optimized', {
+          success: true,
+          course_count: codes.length,
+          dead_minutes: best.deadMinutes,
+          days_with_class: best.daysWithClass,
+          exhaustive: result.exhaustive,
+        });
         const parcial = result.exhaustive ? '' : ' (búsqueda parcial)';
         showToast(
           `${formatDuration(best.deadMinutes)} de tiempo muerto en ${best.daysWithClass} día${best.daysWithClass === 1 ? '' : 's'} de clase.${parcial}`,
@@ -245,6 +267,11 @@ export default function Home() {
         setCargaHabilCodes(data.codes);
         setStudentName(data.studentName || null);
         setCourseTipos(data.courseTipos && Object.keys(data.courseTipos).length > 0 ? data.courseTipos : null);
+        posthog.capture('pdf_uploaded', {
+          course_count: data.codes.length,
+          parsed_pages: data.parsedPages,
+          has_student_name: !!data.studentName,
+        });
         showToast(`Carga Hábil procesada. Se encontraron ${data.codes.length} cursos permitidos.`, 'success');
       } else {
         showToast(data.error || 'Error al procesar el PDF.', 'error');
@@ -280,6 +307,7 @@ export default function Home() {
         await navigator.clipboard.write([
           new ClipboardItem({ 'image/png': blob }),
         ]);
+        posthog.capture('schedule_captured', { method: 'clipboard' });
         showToast('Horario copiado al portapapeles.', 'success');
       } else {
         // Fallback: download the image
@@ -289,6 +317,7 @@ export default function Home() {
         a.download = 'horario-utec.png';
         a.click();
         URL.revokeObjectURL(url);
+        posthog.capture('schedule_captured', { method: 'download' });
         showToast('Imagen descargada (tu navegador no soporta copiar al portapapeles).', 'info');
       }
     } catch {
