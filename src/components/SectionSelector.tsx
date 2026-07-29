@@ -1,8 +1,19 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Course } from '@/types';
 import { DAY_LABELS } from '@/lib/schedule-utils';
 import { analyzeSection } from '@/lib/subsession-utils';
+import { fetchCourseSummaries } from '@/lib/api-client';
+import { isSupabaseConfigured } from '@/lib/supabase/config';
+import {
+  CourseSummaryState,
+  SectionTeacher,
+  indexSummaries,
+  sectionTeachers,
+  teacherSummaryState,
+} from '@/lib/section-teachers';
+import TeacherSummary from './reviews/TeacherSummary';
 
 interface Props {
   course: Course;
@@ -13,16 +24,82 @@ interface Props {
   onHoverSection: (info: {courseCode: string, sectionNumber: number, subsessionId?: string} | null) => void;
 }
 
+/**
+ * Un pedido por curso al desplegarlo, no uno por docente (D1). El estado es
+ * local al componente: nada de esto toca la selección ni localStorage (FR-012).
+ */
+function useCourseSummaries(courseCode: string): CourseSummaryState {
+  const [state, setState] = useState<CourseSummaryState>(() =>
+    isSupabaseConfigured() ? { kind: 'loading' } : { kind: 'disabled' }
+  );
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+
+    // No hace falta volver a 'loading' al cambiar de curso: CourseSearch monta un
+    // SectionSelector por curso desplegado, así que courseCode no cambia en vida
+    // de la instancia y el estado inicial ya es el correcto.
+    let active = true;
+    fetchCourseSummaries(courseCode).then(
+      summaries => { if (active) setState({ kind: 'ready', byPairKey: indexSummaries(summaries) }); },
+      () => { if (active) setState({ kind: 'error' }); }
+    );
+    return () => { active = false; };
+  }, [courseCode]);
+
+  return state;
+}
+
+interface TeacherRowsProps {
+  teachers: SectionTeacher[];
+  summaries: CourseSummaryState;
+  /** La tarjeta de subsección ya imprime su docente; la sección no. */
+  withNames?: boolean;
+}
+
+function TeacherRows({ teachers, summaries, withNames = false }: TeacherRowsProps) {
+  if (teachers.length === 0) return null;
+
+  // Sin Supabase la sección se ve igual que antes de las reseñas (T037).
+  if (summaries.kind === 'disabled') {
+    if (!withNames) return null;
+    return (
+      <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+        {teachers.map(t => t.name).filter(Boolean).join(' / ')}
+      </div>
+    );
+  }
+
+  return (
+    <div className={withNames ? 'mb-1 space-y-1' : 'mt-1 space-y-0.5'}>
+      {teachers.map(teacher => {
+        const state = teacherSummaryState(teacher, summaries);
+        return (
+          <div key={teacher.key}>
+            {withNames && teacher.name && (
+              <div className="text-xs text-gray-500 dark:text-gray-400">{teacher.name}</div>
+            )}
+            {state && <TeacherSummary teacherName={teacher.name} state={state} />}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function SectionSelector({ course, selectedSection, selectedSubsessionId, onSelectSection, onRemoveCourse, onHoverSection }: Props) {
+  const summaries = useCourseSummaries(course.code);
+
   return (
     <div className="px-4 pb-3 space-y-2 bg-gray-50 dark:bg-gray-800/50 transition-colors duration-300">
       {course.sections.map(section => {
         const isSelected = selectedSection === section.number;
         const analysis = analyzeSection(section);
         const hasSubsessions = analysis.subsessionGroups.length > 0;
-        const professors = hasSubsessions
-          ? [...new Set(analysis.mandatorySessions.map(s => s.professor).filter(Boolean))]
-          : [...new Set(section.sessions.map(s => s.professor))];
+        const teachers = sectionTeachers(
+          course.code,
+          hasSubsessions ? analysis.mandatorySessions : section.sessions
+        );
         const modalities = [...new Set(section.sessions.map(s => s.modality))];
         const capacity = section.sessions[0]?.capacity ?? 0;
         const enrolled = section.sessions[0]?.enrolled ?? 0;
@@ -71,9 +148,7 @@ export default function SectionSelector({ course, selectedSection, selectedSubse
               </div>
             </div>
 
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-              {professors.join(' / ')}
-            </div>
+            <TeacherRows teachers={teachers} summaries={summaries} withNames />
 
             {/* Mandatory sessions as fixed tags */}
             {hasSubsessions && analysis.mandatorySessions.length > 0 && (
@@ -119,6 +194,13 @@ export default function SectionSelector({ course, selectedSection, selectedSubse
                           <span>{group.enrolled}/{group.capacity}</span>
                           <span className="truncate">{group.professor.split(',')[0]}</span>
                         </div>
+                        {/* Sin descontar los de la cabecera: cada subsección es
+                            una opción elegible y necesita su propio resumen,
+                            aunque el docente sea el mismo de la obligatoria. */}
+                        <TeacherRows
+                          teachers={sectionTeachers(course.code, group.sessions)}
+                          summaries={summaries}
+                        />
                         <div className="mt-1.5">
                           <button
                             onClick={() => isSubSelected ? onRemoveCourse(course.code) : onSelectSection(section.number, group.id)}

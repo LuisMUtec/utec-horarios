@@ -887,5 +887,5 @@ parseado.
 - [ ] **Plan revisado y aprobado**
 - [ ] Las tres condiciones de publicación de la política, cumplidas
 - [x] R6 resuelto: qué pasa con las reseñas de un docente reemplazado (se apagan con el par y reaparecen si vuelve a la oferta)
-- [ ] R1 medido con el primer componente
-- [ ] Reparto en PRs
+- [x] R1 medido con el primer componente: **no se disparó**. Con los cuatro `.tsx` de US1 dentro, el piso subió de `33.22 / 33.28 / 29.12 / 25.86` a `39.29 / 39.12 / 35.74 / 33.93`. Lo que lo sostiene es la regla de no dejar lógica testeable en el JSX: `src/lib/` quedó en 70.64 % y los componentes en 0 %, así que cada `.tsx` nuevo llega acompañado de un módulo que compensa de sobra. jsdom sigue sin hacer falta.
+- [x] Reparto en PRs (tabla en [tasks.md](tasks.md#reparto-en-prs))
