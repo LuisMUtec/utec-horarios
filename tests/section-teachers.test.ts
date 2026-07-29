@@ -129,7 +129,7 @@ describe('sectionTeachers — sin correo recuperable', () => {
   });
 
   // El detalle se abre con el correo, así que sin par tampoco hay correo: es lo
-  // que impide ofrecer «Ver comentarios» sobre un Docente por asignar (T062).
+  // que impide ofrecer «Ver reseñas» sobre un Docente por asignar (T062).
   it('sin par tampoco hay correo con el que pedir el detalle', () => {
     const teachers = sectionTeachers('CS2023', [
       session({ professor: 'Externo, Ana', email: 'ana@gmail.com' }),

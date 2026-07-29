@@ -2,6 +2,7 @@
 
 import { SummaryState } from '@/types/reviews';
 import {
+  DETAIL_TOGGLE_LABELS,
   EMPTY_SUMMARY_LABEL,
   ERROR_SUMMARY_LABEL,
   RECOMMEND_LABEL,
@@ -79,7 +80,7 @@ function Row({
 }
 
 function DetailButton({ detail, teacherName }: { detail: DetailToggle; teacherName: string }) {
-  const action = detail.expanded ? 'Ocultar comentarios' : 'Ver comentarios';
+  const action = detail.expanded ? DETAIL_TOGGLE_LABELS.close : DETAIL_TOGGLE_LABELS.open;
   const name = teacherName.trim();
 
   return (
@@ -91,7 +92,7 @@ function DetailButton({ detail, teacherName }: { detail: DetailToggle; teacherNa
       className="mt-0.5 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:underline"
     >
       <span aria-hidden="true">{action}</span>
-      {/* Con varios docentes en la sección, «Ver comentarios» a secas se repite
+      {/* Con varios docentes en la sección, «Ver reseñas» a secas se repite
           y no dice de quién. */}
       <span className="sr-only">{name === '' ? action : `${action} de ${name}`}</span>
     </button>

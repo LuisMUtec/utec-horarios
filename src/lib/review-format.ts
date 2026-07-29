@@ -25,6 +25,23 @@ export const NO_COMMENTS_LABEL = 'Aún no hay comentarios';
 /** Acompaña al porcentaje (FR-058). Habla de recomendación, no de dificultad (FR-062). */
 export const RECOMMEND_LABEL = 'lo recomienda';
 
+/**
+ * En la reseña propia la recomendación es de quien la lee, así que va en primera
+ * persona. Y a diferencia de la lista de comentarios, el `No` también se pinta:
+ * es el registro de lo que el autor respondió, y callarlo lo dejaría sin saber
+ * qué publicó.
+ */
+export const OWN_RECOMMEND_LABELS = {
+  yes: 'Lo recomiendo',
+  no: 'No lo recomiendo',
+} as const;
+
+/** El detalle ya no es solo comentarios: también es donde se puntúa. */
+export const DETAIL_TOGGLE_LABELS = {
+  open: 'Ver reseñas',
+  close: 'Ocultar reseñas',
+} as const;
+
 /** FR-055. */
 export const EDITED_LABEL = 'editado';
 

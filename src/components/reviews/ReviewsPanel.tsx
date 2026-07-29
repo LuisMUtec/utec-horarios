@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { fetchPairReviews, publishReview, type PairReviewsResult } from '@/lib/api-client';
 import {
   NO_COMMENTS_LABEL,
+  OWN_RECOMMEND_LABELS,
   RATING_SCALE_MAX,
-  RECOMMEND_LABEL,
   formatRatingLimitMessage,
   ratingFillPercentage,
 } from '@/lib/review-format';
@@ -62,11 +62,15 @@ function OwnReviewCard({ review, confirmed }: { review: OwnReview; confirmed: bo
           {review.rating} de {RATING_SCALE_MAX} estrellas
         </span>
 
-        {review.recommends && (
-          <span className="rounded bg-green-50 dark:bg-green-900/30 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:text-green-300">
-            {RECOMMEND_LABEL}
-          </span>
-        )}
+        <span
+          className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${
+            review.recommends
+              ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+              : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'
+          }`}
+        >
+          {review.recommends ? OWN_RECOMMEND_LABELS.yes : OWN_RECOMMEND_LABELS.no}
+        </span>
       </div>
 
       {confirmed && (

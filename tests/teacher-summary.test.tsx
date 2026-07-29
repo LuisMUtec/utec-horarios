@@ -79,7 +79,7 @@ describe('TeacherSummary — abrir el detalle (T062)', () => {
 
     const button = screen.getByRole('button');
     expect(button.getAttribute('aria-expanded')).toBe('true');
-    expect(button.textContent).toContain('Ocultar comentarios');
+    expect(button.textContent).toContain('Ocultar reseñas');
   });
 
   it('avisa al padre cuando se pulsa', () => {
@@ -91,11 +91,11 @@ describe('TeacherSummary — abrir el detalle (T062)', () => {
     expect(toggle.onToggle).toHaveBeenCalledTimes(1);
   });
 
-  // Con varios docentes en la sección, «Ver comentarios» a secas no dice de quién.
+  // Con varios docentes en la sección, «Ver reseñas» a secas no dice de quién.
   it('el nombre accesible del botón incluye al docente', () => {
     render(<TeacherSummary teacherName={NAME} state={withSummary} detail={detail()} />);
 
-    expect(screen.getByRole('button', { name: `Ver comentarios de ${NAME}` })).toBeDefined();
+    expect(screen.getByRole('button', { name: `Ver reseñas de ${NAME}` })).toBeDefined();
   });
 
   // El botón vive fuera del span aria-hidden que envuelve al resumen: dentro,
