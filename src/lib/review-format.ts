@@ -84,6 +84,31 @@ export function formatEditedMark(editedAt: string | Date | null | undefined): st
   return editedAt ? EDITED_LABEL : null;
 }
 
+const COMMENT_DATE_PARTS: Intl.DateTimeFormatOptions = {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+};
+
+/**
+ * La fecha visible de un comentario (FR-035, FR-064).
+ *
+ * Con año porque la lista mezcla ciclos y «12 de marzo» no dice de cuál. Sin
+ * hora porque el minuto no le sirve a quien lee y sí ayuda a correlacionar un
+ * comentario con quien lo escribió.
+ */
+export function formatCommentDate(
+  value: string | Date | null | undefined,
+  timeZone?: string
+): string | null {
+  if (value === null || value === undefined) return null;
+
+  const at = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(at.getTime())) return null;
+
+  return new Intl.DateTimeFormat('es-PE', { ...COMMENT_DATE_PARTS, timeZone }).format(at);
+}
+
 function summaryAriaParts(summary: TeacherSummary): string {
   const average = formatAverageRating(summary.averageRating);
   const percentage = formatRecommendPercentage(summary.recommendPercentage);

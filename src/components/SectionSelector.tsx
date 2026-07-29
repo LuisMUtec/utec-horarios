@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { Course } from '@/types';
 import { DAY_LABELS } from '@/lib/schedule-utils';
 import { analyzeSection } from '@/lib/subsession-utils';
@@ -9,11 +9,13 @@ import { isSupabaseConfigured } from '@/lib/supabase/config';
 import {
   CourseSummaryState,
   SectionTeacher,
+  canOpenDetail,
   indexSummaries,
   sectionTeachers,
   teacherSummaryState,
 } from '@/lib/section-teachers';
 import TeacherSummary from './reviews/TeacherSummary';
+import ReviewsPanel from './reviews/ReviewsPanel';
 
 interface Props {
   course: Course;
@@ -50,14 +52,51 @@ function useCourseSummaries(courseCode: string): CourseSummaryState {
   return state;
 }
 
+interface TeacherRowProps {
+  courseCode: string;
+  teacher: SectionTeacher;
+  summaries: CourseSummaryState;
+  withNames: boolean;
+}
+
+/**
+ * Un docente y, si se despliega, sus comentarios. El estado de apertura es por
+ * fila y no del curso: dos docentes de la misma sección se comparan mejor con
+ * los dos detalles abiertos.
+ */
+function TeacherRow({ courseCode, teacher, summaries, withNames }: TeacherRowProps) {
+  const [expanded, setExpanded] = useState(false);
+  const panelId = useId();
+
+  const state = teacherSummaryState(teacher, summaries);
+  const detail = canOpenDetail(teacher, state)
+    ? { expanded, panelId, onToggle: () => setExpanded(open => !open) }
+    : undefined;
+
+  return (
+    <div>
+      {withNames && teacher.name && (
+        <div className="text-xs text-gray-500 dark:text-gray-400">{teacher.name}</div>
+      )}
+      {state && <TeacherSummary teacherName={teacher.name} state={state} detail={detail} />}
+      {expanded && teacher.email && (
+        <div id={panelId}>
+          <ReviewsPanel courseCode={courseCode} teacherEmail={teacher.email} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface TeacherRowsProps {
+  courseCode: string;
   teachers: SectionTeacher[];
   summaries: CourseSummaryState;
   /** La tarjeta de subsección ya imprime su docente; la sección no. */
   withNames?: boolean;
 }
 
-function TeacherRows({ teachers, summaries, withNames = false }: TeacherRowsProps) {
+function TeacherRows({ courseCode, teachers, summaries, withNames = false }: TeacherRowsProps) {
   if (teachers.length === 0) return null;
 
   // Sin Supabase la sección se ve igual que antes de las reseñas (T037).
@@ -72,17 +111,15 @@ function TeacherRows({ teachers, summaries, withNames = false }: TeacherRowsProp
 
   return (
     <div className={withNames ? 'mb-1 space-y-1' : 'mt-1 space-y-0.5'}>
-      {teachers.map(teacher => {
-        const state = teacherSummaryState(teacher, summaries);
-        return (
-          <div key={teacher.key}>
-            {withNames && teacher.name && (
-              <div className="text-xs text-gray-500 dark:text-gray-400">{teacher.name}</div>
-            )}
-            {state && <TeacherSummary teacherName={teacher.name} state={state} />}
-          </div>
-        );
-      })}
+      {teachers.map(teacher => (
+        <TeacherRow
+          key={teacher.key}
+          courseCode={courseCode}
+          teacher={teacher}
+          summaries={summaries}
+          withNames={withNames}
+        />
+      ))}
     </div>
   );
 }
@@ -148,7 +185,12 @@ export default function SectionSelector({ course, selectedSection, selectedSubse
               </div>
             </div>
 
-            <TeacherRows teachers={teachers} summaries={summaries} withNames />
+            <TeacherRows
+              courseCode={course.code}
+              teachers={teachers}
+              summaries={summaries}
+              withNames
+            />
 
             {/* Mandatory sessions as fixed tags */}
             {hasSubsessions && analysis.mandatorySessions.length > 0 && (
@@ -198,6 +240,7 @@ export default function SectionSelector({ course, selectedSection, selectedSubse
                             una opción elegible y necesita su propio resumen,
                             aunque el docente sea el mismo de la obligatoria. */}
                         <TeacherRows
+                          courseCode={course.code}
                           teachers={sectionTeachers(course.code, group.sessions)}
                           summaries={summaries}
                         />

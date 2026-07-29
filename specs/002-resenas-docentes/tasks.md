@@ -230,25 +230,25 @@ Tres cosas que el plan dejaba a medias y que estas tareas cierran. **Revísalas 
 
 ### Tests para US3
 
-- [ ] T056 [P] [US3] Crear `tests/reviews-comments.test.ts`: la proyección de la lista de comentarios contiene exactamente puntuación, recomendación, texto, fecha de publicación del comentario y marca de edición — y nada más; el orden es por `comment_published_at` descendente (FR-034); las reseñas sin texto no producen entradas (FR-036, escenario 28); la fecha visible es `comment_published_at` y no `published_at` ([D2](plan.md#d2-comment_published_at-es-la-fecha-visible-de-un-comentario)).
+- [x] T056 [P] [US3] Crear `tests/reviews-comments.test.ts`: la proyección de la lista de comentarios contiene exactamente puntuación, recomendación, texto, fecha de publicación del comentario y marca de edición — y nada más; el orden es por `comment_published_at` descendente (FR-034); las reseñas sin texto no producen entradas (FR-036, escenario 28); la fecha visible es `comment_published_at` y no `published_at` ([D2](plan.md#d2-comment_published_at-es-la-fecha-visible-de-un-comentario)).
 
 ### Implementación de US3
 
-- [ ] T057 [US3] Añadir `getPairComments(courseCode, teacherEmail)` a `src/lib/reviews.ts`, sobre la vista `review_comments`. La vista ya aplica FR-046 y FR-049; la capa de aplicación no vuelve a filtrar, solo proyecta.
+- [x] T057 [US3] Añadir `getPairComments(courseCode, teacherEmail)` a `src/lib/reviews.ts`, sobre la vista `review_comments`. La vista ya aplica FR-046 y FR-049; la capa de aplicación no vuelve a filtrar, solo proyecta.
 
-- [ ] T058 [US3] Crear `src/app/api/reviews/route.ts` con el `GET ?course=&teacher=`: comentarios del par y la reseña propia del usuario si existe, usando el guard de T047. Responde 401 sin sesión, que es lo que dispara la petición de login del escenario 8.
+- [x] T058 [US3] Crear `src/app/api/reviews/route.ts` con el `GET ?course=&teacher=`: comentarios del par y la reseña propia del usuario si existe, usando el guard de T047. Responde 401 sin sesión, que es lo que dispara la petición de login del escenario 8.
 
-- [ ] T059 [P] [US3] Crear `src/components/reviews/ReviewsPanel.tsx`: el detalle del par. Sin sesión muestra la invitación a iniciar sesión con cuenta institucional; con sesión, la lista de comentarios. Se abre desde `TeacherSummary` sin navegar fuera de la página, para no perder la selección (FR-012, escenario 7).
+- [x] T059 [P] [US3] Crear `src/components/reviews/ReviewsPanel.tsx`: el detalle del par. Sin sesión muestra la invitación a iniciar sesión con cuenta institucional; con sesión, la lista de comentarios. Se abre desde `TeacherSummary` sin navegar fuera de la página, para no perder la selección (FR-012, escenario 7).
 
-- [ ] T060 [P] [US3] Crear `src/components/reviews/CommentList.tsx` con la fila de comentario: estrellas, recomendación, texto, fecha de publicación y `editado` cuando `comment_edited_at` no es nulo (FR-035, FR-055). Sin nada del autor (FR-019). Tailwind con `dark:`.
+- [x] T060 [P] [US3] Crear `src/components/reviews/CommentList.tsx` con la fila de comentario: estrellas, recomendación, texto, fecha de publicación y `editado` cuando `comment_edited_at` no es nulo (FR-035, FR-055). Sin nada del autor (FR-019). Tailwind con `dark:`.
 
-- [ ] T061 [US3] Estado vacío `Aún no hay comentarios` conservando el promedio visible (escenario 27, edge case *Sin comentarios después de autenticar*). No inventar comentarios de relleno ni obligar a contribuir.
+- [x] T061 [US3] Estado vacío `Aún no hay comentarios` conservando el promedio visible (escenario 27, edge case *Sin comentarios después de autenticar*). No inventar comentarios de relleno ni obligar a contribuir.
 
-- [ ] T062 [US3] Conectar la apertura del detalle desde `TeacherSummary` (T034), respetando que un `Docente por asignar` no ofrece detalle.
+- [x] T062 [US3] Conectar la apertura del detalle desde `TeacherSummary` (T034), respetando que un `Docente por asignar` no ofrece detalle.
 
-- [ ] T063 [US3] Verificar que un estudiante autenticado que nunca publicó y no completó su perfil lee los comentarios sin fricción (escenario 10, FR-015, FR-016).
+- [x] T063 [US3] Verificar que un estudiante autenticado que nunca publicó y no completó su perfil lee los comentarios sin fricción (escenario 10, FR-015, FR-016).
 
-- [ ] T064 [US3] Comprobar SC-006 en la respuesta cruda de `/api/reviews`: ningún campo permite agrupar comentarios por autor. Es la comprobación que la UI no da: se ve igual con `author_id` que sin él.
+- [x] T064 [US3] Comprobar SC-006 en la respuesta cruda de `/api/reviews`: ningún campo permite agrupar comentarios por autor. Es la comprobación que la UI no da: se ve igual con `author_id` que sin él.
 
 **Checkpoint**: se leen comentarios. PR 4 listo.
 

@@ -37,7 +37,7 @@ El plan se apoya en tres decisiones que ordenan todo lo demás:
 | **Datos** | Postgres 17 (Supabase), proyecto `rlsswhwrigdgsboqakyw`; local vía `supabase start` |
 | **Auth** | Supabase Auth, Google como único proveedor, allowlist exacta `utec.edu.pe` ([docs/auth.md](../../docs/auth.md)) |
 | **Estilos** | Tailwind 4, siempre con variante `dark:` |
-| **Tests** | vitest 4, `environment: 'node'`, sin jsdom ni testing-library. Trinquete de coverage con `autoUpdate` |
+| **Tests** | vitest 4, `environment: 'node'` por defecto y jsdom por archivo con `// @vitest-environment jsdom` (montado en US3, ver [R1](#r1-el-trinquete-de-coverage-bloquea-el-ci)). Trinquete de coverage con `autoUpdate` |
 | **CI** | `pnpm lint`, `pnpm typecheck`, `pnpm test --coverage`, `pnpm build`. **Sin secretos** |
 | **Runtime** | Vercel Fluid Compute. Cliente de Supabase por request, nunca en scope de módulo |
 | **Escala** | 1821 sesiones, ~700 cursos-sección, 619 pares docente–curso reseñables. Alumnado del orden de miles |
@@ -812,6 +812,12 @@ componente.
 `teacher-email.ts` son node-testables y compensan el JSX nuevo. Si no alcanza, montar
 jsdom + testing-library. Se mide con el primer componente.
 
+**Resuelto en US3.** La mitigación aguantó dos historias y se quedó corta en la tercera:
+`.tsx` finos compensan mientras el JSX sea poco, y con seis componentes ya no lo era. Se
+montó jsdom + `@testing-library/react`, pedido por archivo con
+`// @vitest-environment jsdom` para que los ~90 tests de node sigan arrancando en un
+entorno barato. El piso quedó en `50.39 / 50.03 / 48.84 / 51.53`.
+
 ### R2. La frontera es RLS, no los handlers
 
 D6 no cierra la Data API: sigue alcanzable con la publishable key, así que un error en una
@@ -887,6 +893,6 @@ parseado.
 - [ ] **Plan revisado y aprobado**
 - [ ] Las tres condiciones de publicación de la política, cumplidas. La segunda —la purga a los 30 días— ya está implementada; siguen abiertas el buzón `privacidad@mail.luismaquera.dev` y la revisión legal. Mientras tanto `/privacidad` existe y responde 404 (T099)
 - [x] R6 resuelto: qué pasa con las reseñas de un docente reemplazado (se apagan con el par y reaparecen si vuelve a la oferta)
-- [x] R1 medido con el primer componente: **no se disparó**. Con los cuatro `.tsx` de US1 dentro, el piso subió de `33.22 / 33.28 / 29.12 / 25.86` a `39.29 / 39.12 / 35.74 / 33.93`. Lo que lo sostiene es la regla de no dejar lógica testeable en el JSX: `src/lib/` quedó en 70.64 % y los componentes en 0 %, así que cada `.tsx` nuevo llega acompañado de un módulo que compensa de sobra. jsdom sigue sin hacer falta. Con US2 el piso volvió a subir, a `40.65 / 40.58 / 38.29 / 40.89`, y eso que entraron cuatro páginas y dos componentes más: `src/lib/` está en 77.36 %
+- [x] R1 medido, y **disparado en US3**. No se disparó con US1 (`33.22 / 33.28 / 29.12 / 25.86` → `39.29 / 39.12 / 35.74 / 33.93`) ni con US2 (→ `40.65 / 40.58 / 38.29 / 40.89`): lo sostuvo la regla de no dejar lógica testeable en el JSX. En US3 no alcanzó —`ReviewsPanel` y `CommentList` sumaron ~90 líneas de `.tsx` y el piso quedó corto por 0,37 puntos en líneas—, así que se montó jsdom + `@testing-library/react`, con el entorno pedido por archivo para no pagarlo en los tests de node. El piso pasó a `50.39 / 50.03 / 48.84 / 51.53` y de paso quedaron cubiertos los huecos de montaje que US1 (T039) y US2 (`SessionMenu`, `ProfileForm`) habían dejado abiertos
 - [x] Reparto en PRs (tabla en [tasks.md](tasks.md#reparto-en-prs))
 - [ ] Esquema en producción. El proyecto ya está enlazado a `rlsswhwrigdgsboqakyw` y `supabase migration list` da las ocho migraciones pendientes; falta correr `supabase db push` (nunca con `--include-seed`)

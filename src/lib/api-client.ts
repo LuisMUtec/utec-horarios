@@ -1,6 +1,10 @@
 import type { Career, CareersResponse } from '@/lib/careers';
 import type { Profile, ProfileErrors, ProfileResponse, ProfileUpdate } from '@/lib/profile';
-import type { CourseSummariesResponse, TeacherSummary } from '@/types/reviews';
+import type {
+  CourseSummariesResponse,
+  PairReviewsResponse,
+  TeacherSummary,
+} from '@/types/reviews';
 
 /**
  * Fetch tipado a `/api/*` desde los componentes, con caché por curso que vive
@@ -123,4 +127,40 @@ export async function updateProfile(update: ProfileUpdate): Promise<ProfileSaveR
   if (body.banned) return { ok: false, errors: bannedError({ reason: body.reason }) };
 
   return { ok: true, profile: body.profile };
+}
+
+/**
+ * Los cuatro desenlaces del detalle de un par. `anonymous` y `banned` no son
+ * fallos: son las dos pantallas que FR-013 y FR-057 exigen mostrar, y por eso
+ * no viajan como excepción.
+ */
+export type PairReviewsResult =
+  | { kind: 'ok'; reviews: PairReviewsResponse }
+  | { kind: 'anonymous' }
+  | { kind: 'banned'; reason: string }
+  | { kind: 'missing' };
+
+/** Sin caché a propósito: la respuesta depende de quién pregunta —lleva la
+ *  reseña propia y la vista le esconde lo que reportó (FR-046)—, y después de
+ *  publicar tiene que reflejarlo (SC-005). */
+export async function fetchPairReviews(
+  courseCode: string,
+  teacherEmail: string
+): Promise<PairReviewsResult> {
+  const query = new URLSearchParams({ course: courseKey(courseCode), teacher: teacherEmail });
+  const response = await fetch(`/api/reviews?${query}`);
+
+  if (response.status === 401) return { kind: 'anonymous' };
+  if (response.status === 404) return { kind: 'missing' };
+
+  if (response.status === 403) {
+    const body = (await response.json()) as { reason?: string };
+    return { kind: 'banned', reason: body.reason ?? '' };
+  }
+
+  if (!response.ok) {
+    throw new Error(`No se pudieron cargar las reseñas (${response.status})`);
+  }
+
+  return { kind: 'ok', reviews: (await response.json()) as PairReviewsResponse };
 }
