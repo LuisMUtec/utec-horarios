@@ -7,7 +7,7 @@
 export type SessionState =
   | { kind: 'unknown' }
   | { kind: 'anonymous' }
-  | { kind: 'student'; email: string; label: string };
+  | { kind: 'student'; id: string; email: string; label: string };
 
 /** Etiqueta corta para la cabecera; el correo completo va en el `title`. */
 export function accountLabel(email: string): string {
@@ -18,6 +18,9 @@ export function accountLabel(email: string): string {
 /**
  * `sub` es lo que decide si hay sesión: es la única claim que el token siempre
  * trae. El correo puede faltar y eso no vuelve anónimo a nadie.
+ *
+ * Sale además como `id` porque es el identificador estable de la cuenta, que es
+ * lo que PostHog necesita para atar los eventos a una persona.
  */
 export function sessionFromClaims(claims: unknown): SessionState {
   if (typeof claims !== 'object' || claims === null) return { kind: 'anonymous' };
@@ -29,6 +32,7 @@ export function sessionFromClaims(claims: unknown): SessionState {
 
   return {
     kind: 'student',
+    id: sub,
     email: address,
     label: address ? accountLabel(address) : 'Mi cuenta',
   };

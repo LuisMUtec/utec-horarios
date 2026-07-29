@@ -142,7 +142,26 @@ export default function PrivacidadPage() {
         La aplicación se apoya en proveedores de infraestructura que procesan datos por
         cuenta nuestra: <strong>Google</strong> (inicio de sesión), <strong>Supabase</strong>{' '}
         (base de datos y autenticación), <strong>Vercel</strong> (alojamiento y analítica de
-        uso agregada) y <strong>Resend</strong> (envío de los correos de la cuenta).
+        uso agregada), <strong>PostHog</strong> (analítica de uso) y <strong>Resend</strong>{' '}
+        (envío de los correos de la cuenta).
+      </p>
+
+      <h3 className={H3}>Qué mide PostHog</h3>
+      <p className={P}>
+        Qué pantallas se visitan y qué elementos se pulsan dentro de la aplicación, para
+        saber qué vale la pena mejorar. De cada elemento que pulsas se registra también su
+        texto visible, así que <strong>si pulsas sobre una reseña, su texto puede quedar
+        registrado</strong>. Tu PDF de Carga Hábil no se le envía nunca.
+      </p>
+      <p className={P}>
+        Eso no revela quién escribió esa reseña: lo que se registra es que <em>tú</em>{' '}
+        pulsaste ahí, no la identidad de su autor, que la aplicación tampoco muestra.
+      </p>
+      <p className={P}>
+        Si iniciaste sesión, esa navegación queda asociada a tu cuenta mediante su
+        identificador interno, y le enviamos tu correo institucional como propiedad de esa
+        cuenta. Si no iniciaste sesión, se registra de forma anónima. Al cerrar sesión el
+        vínculo se corta, para que quien use el navegador después no herede tu identidad.
       </p>
 
       <h2 className={H2}>Cuánto tiempo se conserva</h2>

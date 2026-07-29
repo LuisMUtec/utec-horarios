@@ -57,6 +57,17 @@ Ambas son públicas por diseño: viajan al navegador.
 
 Hay una tercera opcional, `NEXT_PUBLIC_SITE_URL`, con el origen público que se usa para armar las URLs de redirección del login. En Vercel se deduce del deploy y en local del propio request, así que solo hace falta si la app corre detrás de otro proxy o con un dominio propio.
 
+## Analítica (opcional)
+
+La app mide vistas de pantalla e interacciones con [PostHog](https://posthog.com), para saber qué vale la pena mejorar. Es opcional: sin estas dos variables la app corre igual y no se mide nada.
+
+| Variable | Dónde sacarla |
+|----------|---------------|
+| `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` | PostHog → Settings → Project → Project API key (empieza con `phc_`) |
+| `NEXT_PUBLIC_POSTHOG_HOST` | `https://us.i.posthog.com` o `https://eu.i.posthog.com`, según la nube del proyecto |
+
+El token es público por diseño: viaja al navegador. Si hay sesión iniciada, los eventos se atan a la cuenta por su UUID de Supabase, con el correo como propiedad; al cerrar sesión el vínculo se corta. Lo que se mide está declarado en la [política de privacidad](src/app/privacidad/page.tsx).
+
 Para montar el proyecto desde cero:
 
 1. **Google Cloud Console** → *APIs & Services → Credentials → OAuth client ID → Web application*. En *Authorized redirect URIs* va la URL de Supabase, no la de la app: `https://<ref>.supabase.co/auth/v1/callback`. Scopes: solo `openid`, `email` y `profile`.

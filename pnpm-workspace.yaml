@@ -1,6 +1,9 @@
 # Únicos paquetes autorizados a ejecutar scripts de instalación (postinstall).
 # sharp: binarios nativos para la optimización de imágenes de Next.
 # unrs-resolver: binario napi del resolver de TypeScript para ESLint.
+# core-js: entra como dependencia transitiva de posthog-js. Su postinstall solo
+#   imprime un pedido de donaciones, no compila nada, así que va denegado.
 allowBuilds:
+  core-js: false
   sharp: true
   unrs-resolver: true
