@@ -81,6 +81,13 @@ jobs:
           version: 2.109.1
       # Aplica migrations/ y seed.sql sobre una base recién creada.
       - run: supabase start
+      # Node acá también: el chequeo de los handlers necesita la app levantada.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       # RLS y los triggers son la frontera de seguridad de las reseñas: la Data
       # API sigue alcanzable con la publishable key, así que un error en una
       # política es una fuga que ningún test de TypeScript detecta.
@@ -126,3 +133,32 @@ jobs:
             -H "apikey: $ANON_KEY" -H "Content-Type: application/json" \
             -d "{\"email\":\"nueva@utec.edu.pe\",\"password\":\"$PASS\"}")
           [ "$codigo" = "200" ] || { echo "Se esperaba 200, llegó $codigo"; exit 1; }
+
+      # La costura que nadie más cubre: vitest simula el `fetch` y el pgTAP se
+      # queda dentro de Postgres, así que nadie comprueba que el handler
+      # traduzca las reglas de la base a estados HTTP. Publicar dos veces el
+      # mismo par tiene que terminar en 409 con la reseña que ya existía, y no
+      # en un 500.
+      #
+      # Con `pnpm dev` y no con `pnpm build && pnpm start`: lo que se prueba es
+      # la lógica de los handlers, que es la misma, y el job `build` ya cubre
+      # que la app compile. Arrancar sin construir ahorra más de un minuto.
+      - name: Verificar los handlers de reseñas
+        run: |
+          set -euo pipefail
+          eval "$(supabase status -o env | sed 's/^/export /')"
+
+          NEXT_PUBLIC_SUPABASE_URL="$API_URL" \
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="$PUBLISHABLE_KEY" \
+            pnpm dev >/tmp/next-dev.log 2>&1 &
+
+          # Turbopack compila cada ruta al primer pedido, así que la espera es
+          # por una respuesta y no por el puerto abierto.
+          for _ in $(seq 1 60); do
+            curl -sf -o /dev/null http://localhost:3000/api/careers && break
+            sleep 1
+          done
+
+          ./scripts/verificar-api-de-resenas.sh || {
+            echo "--- salida del servidor ---"; cat /tmp/next-dev.log; exit 1;
+          }

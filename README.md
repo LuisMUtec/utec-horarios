@@ -217,6 +217,7 @@ Para cambiar de ciclo: baja el xlsx del ciclo nuevo, corre el script y actualiza
 | `pnpm test` | Tests (Vitest) |
 | `pnpm test:watch` | Tests en modo watch |
 | `pnpm test:db` | Tests pgTAP de la base (`supabase test db`, pide `supabase start`) |
+| `pnpm test:api` | Comprueba los route handlers de reseñas contra el stack real (pide `supabase start` y `pnpm dev`) |
 | `pnpm parse-xlsx <ruta>` | Regenera `courses.json` desde el xlsx de horarios |
 | `pnpm diff-oferta` | Lista los pares docente–curso que entran y salen de la oferta |
 | `pnpm generate-offer` | Emite la migración que refresca la oferta |
