@@ -148,9 +148,14 @@ export default function PrivacidadPage() {
 
       <h3 className={H3}>Qué mide PostHog</h3>
       <p className={P}>
-        Qué pantallas se visitan y qué se pulsa dentro de la aplicación, para saber qué vale
-        la pena mejorar. <strong>No lee el contenido de tus reseñas</strong> ni el de tu PDF
-        de Carga Hábil.
+        Qué pantallas se visitan y qué elementos se pulsan dentro de la aplicación, para
+        saber qué vale la pena mejorar. De cada elemento que pulsas se registra también su
+        texto visible, así que <strong>si pulsas sobre una reseña, su texto puede quedar
+        registrado</strong>. Tu PDF de Carga Hábil no se le envía nunca.
+      </p>
+      <p className={P}>
+        Eso no revela quién escribió esa reseña: lo que se registra es que <em>tú</em>{' '}
+        pulsaste ahí, no la identidad de su autor, que la aplicación tampoco muestra.
       </p>
       <p className={P}>
         Si iniciaste sesión, esa navegación queda asociada a tu cuenta mediante su
