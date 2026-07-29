@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
 import { sessionFromClaims, type SessionState } from '@/lib/session';
+import { forgetStudent, identifyStudent } from '@/lib/posthog/identity';
 
 /**
  * La cabecera de sesión. Hasta acá existían `/auth/login`, `/auth/callback` y
@@ -23,7 +24,11 @@ export default function SessionMenu() {
     const resolve = () =>
       supabase.auth.getClaims().then(
         ({ data }) => {
-          if (active) setSession(sessionFromClaims(data?.claims));
+          const next = sessionFromClaims(data?.claims);
+          // Fuera del guard de `active` a propósito: identificar es un efecto
+          // global de la pestaña, no depende de que la cabecera siga montada.
+          if (next.kind === 'student') identifyStudent(next.id, next.email);
+          if (active) setSession(next);
         },
         () => {
           if (active) setSession({ kind: 'anonymous' });
@@ -85,7 +90,12 @@ export default function SessionMenu() {
       >
         {session.label}
       </Link>
-      <form action="/auth/signout" method="post">
+      {/*
+        `onSubmit` alcanza para desatar la identidad: corre antes de que el POST
+        recargue la página, y sin JS tampoco llegó a haber ningún evento que
+        desatar.
+      */}
+      <form action="/auth/signout" method="post" onSubmit={() => forgetStudent()}>
         <button
           type="submit"
           className="text-xs font-medium px-2 py-1.5 text-gray-500 dark:text-gray-400 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"

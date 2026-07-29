@@ -19,6 +19,7 @@ describe('sessionFromClaims', () => {
   it('con sub y correo hay sesión', () => {
     expect(sessionFromClaims({ sub: 'u1', email: 'alumno@utec.edu.pe' })).toEqual({
       kind: 'student',
+      id: 'u1',
       email: 'alumno@utec.edu.pe',
       label: 'alumno',
     });
@@ -29,6 +30,7 @@ describe('sessionFromClaims', () => {
   it('sin correo hay sesión igual, con una etiqueta neutra', () => {
     expect(sessionFromClaims({ sub: 'u1' })).toEqual({
       kind: 'student',
+      id: 'u1',
       email: '',
       label: 'Mi cuenta',
     });
@@ -44,6 +46,7 @@ describe('sessionFromClaims', () => {
   it('un correo que no es texto no rompe la etiqueta', () => {
     expect(sessionFromClaims({ sub: 'u1', email: 42 })).toEqual({
       kind: 'student',
+      id: 'u1',
       email: '',
       label: 'Mi cuenta',
     });

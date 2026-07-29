@@ -142,7 +142,21 @@ export default function PrivacidadPage() {
         La aplicación se apoya en proveedores de infraestructura que procesan datos por
         cuenta nuestra: <strong>Google</strong> (inicio de sesión), <strong>Supabase</strong>{' '}
         (base de datos y autenticación), <strong>Vercel</strong> (alojamiento y analítica de
-        uso agregada) y <strong>Resend</strong> (envío de los correos de la cuenta).
+        uso agregada), <strong>PostHog</strong> (analítica de uso) y <strong>Resend</strong>{' '}
+        (envío de los correos de la cuenta).
+      </p>
+
+      <h3 className={H3}>Qué mide PostHog</h3>
+      <p className={P}>
+        Qué pantallas se visitan y qué se pulsa dentro de la aplicación, para saber qué vale
+        la pena mejorar. <strong>No lee el contenido de tus reseñas</strong> ni el de tu PDF
+        de Carga Hábil.
+      </p>
+      <p className={P}>
+        Si iniciaste sesión, esa navegación queda asociada a tu cuenta mediante su
+        identificador interno, y le enviamos tu correo institucional como propiedad de esa
+        cuenta. Si no iniciaste sesión, se registra de forma anónima. Al cerrar sesión el
+        vínculo se corta, para que quien use el navegador después no herede tu identidad.
       </p>
 
       <h2 className={H2}>Cuánto tiempo se conserva</h2>
