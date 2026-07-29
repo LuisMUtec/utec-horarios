@@ -14,6 +14,9 @@ export interface SectionTeacher {
   key: string;
   /** Par docente–curso, o `null` si la sesión no trae correo (FR-054). */
   pairKey: string | null;
+  /** El correo ya normalizado, que es lo que pide `/api/reviews`. Va aparte de
+   *  `pairKey` para no tener que volver a partirla por el separador. */
+  email: string | null;
   /** Solo para mostrar: la identidad es el correo (FR-053). */
   name: string;
 }
@@ -39,7 +42,7 @@ export function sectionTeachers(courseCode: string, sessions: Session[]): Sectio
     const pairKey = email === null ? null : teacherPairKey(courseCode, email);
     // Sin correo no hay par sobre el cual agregar: quedan separados por nombre.
     const key = pairKey ?? `sin-correo|${name.toLowerCase()}`;
-    if (!byKey.has(key)) byKey.set(key, { key, pairKey, name });
+    if (!byKey.has(key)) byKey.set(key, { key, pairKey, email, name });
   }
 
   const teachers = [...byKey.values()];
@@ -63,6 +66,18 @@ export function indexSummaries(summaries: TeacherSummary[]): Map<string, Teacher
       summary,
     ])
   );
+}
+
+/**
+ * Si la fila ofrece abrir el detalle de comentarios (T062).
+ *
+ * Sin correo no hay par que consultar (FR-054). Mientras el resumen no esté
+ * resuelto tampoco: ofrecer un detalle que puede responder 404 confunde más de
+ * lo que adelanta.
+ */
+export function canOpenDetail(teacher: SectionTeacher, state: SummaryState | null): boolean {
+  if (teacher.email === null || state === null) return false;
+  return state.kind === 'summary' || state.kind === 'empty';
 }
 
 /** `null` es no renderizar nada: la app sin Supabase se ve como antes de las reseñas. */

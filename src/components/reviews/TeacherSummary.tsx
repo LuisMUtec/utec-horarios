@@ -14,11 +14,21 @@ import {
   ratingFillPercentage,
 } from '@/lib/review-format';
 
+/** Lo que hace falta para abrir el detalle. Sin esto el resumen es solo lectura,
+ *  que es como se ve un `Docente por asignar` (FR-054, T062). */
+export interface DetailToggle {
+  expanded: boolean;
+  /** Id del panel que este control abre, para `aria-controls`. */
+  panelId: string;
+  onToggle: () => void;
+}
+
 interface Props {
   /** Nombre tal como lo publica la oferta. No se pinta: la tarjeta de sección ya
    *  lo muestra, acá solo entra en el texto equivalente del resumen. */
   teacherName: string;
   state: SummaryState;
+  detail?: DetailToggle;
 }
 
 const MUTED = 'text-gray-500 dark:text-gray-400';
@@ -44,24 +54,56 @@ function Separator() {
 }
 
 /** Lo visible son fragmentos sueltos y glifos; el texto equivalente lo arma
- *  `formatSummaryAriaLabel` y por eso la fila entera va oculta al lector. */
-function Row({ label, children }: { label: string; children: React.ReactNode }) {
+ *  `formatSummaryAriaLabel` y por eso esa parte va oculta al lector. El control
+ *  del detalle queda fuera del `aria-hidden`, o no habría cómo abrirlo. */
+function Row({
+  label,
+  detail,
+  teacherName,
+  children,
+}: {
+  label: string;
+  detail?: DetailToggle;
+  teacherName?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="text-[11px]">
       <span className="sr-only">{label}</span>
       <span aria-hidden="true" className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
         {children}
       </span>
+      {detail && <DetailButton detail={detail} teacherName={teacherName ?? ''} />}
     </div>
   );
 }
 
-export default function TeacherSummary({ teacherName, state }: Props) {
+function DetailButton({ detail, teacherName }: { detail: DetailToggle; teacherName: string }) {
+  const action = detail.expanded ? 'Ocultar comentarios' : 'Ver comentarios';
+  const name = teacherName.trim();
+
+  return (
+    <button
+      type="button"
+      onClick={detail.onToggle}
+      aria-expanded={detail.expanded}
+      aria-controls={detail.panelId}
+      className="mt-0.5 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:underline"
+    >
+      <span aria-hidden="true">{action}</span>
+      {/* Con varios docentes en la sección, «Ver comentarios» a secas se repite
+          y no dice de quién. */}
+      <span className="sr-only">{name === '' ? action : `${action} de ${name}`}</span>
+    </button>
+  );
+}
+
+export default function TeacherSummary({ teacherName, state, detail }: Props) {
   const label = formatSummaryAriaLabel(teacherName, state);
 
   if (state.kind === 'empty') {
     return (
-      <Row label={label}>
+      <Row label={label} detail={detail} teacherName={teacherName}>
         <span className="italic text-gray-400 dark:text-gray-500">{EMPTY_SUMMARY_LABEL}</span>
       </Row>
     );
@@ -104,7 +146,7 @@ export default function TeacherSummary({ teacherName, state }: Props) {
   const recommendation = formatRecommendPercentage(summary.recommendPercentage);
 
   return (
-    <Row label={label}>
+    <Row label={label} detail={detail} teacherName={teacherName}>
       {average !== null && (
         <span className="inline-flex items-center gap-1">
           <Stars average={summary.averageRating} />

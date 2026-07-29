@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import type { Session } from '@/types';
 import type { TeacherSummary } from '@/types/reviews';
 import {
+  canOpenDetail,
   indexSummaries,
   sectionTeachers,
   teacherSummaryState,
@@ -52,6 +53,7 @@ describe('sectionTeachers — identidad por correo', () => {
       {
         key: 'CS2023|bojeda@utec.edu.pe',
         pairKey: 'CS2023|bojeda@utec.edu.pe',
+        email: 'bojeda@utec.edu.pe',
         name: 'Ojeda Rios, Brenner Humberto',
       },
     ]);
@@ -81,6 +83,7 @@ describe('sectionTeachers — identidad por correo', () => {
       {
         key: 'CS2023|lsalazar@utec.edu.pe',
         pairKey: 'CS2023|lsalazar@utec.edu.pe',
+        email: 'lsalazar@utec.edu.pe',
         name: 'Salazar, Luis',
       },
     ]);
@@ -122,7 +125,18 @@ describe('sectionTeachers — sin correo recuperable', () => {
   it('una sesión sin correo da un docente sin par', () => {
     const [teacher] = sectionTeachers('CS2023', [session({ professor: '', email: '' })]);
 
-    expect(teacher).toEqual({ key: 'sin-correo|', pairKey: null, name: '' });
+    expect(teacher).toEqual({ key: 'sin-correo|', pairKey: null, email: null, name: '' });
+  });
+
+  // El detalle se abre con el correo, así que sin par tampoco hay correo: es lo
+  // que impide ofrecer «Ver comentarios» sobre un Docente por asignar (T062).
+  it('sin par tampoco hay correo con el que pedir el detalle', () => {
+    const teachers = sectionTeachers('CS2023', [
+      session({ professor: 'Externo, Ana', email: 'ana@gmail.com' }),
+      session({ professor: '', email: '' }),
+    ]);
+
+    expect(teachers.every((t) => t.email === null)).toBe(true);
   });
 
   it('un correo que no es institucional tampoco forma par', () => {
@@ -246,5 +260,39 @@ describe('teacherSummaryState', () => {
     expect(teacherSummaryState(unassigned, { kind: 'loading' })).toEqual({ kind: 'unassigned' });
     expect(teacherSummaryState(unassigned, { kind: 'error' })).toEqual({ kind: 'unassigned' });
     expect(teacherSummaryState(unassigned, ready)).toEqual({ kind: 'unassigned' });
+  });
+});
+
+describe('canOpenDetail', () => {
+  const [conCorreo] = sectionTeachers('CS2023', [session({})]);
+  const [sinCorreo] = sectionTeachers('CS2023', [session({ email: '', professor: '' })]);
+  const ready: CourseSummaryState = { kind: 'ready', byPairKey: indexSummaries([summary({})]) };
+
+  it('con resumen resuelto se puede abrir', () => {
+    expect(canOpenDetail(conCorreo, teacherSummaryState(conCorreo, ready))).toBe(true);
+  });
+
+  // FR-007: sin puntuaciones no significa sin comentarios que leer más adelante,
+  // y escenario 27 pide poder abrirlo igual.
+  it('sin puntuaciones también se puede abrir', () => {
+    const [otro] = sectionTeachers('CS2023', [
+      session({ email: 'lsalazar@utec.edu.pe', professor: 'Salazar, Luis' }),
+    ]);
+    expect(canOpenDetail(otro, teacherSummaryState(otro, ready))).toBe(true);
+  });
+
+  // T062
+  it('un Docente por asignar no ofrece detalle', () => {
+    expect(canOpenDetail(sinCorreo, teacherSummaryState(sinCorreo, ready))).toBe(false);
+  });
+
+  it.each([['loading'], ['error']] as const)('con el curso en %s todavía no', (kind) => {
+    expect(canOpenDetail(conCorreo, teacherSummaryState(conCorreo, { kind }))).toBe(false);
+  });
+
+  it('sin Supabase no hay nada que abrir', () => {
+    expect(canOpenDetail(conCorreo, teacherSummaryState(conCorreo, { kind: 'disabled' }))).toBe(
+      false
+    );
   });
 });

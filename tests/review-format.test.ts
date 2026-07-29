@@ -9,6 +9,7 @@ import {
   UNASSIGNED_TEACHER_LABEL,
   formatAverageRating,
   formatCommentCount,
+  formatCommentDate,
   formatEditedMark,
   formatRatingCount,
   formatRatingLimitMessage,
@@ -264,5 +265,33 @@ describe('formatRatingLimitMessage', () => {
     expect(message).toContain('Alcanzaste el límite de 8 puntuaciones en 24 horas.');
     expect(message).toContain('más tarde');
     expect(message).not.toContain('Invalid Date');
+  });
+});
+
+describe('formatCommentDate', () => {
+  const LIMA = 'America/Lima';
+
+  it('muestra día, mes y año', () => {
+    expect(formatCommentDate('2026-05-12T15:04:05Z', LIMA)).toBe('12 de mayo de 2026');
+  });
+
+  // La lista mezcla ciclos: sin año, «12 de mayo» no dice de cuál.
+  it('distingue el mismo día de dos años', () => {
+    expect(formatCommentDate('2025-05-12T15:04:05Z', LIMA)).not.toBe(
+      formatCommentDate('2026-05-12T15:04:05Z', LIMA)
+    );
+  });
+
+  // El minuto exacto no le sirve a quien lee y sí ayuda a correlacionar.
+  it('no incluye la hora', () => {
+    expect(formatCommentDate('2026-05-12T15:04:05Z', LIMA)).not.toMatch(/\d{1,2}:\d{2}/);
+  });
+
+  it('acepta Date además de texto', () => {
+    expect(formatCommentDate(new Date('2026-05-12T15:04:05Z'), LIMA)).toBe('12 de mayo de 2026');
+  });
+
+  it.each([[null], [undefined], ['sin fecha'], ['']])('devuelve null para %o', (value) => {
+    expect(formatCommentDate(value, LIMA)).toBeNull();
   });
 });

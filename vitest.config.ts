@@ -10,24 +10,25 @@ export default defineConfig({
     },
   },
   test: {
+    // El default sigue siendo node: jsdom cuesta ~10x en arranque y sólo lo
+    // necesitan los tests de componente, que se lo piden con el docblock
+    // `// @vitest-environment jsdom`.
     environment: 'node',
-    include: ['tests/**/*.test.ts'],
+    include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
     coverage: {
       provider: 'v8',
       // Trinquete: el piso es el coverage medido, no un número elegido. Con
       // `autoUpdate` vitest reescribe estos valores cuando el coverage sube, y
-      // el CI falla si baja. Así el coverage sólo puede avanzar, sin fijar hoy
-      // una meta que la app no puede cumplir (los componentes React están en 0%
-      // y no hay jsdom ni testing-library montados).
+      // el CI falla si baja, así que el coverage sólo puede avanzar.
       //
       // El `autoUpdate` sólo persiste cuando alguien corre coverage en local y
       // commitea el archivo: en el runner la reescritura se descarta.
       thresholds: {
         autoUpdate: true,
-        lines: 40.65,
-        statements: 40.58,
-        functions: 38.29,
-        branches: 40.89,
+        lines: 50.39,
+        statements: 50.03,
+        functions: 48.84,
+        branches: 51.53,
       },
       reporter: ['text', 'json-summary'],
       include: ['src/**/*.{ts,tsx}'],

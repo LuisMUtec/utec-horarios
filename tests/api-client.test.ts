@@ -4,6 +4,7 @@ import {
   clearSummaryCache,
   fetchCareers,
   fetchCourseSummaries,
+  fetchPairReviews,
   invalidateCourse,
   updateProfile,
 } from '@/lib/api-client';
@@ -277,5 +278,79 @@ describe('updateProfile', () => {
   it('lanza cuando el servidor falla de verdad', async () => {
     fetchMock.mockResolvedValue(profileResponse(503, {}));
     await expect(updateProfile({ term: 5 })).rejects.toThrow('503');
+  });
+});
+
+const PAIR_REVIEWS = {
+  courseTeacherId: 'par-1',
+  comments: [
+    {
+      id: 'r-1',
+      rating: 4,
+      recommends: true,
+      comment: 'Explica con calma.',
+      publishedAt: '2026-05-12T15:04:05Z',
+      editedAt: null,
+    },
+  ],
+  own: null,
+};
+
+describe('fetchPairReviews', () => {
+  it('pide el par por curso y correo', async () => {
+    fetchMock.mockResolvedValue({ ok: true, status: 200, json: async () => PAIR_REVIEWS });
+
+    await expect(fetchPairReviews('cs2023', 'bojeda@utec.edu.pe')).resolves.toEqual({
+      kind: 'ok',
+      reviews: PAIR_REVIEWS,
+    });
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/api/reviews?course=CS2023&teacher=bojeda%40utec.edu.pe'
+    );
+  });
+
+  // FR-013: el 401 no es un fallo, es la pantalla que pide iniciar sesión.
+  it('un 401 es el estado anónimo, no una excepción', async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 401, json: async () => ({}) });
+    await expect(fetchPairReviews('CS2023', 'bojeda@utec.edu.pe')).resolves.toEqual({
+      kind: 'anonymous',
+    });
+  });
+
+  // FR-057: cada vez que intente leer comentarios, con el motivo.
+  it('un 403 trae el motivo de la sanción', async () => {
+    fetchMock.mockResolvedValue({
+      ok: false,
+      status: 403,
+      json: async () => ({ banned: true, reason: 'Datos personales de un tercero.' }),
+    });
+
+    await expect(fetchPairReviews('CS2023', 'bojeda@utec.edu.pe')).resolves.toEqual({
+      kind: 'banned',
+      reason: 'Datos personales de un tercero.',
+    });
+  });
+
+  it('un 404 es el par que salió de la oferta', async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 404, json: async () => ({}) });
+    await expect(fetchPairReviews('CS2023', 'bojeda@utec.edu.pe')).resolves.toEqual({
+      kind: 'missing',
+    });
+  });
+
+  it('lanza cuando el servidor falla de verdad', async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 503, json: async () => ({}) });
+    await expect(fetchPairReviews('CS2023', 'bojeda@utec.edu.pe')).rejects.toThrow('503');
+  });
+
+  // Sin caché: la respuesta depende de quién pregunta y de lo que acaba de
+  // publicar (SC-005).
+  it('no cachea entre llamadas', async () => {
+    fetchMock.mockResolvedValue({ ok: true, status: 200, json: async () => PAIR_REVIEWS });
+
+    await fetchPairReviews('CS2023', 'bojeda@utec.edu.pe');
+    await fetchPairReviews('CS2023', 'bojeda@utec.edu.pe');
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 });
