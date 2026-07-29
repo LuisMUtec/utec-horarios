@@ -16,6 +16,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:db": "supabase test db",
+    "test:api": "./scripts/verificar-api-de-resenas.sh",
     "gen-types": "{ echo '// GENERADO automáticamente — no editar a mano. Regenerar con: pnpm gen-types'; supabase gen types typescript --local --schema public; } > src/types/database.ts",
     "parse-xlsx": "node scripts/parse-xlsx.mjs",
     "generate-offer": "node scripts/generate-offer-migration.mts",

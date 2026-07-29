@@ -48,6 +48,11 @@ export interface OwnReview {
   commentEditedAt: string | null;
 }
 
+/** Respuesta de `POST /api/reviews` cuando la reseña entró. */
+export interface PublishedReviewResponse {
+  review: OwnReview;
+}
+
 /** Respuesta de `GET /api/reviews?course=&teacher=`. Exige sesión (FR-013). */
 export interface PairReviewsResponse {
   /** Lo necesita US4 para publicar contra el par, y no identifica a nadie. */

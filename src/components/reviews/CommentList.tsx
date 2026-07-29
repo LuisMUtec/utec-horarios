@@ -9,6 +9,12 @@ import {
 } from '@/lib/review-format';
 import type { PairComment } from '@/types/reviews';
 
+/**
+ * **Nadie lo monta todavía**, y no es un descuido: `COMMENTS_ENABLED` mantiene
+ * los comentarios fuera de la interfaz hasta que US4b permita escribir uno. El
+ * componente y sus tests quedan enteros para ese momento.
+ */
+
 /** Misma capa recortada que el resumen (FR-003), en tamaño de fila. */
 function Stars({ rating }: { rating: number }) {
   return (

@@ -6,10 +6,12 @@ import {
   fetchCourseSummaries,
   fetchPairReviews,
   invalidateCourse,
+  publishReview,
   updateProfile,
 } from '@/lib/api-client';
 import type { Career } from '@/lib/careers';
-import type { TeacherSummary } from '@/types/reviews';
+import type { ReviewDraft } from '@/lib/review-submit';
+import type { OwnReview, TeacherSummary } from '@/types/reviews';
 
 const SUMMARY: TeacherSummary = {
   courseTeacherId: '2f9d1b7c-0000-4000-8000-000000000001',
@@ -352,5 +354,130 @@ describe('fetchPairReviews', () => {
     await fetchPairReviews('CS2023', 'bojeda@utec.edu.pe');
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+});
+
+const OWN_REVIEW: OwnReview = {
+  id: 'r-9',
+  rating: 4,
+  recommends: true,
+  comment: null,
+  publishedAt: '2026-07-29T15:04:05Z',
+  commentPublishedAt: null,
+  commentEditedAt: null,
+};
+
+const DRAFT: ReviewDraft = { declaredAttendance: true, rating: 4, recommends: true };
+
+const publish = () => publishReview('cs2023', 'bojeda@utec.edu.pe', DRAFT);
+
+/** La respuesta de publicar; `status` decide el desenlace. */
+const publishResponse = (status: number, body: unknown = {}) => ({
+  ok: status < 400,
+  status,
+  json: async () => body,
+});
+
+describe('publishReview', () => {
+  it('manda el par y el borrador al endpoint', async () => {
+    fetchMock.mockResolvedValue(publishResponse(201, { review: OWN_REVIEW }));
+
+    await expect(publish()).resolves.toEqual({ kind: 'published', review: OWN_REVIEW });
+
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe('/api/reviews');
+    expect(init.method).toBe('POST');
+    // El curso viaja normalizado, igual que en la caché de resúmenes.
+    expect(JSON.parse(init.body)).toEqual({
+      course: 'CS2023',
+      teacher: 'bojeda@utec.edu.pe',
+      declaredAttendance: true,
+      rating: 4,
+      recommends: true,
+    });
+  });
+
+  // SC-005: sin esto el autor ve su propio promedio viejo hasta recargar, que
+  // es justo donde el desfase se nota.
+  it('invalida el resumen del curso al publicar', async () => {
+    fetchMock.mockResolvedValue(okResponse([SUMMARY]));
+    await fetchCourseSummaries('CS2023');
+
+    fetchMock.mockResolvedValue(publishResponse(201, { review: OWN_REVIEW }));
+    await publish();
+
+    fetchMock.mockResolvedValue(okResponse([SUMMARY]));
+    await fetchCourseSummaries('CS2023');
+
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+
+  it('no invalida el resumen cuando la publicación no entró', async () => {
+    fetchMock.mockResolvedValue(okResponse([SUMMARY]));
+    await fetchCourseSummaries('CS2023');
+
+    fetchMock.mockResolvedValue(publishResponse(429, { releaseAt: null, error: 'límite' }));
+    await publish();
+
+    await fetchCourseSummaries('CS2023');
+
+    // La segunda consulta sale de la caché: solo dos llamadas en total.
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('un 400 devuelve los requisitos pendientes, sin excepción', async () => {
+    fetchMock.mockResolvedValue(
+      publishResponse(400, { errors: { recommends: 'Responde si recomendarías.' } })
+    );
+
+    await expect(publish()).resolves.toEqual({
+      kind: 'invalid',
+      errors: { recommends: 'Responde si recomendarías.' },
+    });
+  });
+
+  // FR-027, escenario 16: la reseña que ya existía vuelve con el rechazo.
+  it('un 409 trae la reseña que ya estaba publicada', async () => {
+    fetchMock.mockResolvedValue(publishResponse(409, { own: OWN_REVIEW }));
+
+    await expect(publish()).resolves.toEqual({ kind: 'duplicate', own: OWN_REVIEW });
+  });
+
+  // FR-030 y FR-031.
+  it('un 429 trae el instante de liberación', async () => {
+    fetchMock.mockResolvedValue(
+      publishResponse(429, {
+        releaseAt: '2026-07-30T15:45:00.000Z',
+        error: 'Alcanzaste el límite.',
+      })
+    );
+
+    await expect(publish()).resolves.toEqual({
+      kind: 'rate_limit',
+      releaseAt: '2026-07-30T15:45:00.000Z',
+      message: 'Alcanzaste el límite.',
+    });
+  });
+
+  // Edge case *Pérdida de sesión durante la publicación*: no es un fallo, es una
+  // pantalla, y por eso lo elegido puede quedarse en el formulario.
+  it('un 401 es el estado anónimo', async () => {
+    fetchMock.mockResolvedValue(publishResponse(401));
+    await expect(publish()).resolves.toEqual({ kind: 'anonymous' });
+  });
+
+  it('un 403 trae el motivo de la sanción', async () => {
+    fetchMock.mockResolvedValue(publishResponse(403, { reason: 'Spam.' }));
+    await expect(publish()).resolves.toEqual({ kind: 'banned', reason: 'Spam.' });
+  });
+
+  it('un 404 es el par que salió de la oferta', async () => {
+    fetchMock.mockResolvedValue(publishResponse(404));
+    await expect(publish()).resolves.toEqual({ kind: 'not_current' });
+  });
+
+  it('lanza cuando el servidor falla de verdad', async () => {
+    fetchMock.mockResolvedValue(publishResponse(503));
+    await expect(publish()).rejects.toThrow('503');
   });
 });

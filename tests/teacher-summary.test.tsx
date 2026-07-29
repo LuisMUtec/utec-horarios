@@ -21,8 +21,8 @@ const summary: Summary = {
 
 const withSummary: SummaryState = { kind: 'summary', summary };
 
-function detail(expanded = false) {
-  return { expanded, panelId: 'panel-1', onToggle: vi.fn() };
+function detail() {
+  return { onOpen: vi.fn() };
 }
 
 describe('TeacherSummary — estados', () => {
@@ -48,7 +48,8 @@ describe('TeacherSummary — estados', () => {
     expect(container.textContent).toContain('4.3');
     expect(container.textContent).toContain('7 puntuaciones');
     expect(container.textContent).toContain('86%');
-    expect(container.textContent).toContain('2 comentarios');
+    // El conteo de comentarios no se muestra hasta US4b (`COMMENTS_ENABLED`).
+    expect(container.textContent).not.toContain('2 comentarios');
   });
 
   // FR-019: el resumen es público y el nombre del docente ya lo imprime la
@@ -60,26 +61,32 @@ describe('TeacherSummary — estados', () => {
   });
 });
 
-describe('TeacherSummary — abrir el detalle (T062)', () => {
+describe('TeacherSummary — cargando', () => {
+  // SC-002: cargando no puede leerse como «nadie lo evaluó».
+  it('se anuncia como carga y no como estado vacío', () => {
+    render(<TeacherSummary teacherName={NAME} state={{ kind: 'loading' }} />);
+
+    expect(screen.getByText(`${NAME}: Cargando reseñas.`)).toBeDefined();
+    expect(screen.queryByText(/Sin puntuaciones/)).toBeNull();
+  });
+
+  it('mientras carga no ofrece puntuar', () => {
+    render(<TeacherSummary teacherName={NAME} state={{ kind: 'loading' }} detail={detail()} />);
+
+    expect(screen.queryByRole('button')).toBeNull();
+  });
+});
+
+describe('TeacherSummary — abrir el diálogo (T062)', () => {
   it('sin detalle no hay botón', () => {
     render(<TeacherSummary teacherName={NAME} state={withSummary} />);
     expect(screen.queryByRole('button')).toBeNull();
   });
 
-  it('con detalle ofrece el botón y lo enlaza al panel', () => {
+  it('con detalle ofrece el botón de puntuar', () => {
     render(<TeacherSummary teacherName={NAME} state={withSummary} detail={detail()} />);
 
-    const button = screen.getByRole('button');
-    expect(button.getAttribute('aria-expanded')).toBe('false');
-    expect(button.getAttribute('aria-controls')).toBe('panel-1');
-  });
-
-  it('abierto lo dice en el texto y en aria-expanded', () => {
-    render(<TeacherSummary teacherName={NAME} state={withSummary} detail={detail(true)} />);
-
-    const button = screen.getByRole('button');
-    expect(button.getAttribute('aria-expanded')).toBe('true');
-    expect(button.textContent).toContain('Ocultar comentarios');
+    expect(screen.getByRole('button').textContent).toContain('Puntuar');
   });
 
   it('avisa al padre cuando se pulsa', () => {
@@ -88,14 +95,14 @@ describe('TeacherSummary — abrir el detalle (T062)', () => {
 
     screen.getByRole('button').click();
 
-    expect(toggle.onToggle).toHaveBeenCalledTimes(1);
+    expect(toggle.onOpen).toHaveBeenCalledTimes(1);
   });
 
-  // Con varios docentes en la sección, «Ver comentarios» a secas no dice de quién.
+  // Con varios docentes en la sección, «Puntuar» a secas no dice a quién.
   it('el nombre accesible del botón incluye al docente', () => {
     render(<TeacherSummary teacherName={NAME} state={withSummary} detail={detail()} />);
 
-    expect(screen.getByRole('button', { name: `Ver comentarios de ${NAME}` })).toBeDefined();
+    expect(screen.getByRole('button', { name: `Puntuar a ${NAME}` })).toBeDefined();
   });
 
   // El botón vive fuera del span aria-hidden que envuelve al resumen: dentro,

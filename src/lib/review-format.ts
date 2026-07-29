@@ -25,6 +25,32 @@ export const NO_COMMENTS_LABEL = 'Aún no hay comentarios';
 /** Acompaña al porcentaje (FR-058). Habla de recomendación, no de dificultad (FR-062). */
 export const RECOMMEND_LABEL = 'lo recomienda';
 
+/**
+ * En la reseña propia la recomendación es de quien la lee, así que va en primera
+ * persona. Y a diferencia de la lista de comentarios, el `No` también se pinta:
+ * es el registro de lo que el autor respondió, y callarlo lo dejaría sin saber
+ * qué publicó.
+ */
+export const OWN_RECOMMEND_LABELS = {
+  yes: 'Lo recomiendo',
+  no: 'No lo recomiendo',
+} as const;
+
+/**
+ * Los comentarios están construidos —US3 los lee— pero **nadie puede escribir
+ * uno todavía**: publicar texto llega con US4b. Mostrar el conteo y la lista
+ * significa enseñarle a todo el mundo `Aún no hay comentarios` en los 757
+ * pares, para siempre, sin manera de arreglarlo.
+ *
+ * Es un interruptor y no un borrado porque el código de US3 está probado y
+ * entero: US4b lo pone en `true` y vuelve todo, incluidos sus tests.
+ */
+export const COMMENTS_ENABLED = false;
+
+/** Lo que abre el diálogo. No dice «ver reseñas» porque el resumen ya está a la
+ *  vista: lo que hay detrás es la puntuación propia. */
+export const RATE_ACTION_LABEL = 'Puntuar';
+
 /** FR-055. */
 export const EDITED_LABEL = 'editado';
 
@@ -66,6 +92,11 @@ export function ratingFillPercentage(value: number | string | null | undefined):
 
 function pluralize(count: number, singular: string, plural: string): string {
   return `${count} ${count === 1 ? singular : plural}`;
+}
+
+/** Cada opción del selector de estrellas se anuncia sola: el glifo no se lee. */
+export function formatStarOptionLabel(value: number): string {
+  return pluralize(value, 'estrella', 'estrellas');
 }
 
 /** FR-005. */
@@ -117,7 +148,7 @@ function summaryAriaParts(summary: TeacherSummary): string {
     average === null ? null : `${average} de ${RATING_SCALE_MAX} estrellas`,
     formatRatingCount(summary.ratingCount),
     percentage === null ? null : `${percentage} ${RECOMMEND_LABEL}`,
-    formatCommentCount(summary.commentCount),
+    COMMENTS_ENABLED ? formatCommentCount(summary.commentCount) : null,
   ]
     .filter((part): part is string => part !== null)
     .join(', ');

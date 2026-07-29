@@ -72,7 +72,7 @@ Plantilla para copiar y rellenar: [`specs/TEMPLATE.md`](specs/TEMPLATE.md).
 - Rama con el mismo nombre que la carpeta del spec (`001-bloques-libres`), a partir de `main`.
 - Commits en español siguiendo el historial: `feat:`, `fix:`, `docs:`.
 - El PR incluye el spec y enlaza el issue donde se discutió (`Closes #N`).
-- `pnpm lint`, `pnpm typecheck`, `pnpm test` y `pnpm build` deben pasar. Si el PR toca `supabase/`, también `supabase db reset && pnpm test:db`: `supabase start` solo aplica migraciones y seed al crear el volumen, así que sin el reset los tests pgTAP validan el esquema anterior.
+- `pnpm lint`, `pnpm typecheck`, `pnpm test` y `pnpm build` deben pasar. Si el PR toca los route handlers de `src/app/api/`, además `pnpm test:api` con la app y la Supabase local levantadas: comprueba contra el stack real los estados que vitest no puede: 401 sin sesión, 403 con sanción, 409 en un par ya reseñado, 429 al topar el límite de 24 h y 404 con un par fuera de la oferta. Si el PR toca `supabase/`, también `supabase db reset && pnpm test:db`: `supabase start` solo aplica migraciones y seed al crear el volumen, así que sin el reset los tests pgTAP validan el esquema anterior.
 - El cuerpo del PR **no repite el spec** — el spec ya viaja en el propio PR y quien revisa lo tiene al lado. Nada de tablas que mapeen cada `FR-` a su archivo: envejecen mal y no dicen nada que el diff no diga. El cuerpo cuenta lo que *no* está en el spec:
   - qué se implementó, en un párrafo;
   - las decisiones de implementación que el spec no cubría, y por qué se tomaron así;

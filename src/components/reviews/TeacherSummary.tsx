@@ -2,8 +2,10 @@
 
 import { SummaryState } from '@/types/reviews';
 import {
+  COMMENTS_ENABLED,
   EMPTY_SUMMARY_LABEL,
   ERROR_SUMMARY_LABEL,
+  RATE_ACTION_LABEL,
   RECOMMEND_LABEL,
   UNASSIGNED_TEACHER_LABEL,
   formatAverageRating,
@@ -14,13 +16,10 @@ import {
   ratingFillPercentage,
 } from '@/lib/review-format';
 
-/** Lo que hace falta para abrir el detalle. Sin esto el resumen es solo lectura,
+/** Lo que hace falta para abrir el diálogo. Sin esto el resumen es solo lectura,
  *  que es como se ve un `Docente por asignar` (FR-054, T062). */
 export interface DetailToggle {
-  expanded: boolean;
-  /** Id del panel que este control abre, para `aria-controls`. */
-  panelId: string;
-  onToggle: () => void;
+  onOpen: () => void;
 }
 
 interface Props {
@@ -79,21 +78,20 @@ function Row({
 }
 
 function DetailButton({ detail, teacherName }: { detail: DetailToggle; teacherName: string }) {
-  const action = detail.expanded ? 'Ocultar comentarios' : 'Ver comentarios';
   const name = teacherName.trim();
 
   return (
     <button
       type="button"
-      onClick={detail.onToggle}
-      aria-expanded={detail.expanded}
-      aria-controls={detail.panelId}
+      onClick={detail.onOpen}
       className="mt-0.5 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:underline"
     >
-      <span aria-hidden="true">{action}</span>
-      {/* Con varios docentes en la sección, «Ver comentarios» a secas se repite
-          y no dice de quién. */}
-      <span className="sr-only">{name === '' ? action : `${action} de ${name}`}</span>
+      <span aria-hidden="true">{RATE_ACTION_LABEL}</span>
+      {/* Con varios docentes en la sección, «Puntuar» a secas se repite y no
+          dice a quién. */}
+      <span className="sr-only">
+        {name === '' ? RATE_ACTION_LABEL : `${RATE_ACTION_LABEL} a ${name}`}
+      </span>
     </button>
   );
 }
@@ -165,8 +163,12 @@ export default function TeacherSummary({ teacherName, state, detail }: Props) {
         </>
       )}
 
-      <Separator />
-      <span className={MUTED}>{formatCommentCount(summary.commentCount)}</span>
+      {COMMENTS_ENABLED && (
+        <>
+          <Separator />
+          <span className={MUTED}>{formatCommentCount(summary.commentCount)}</span>
+        </>
+      )}
     </Row>
   );
 }
