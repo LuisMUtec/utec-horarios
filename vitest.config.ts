@@ -23,12 +23,18 @@ export default defineConfig({
       //
       // El `autoUpdate` sólo persiste cuando alguien corre coverage en local y
       // commitea el archivo: en el runner la reescritura se descarta.
+      //
+      // Ojo con `branches`: el `autoUpdate` lo escribe unas centésimas por
+      // encima de lo que después mide el propio gate (todos los reporters dicen
+      // 62.29 y él escribe 62.39), así que el valor que deja falla en la
+      // corrida siguiente. Si lo reescribe, corrige a mano con lo que diga
+      // `coverage/coverage-summary.json` y vuelve a correr para comprobarlo.
       thresholds: {
         autoUpdate: true,
         lines: 64.11,
         statements: 63.97,
         functions: 63.08,
-        branches: 62.39,
+        branches: 62.29,
       },
       reporter: ['text', 'json-summary'],
       include: ['src/**/*.{ts,tsx}'],
