@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
+import { getPostHogClient } from '@/lib/posthog-server';
 
 // Required for pdfjs-dist to work in standard Node environments without throwing Worker errors
 // @ts-expect-error pdf.worker.mjs no expone tipos (TS7016); se importa solo por su efecto secundario.
@@ -64,6 +65,20 @@ export async function POST(request: Request) {
         courseTipos[code] = tipoMatch[1].charAt(0).toUpperCase() + tipoMatch[1].slice(1).toLowerCase();
       }
     }
+
+    try {
+      const ph = getPostHogClient();
+      ph.capture({
+        distinctId: 'anonymous',
+        event: 'pdf_parsed',
+        properties: {
+          course_count: uniqueCodes.length,
+          parsed_pages: numPages,
+          has_student_name: !!studentName,
+        },
+      });
+      await ph.flush();
+    } catch { /* PostHog no debe bloquear la respuesta */ }
 
     return NextResponse.json({
       success: true,

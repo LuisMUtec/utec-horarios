@@ -4,9 +4,13 @@ import { cleanup, render, screen } from '@testing-library/react';
 import SessionMenu from '@/components/SessionMenu';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
+import posthog from 'posthog-js';
 
 vi.mock('@/lib/supabase/client', () => ({ createClient: vi.fn() }));
 vi.mock('@/lib/supabase/config', () => ({ isSupabaseConfigured: vi.fn() }));
+vi.mock('posthog-js', () => ({
+  default: { identify: vi.fn(), reset: vi.fn() },
+}));
 
 const configured = vi.mocked(isSupabaseConfigured);
 const clientMock = vi.mocked(createClient);
@@ -104,5 +108,40 @@ describe('SessionMenu', () => {
     render(<SessionMenu />);
 
     expect(await screen.findByRole('link', { name: 'Mi cuenta' })).toBeDefined();
+  });
+
+  it('identifica a PostHog al resolver una sesión de estudiante', async () => {
+    clientMock.mockReturnValue(fakeClient({ sub: 'u1', email: 'alumno@utec.edu.pe' }));
+
+    render(<SessionMenu />);
+    await screen.findByRole('link', { name: 'alumno' });
+
+    expect(posthog.identify).toHaveBeenCalledWith('u1', { email: 'alumno@utec.edu.pe' });
+  });
+
+  // Un `distinct_id` que sigue apuntando al estudiante después de cerrar sesión
+  // le mezclaría al próximo visitante anónimo los eventos de otra persona.
+  it('resetea a PostHog cuando la sesión pasa de estudiante a anónima', async () => {
+    let claims: Record<string, unknown> | null = { sub: 'u1', email: 'alumno@utec.edu.pe' };
+    let onChange: () => void = () => {};
+
+    clientMock.mockReturnValue({
+      auth: {
+        getClaims: () => Promise.resolve({ data: claims ? { claims } : null, error: null }),
+        onAuthStateChange: (cb: () => void) => {
+          onChange = cb;
+          return { data: { subscription: { unsubscribe } } };
+        },
+      },
+    } as unknown as ReturnType<typeof createClient>);
+
+    render(<SessionMenu />);
+    await screen.findByRole('link', { name: 'alumno' });
+
+    claims = null;
+    onChange();
+    await screen.findByRole('link', { name: /Iniciar sesión/ });
+
+    expect(posthog.reset).toHaveBeenCalledTimes(1);
   });
 });

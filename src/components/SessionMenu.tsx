@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import posthog from 'posthog-js';
 import { createClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
 import { sessionFromClaims, type SessionState } from '@/lib/session';
@@ -13,6 +14,7 @@ import { sessionFromClaims, type SessionState } from '@/lib/session';
  */
 export default function SessionMenu() {
   const [session, setSession] = useState<SessionState>({ kind: 'unknown' });
+  const prevSessionRef = useRef<SessionState>({ kind: 'unknown' });
 
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
@@ -23,7 +25,18 @@ export default function SessionMenu() {
     const resolve = () =>
       supabase.auth.getClaims().then(
         ({ data }) => {
-          if (active) setSession(sessionFromClaims(data?.claims));
+          if (!active) return;
+          const next = sessionFromClaims(data?.claims);
+          const prev = prevSessionRef.current;
+
+          if (next.kind === 'student') {
+            posthog.identify(next.sub, { email: next.email });
+          } else if (next.kind === 'anonymous' && prev.kind === 'student') {
+            posthog.reset();
+          }
+
+          prevSessionRef.current = next;
+          setSession(next);
         },
         () => {
           if (active) setSession({ kind: 'anonymous' });

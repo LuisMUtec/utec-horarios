@@ -29,6 +29,8 @@
     "html-to-image": "^1.11.13",
     "next": "16.1.6",
     "pdfjs-dist": "^4.0.379",
+    "posthog-js": "^1.407.5",
+    "posthog-node": "^5.46.1",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },

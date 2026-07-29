@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import posthog from 'posthog-js';
 import { fetchCareers, updateProfile } from '@/lib/api-client';
 import { groupByFaculty, outdatedOption, type Career } from '@/lib/careers';
 import {
@@ -79,6 +80,10 @@ export default function ProfileForm({ initial }: Props) {
         setSaved(result.profile);
         setDraft(profileDraft(result.profile));
         setDone(true);
+        posthog.capture('profile_updated', {
+          has_career: !!result.profile.careerSlug,
+          has_term: !!result.profile.term,
+        });
       } else {
         setErrors(result.errors);
       }
