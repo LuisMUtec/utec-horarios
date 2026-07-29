@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
-import Link from 'next/link';
 import { toBlob } from 'html-to-image';
 import coursesData from '@/data/courses.json';
 import { CalendarEvent, Course, SelectedCourse } from '@/types';
@@ -518,11 +517,11 @@ export default function Home() {
           </div>
         </div>
         <div className="flex items-center gap-3 text-[10px] text-gray-300 dark:text-gray-600">
-          {/* La política de privacidad no se enlaza todavía: sigue sin publicarse
-              hasta cerrar las condiciones de su propio documento (T099). */}
-          <Link href="/normas" className="hover:text-blue-500 transition-colors">
-            Normas de la comunidad
-          </Link>
+          {/* Ni las normas ni la política de privacidad se enlazan todavía: la
+              política sigue sin publicarse (T099) y las normas no se anuncian
+              mientras no haya reseñas que normar. Ambas páginas se siguen
+              sirviendo por URL, y el enlace que FR-026 exige va en el control de
+              compromiso (T072), no en este footer. */}
           <span>Utec Horarios © 2026</span>
         </div>
       </footer>
