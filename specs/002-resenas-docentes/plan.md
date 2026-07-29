@@ -40,7 +40,7 @@ El plan se apoya en tres decisiones que ordenan todo lo demás:
 | **Tests** | vitest 4, `environment: 'node'`, sin jsdom ni testing-library. Trinquete de coverage con `autoUpdate` |
 | **CI** | `pnpm lint`, `pnpm typecheck`, `pnpm test --coverage`, `pnpm build`. **Sin secretos** |
 | **Runtime** | Vercel Fluid Compute. Cliente de Supabase por request, nunca en scope de módulo |
-| **Escala** | 1821 sesiones, ~700 cursos-sección, 619 pares docente–curso reseñables. Alumnado del orden de miles |
+| **Escala** | 1904 sesiones, 798 cursos-sección, 757 pares docente–curso reseñables. Alumnado del orden de miles |
 
 **Restricción heredada que condiciona el diseño**: `docs/auth.md` fija que *"sin variables
 de entorno la app corre igual"* y el job `build` del CI no tiene secretos. Toda la UI de
@@ -312,7 +312,7 @@ Tres cosas que esta vista resuelve de una vez:
   `anon` obtiene agregados sin que exista ninguna política de select sobre `reviews` para
   `anon`. No hay fila que filtrar porque no hay fila que devolver.
 - **SC-005 (sin ventana de datos viejos)**: es una vista normal, no materializada. Un
-  `insert` se ve en la consulta siguiente. Con 619 pares y miles de filas el agregado es
+  `insert` se ve en la consulta siguiente. Con 757 pares y miles de filas el agregado es
   irrelevante en costo; materializarla solo agregaría el desfase que SC-005 prohíbe.
 - **FR-003, FR-005, FR-006, FR-058, FR-059, FR-060**: promedio con un decimal, conteo de
   puntuaciones sobre todas las activas, conteo de comentarios solo sobre las que tienen
@@ -835,7 +835,7 @@ pipeline y la CLI como dependencia nueva del runner.
 
 ### R4. Arranque en frío
 
-Al deployar hay 619 pares en `Sin puntuaciones` y ninguna reseña. Los Non-Goals descartan
+Al deployar hay 757 pares en `Sin puntuaciones` y ninguna reseña. Los Non-Goals descartan
 campañas e incentivos; SC-009 solo deja la consulta para medirlo.
 
 ### R5. Dependencias externas sin cerrar
@@ -889,4 +889,4 @@ parseado.
 - [x] R6 resuelto: qué pasa con las reseñas de un docente reemplazado (se apagan con el par y reaparecen si vuelve a la oferta)
 - [x] R1 medido con el primer componente: **no se disparó**. Con los cuatro `.tsx` de US1 dentro, el piso subió de `33.22 / 33.28 / 29.12 / 25.86` a `39.29 / 39.12 / 35.74 / 33.93`. Lo que lo sostiene es la regla de no dejar lógica testeable en el JSX: `src/lib/` quedó en 70.64 % y los componentes en 0 %, así que cada `.tsx` nuevo llega acompañado de un módulo que compensa de sobra. jsdom sigue sin hacer falta. Con US2 el piso volvió a subir, a `40.65 / 40.58 / 38.29 / 40.89`, y eso que entraron cuatro páginas y dos componentes más: `src/lib/` está en 77.36 %
 - [x] Reparto en PRs (tabla en [tasks.md](tasks.md#reparto-en-prs))
-- [ ] Esquema en producción. El proyecto ya está enlazado a `rlsswhwrigdgsboqakyw` y `supabase migration list` da las ocho migraciones pendientes; falta correr `supabase db push` (nunca con `--include-seed`)
+- [x] Esquema en producción. Las diez migraciones están aplicadas en `rlsswhwrigdgsboqakyw` (`supabase db push --linked`, nunca con `--include-seed`). La última en entrar fue la oferta del export vigente: `course_teachers` pasó de 619 a **757 pares vigentes, 0 apagados** —los 619 eran subconjunto, así que ningún par salió de la oferta—. Hasta ese push los ~138 pares nuevos no tenían resumen y habrían sido irreseñables por FR-028
