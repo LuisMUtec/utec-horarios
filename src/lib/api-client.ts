@@ -1,8 +1,11 @@
 import type { Career, CareersResponse } from '@/lib/careers';
 import type { Profile, ProfileErrors, ProfileResponse, ProfileUpdate } from '@/lib/profile';
+import type { ReviewDraft, ReviewErrors } from '@/lib/review-submit';
 import type {
   CourseSummariesResponse,
+  OwnReview,
   PairReviewsResponse,
+  PublishedReviewResponse,
   TeacherSummary,
 } from '@/types/reviews';
 
@@ -163,4 +166,75 @@ export async function fetchPairReviews(
   }
 
   return { kind: 'ok', reviews: (await response.json()) as PairReviewsResponse };
+}
+
+/**
+ * Los desenlaces de publicar. Solo `unavailable` es un fallo del sistema; los
+ * demás son respuestas que el estudiante tiene que poder leer y distinguir:
+ * «ya reseñaste este par» no se parece en nada a «alcanzaste el límite».
+ */
+export type PublishReviewResult =
+  | { kind: 'published'; review: OwnReview }
+  | { kind: 'invalid'; errors: ReviewErrors }
+  /** FR-027, escenario 16. `own` es lo que ya había publicado. */
+  | { kind: 'duplicate'; own: OwnReview | null }
+  /** FR-030. `releaseAt` alimenta el texto de FR-031. */
+  | { kind: 'rate_limit'; releaseAt: string | null; message: string }
+  /** FR-028: el par salió de la oferta mientras la página estaba abierta. */
+  | { kind: 'not_current' }
+  /** La sesión se cayó mientras escribía: lo elegido no se pierde. */
+  | { kind: 'anonymous' }
+  | { kind: 'banned'; reason: string };
+
+/**
+ * Publica y deja el resumen del curso listo para volver a pedirse. La
+ * invalidación va acá y no en el componente porque es lo que sostiene SC-005 en
+ * la pestaña del autor, que es donde más se nota que el promedio no cambió.
+ */
+export async function publishReview(
+  courseCode: string,
+  teacherEmail: string,
+  draft: ReviewDraft
+): Promise<PublishReviewResult> {
+  const response = await fetch('/api/reviews', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ course: courseKey(courseCode), teacher: teacherEmail, ...draft }),
+  });
+
+  if (response.status === 201) {
+    invalidateCourse(courseCode);
+    const body = (await response.json()) as PublishedReviewResponse;
+    return { kind: 'published', review: body.review };
+  }
+
+  if (response.status === 401) return { kind: 'anonymous' };
+
+  if (response.status === 403) {
+    const body = (await response.json()) as { reason?: string };
+    return { kind: 'banned', reason: body.reason ?? '' };
+  }
+
+  if (response.status === 400) {
+    const body = (await response.json()) as { errors?: ReviewErrors };
+    return { kind: 'invalid', errors: body.errors ?? {} };
+  }
+
+  if (response.status === 409) {
+    const body = (await response.json()) as { own?: OwnReview | null };
+    return { kind: 'duplicate', own: body.own ?? null };
+  }
+
+  if (response.status === 429) {
+    const body = (await response.json()) as { releaseAt?: string | null; error?: string };
+    return {
+      kind: 'rate_limit',
+      releaseAt: body.releaseAt ?? null,
+      message: body.error ?? '',
+    };
+  }
+
+  if (response.status === 404) return { kind: 'not_current' };
+
+  throw new Error(`No se pudo publicar la reseña (${response.status})`);
 }

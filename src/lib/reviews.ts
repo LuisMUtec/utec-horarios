@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { DUPLICATE_REVIEW_MESSAGE } from '@/lib/review-submit';
 import type { Database } from '@/types/database';
 import type { OwnReview, PairComment, TeacherSummary } from '@/types/reviews';
 
@@ -134,6 +135,32 @@ export async function getCourseTeacherId(
   return data?.id ?? null;
 }
 
+const OWN_REVIEW_COLUMNS =
+  'id, rating, recommends, comment, published_at, comment_published_at, comment_edited_at';
+
+type OwnReviewRow = Pick<
+  Database['public']['Tables']['reviews']['Row'],
+  | 'id'
+  | 'rating'
+  | 'recommends'
+  | 'comment'
+  | 'published_at'
+  | 'comment_published_at'
+  | 'comment_edited_at'
+>;
+
+function toOwnReview(row: OwnReviewRow): OwnReview {
+  return {
+    id: row.id,
+    rating: row.rating,
+    recommends: row.recommends,
+    comment: row.comment,
+    publishedAt: row.published_at,
+    commentPublishedAt: row.comment_published_at,
+    commentEditedAt: row.comment_edited_at,
+  };
+}
+
 /**
  * La reseña propia del par, si existe. Sin filtro por autor: lo aplica la
  * política, y repetirlo acá sugeriría que es esto lo que protege el dato.
@@ -144,9 +171,7 @@ export async function getOwnReview(
 ): Promise<OwnReview | null> {
   const { data, error } = await client
     .from('reviews')
-    .select(
-      'id, rating, recommends, comment, published_at, comment_published_at, comment_edited_at'
-    )
+    .select(OWN_REVIEW_COLUMNS)
     .eq('course_teacher_id', courseTeacherId)
     .maybeSingle();
 
@@ -154,15 +179,108 @@ export async function getOwnReview(
     throw new Error(`No se pudo cargar tu reseña: ${error.message}`);
   }
 
-  if (!data) return null;
+  return data === null ? null : toOwnReview(data);
+}
 
-  return {
-    id: data.id,
-    rating: data.rating,
-    recommends: data.recommends,
-    comment: data.comment,
-    publishedAt: data.published_at,
-    commentPublishedAt: data.comment_published_at,
-    commentEditedAt: data.comment_edited_at,
-  };
+/**
+ * Los tres rechazos esperables al publicar. Ninguno es una excepción: cada uno
+ * tiene una pantalla y un código que la UI necesita distinguir —«ya reseñaste
+ * este par» no se parece en nada a «alcanzaste el límite»—.
+ */
+export type ReviewRejection =
+  /** FR-027, escenario 16. */
+  | { code: 'duplicate'; message: string }
+  /** FR-030. `releaseAt` es el instante de FR-031, en ISO. */
+  | { code: 'rate_limit'; message: string; releaseAt: string | null }
+  /** FR-028: el par salió de la oferta entre que se pintó la UI y se publicó. */
+  | { code: 'not_current'; message: string };
+
+export type CreateReviewResult =
+  | { ok: true; review: OwnReview }
+  | { ok: false; rejection: ReviewRejection };
+
+/**
+ * El instante de liberación viaja dentro del mensaje del trigger, que es el
+ * único que sabe cuál es: cuenta también las reseñas eliminadas, que el autor
+ * ya no puede leer (edge case *Límite de publicación*).
+ *
+ * `to_char(..., 'OF')` escribe el desfase en horas —`+00`, `-05`— y esa forma no
+ * es una fecha válida en JavaScript, así que se completa a `+00:00` antes de
+ * devolverla. Si el formato cambia se devuelve `null` y manda el mensaje del
+ * trigger, que ya está en español y ya trae la hora.
+ */
+export function parseReleaseAt(message: string): string | null {
+  const match = /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})([+-]\d{2})(?::?(\d{2}))?/.exec(message);
+  if (match === null) return null;
+
+  const [, instant, hours, minutes = '00'] = match;
+  const at = new Date(`${instant}${hours}:${minutes}`);
+
+  return Number.isNaN(at.getTime()) ? null : at.toISOString();
+}
+
+/** Postgres: violación de unicidad y violación de check. */
+const UNIQUE_VIOLATION = '23505';
+const CHECK_VIOLATION = '23514';
+
+/**
+ * Traduce el rechazo de la base a algo que la UI pueda mostrar y distinguir.
+ *
+ * Los dos triggers que pueden cortar un insert levantan `check_violation`, así
+ * que se separan por su mensaje. Es acoplamiento a un texto nuestro, no a uno
+ * de Postgres, y `supabase/tests/resenas_reglas.test.sql` lo fija.
+ */
+function toRejection(error: { code?: string; message: string }): ReviewRejection | null {
+  if (error.code === UNIQUE_VIOLATION) {
+    return { code: 'duplicate', message: DUPLICATE_REVIEW_MESSAGE };
+  }
+
+  if (error.code !== CHECK_VIOLATION) return null;
+
+  const releaseAt = parseReleaseAt(error.message);
+  if (releaseAt !== null || error.message.includes('límite')) {
+    return { code: 'rate_limit', message: error.message, releaseAt };
+  }
+
+  if (error.message.includes('oferta vigente')) {
+    return { code: 'not_current', message: error.message };
+  }
+
+  return null;
+}
+
+/**
+ * Publica una reseña (FR-021, FR-061). El `declared_attendance` va en `true`
+ * fijo: la columna lleva un check que no acepta otra cosa, y la validación de
+ * `review-submit.ts` ya exigió la casilla.
+ *
+ * Nada de esto es la frontera: la unicidad, el límite de 24 horas y el par
+ * vigente los imponen el índice y los triggers. Acá solo se traduce su rechazo.
+ */
+export async function createReview(
+  client: ReviewsClient,
+  authorId: string,
+  courseTeacherId: string,
+  submission: { rating: number; recommends: boolean }
+): Promise<CreateReviewResult> {
+  const { data, error } = await client
+    .from('reviews')
+    .insert({
+      author_id: authorId,
+      course_teacher_id: courseTeacherId,
+      rating: submission.rating,
+      recommends: submission.recommends,
+      declared_attendance: true,
+    })
+    .select(OWN_REVIEW_COLUMNS)
+    .single();
+
+  if (error) {
+    const rejection = toRejection(error);
+    if (rejection !== null) return { ok: false, rejection };
+
+    throw new Error(`No se pudo publicar la reseña: ${error.message}`);
+  }
+
+  return { ok: true, review: toOwnReview(data) };
 }

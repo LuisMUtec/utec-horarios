@@ -29,10 +29,13 @@ Cierra el punto abierto *Reparto en PRs* del Progress Tracking del plan.
 | 2 | US1 (P1) 🎯 MVP | Resumen público junto a cada docente en el horario | T028–T040 |
 | 3 | US2 (P2) | Sesión institucional, perfil, normas y privacidad | T041–T055 |
 | 4 | US3 (P3) | Lectura de comentarios | T056–T064 |
-| 5 | US4 (P4) | Publicar puntuación, recomendación y comentario | T065–T077 |
+| 5 | US4a (P4) | Puntuar y recomendar, sin comentario | T065–T071, T073–T077, T103 |
 | 6 | US5 (P5) | Editar y eliminar la reseña propia | T078–T085 |
-| 7 | US6 (P6) | Reportar y sanción visible | T086–T095 |
-| 8 | Polish | SC-009, purga documentada, cierre de la política | T096–T102 |
+| 7 | US4b (P4) | Añadir el comentario al formulario | T104–T108 |
+| 8 | US6 (P6) | Reportar y sanción visible | T086–T095 |
+| 9 | Polish | SC-009, purga documentada, cierre de la política | T096–T102 |
+
+**US4 se partió en dos después de US3.** El orden original publicaba puntuación y comentario en el mismo PR; ahora la puntuación con recomendación va sola y primero. El motivo está en el *Goal* de la Fase 6: es la contribución barata y es la única que llena una base vacía ([R4](plan.md#r4-arranque-en-frío)). Los IDs T065–T102 se conservan tal cual —los citan plan.md y los PRs ya mergeados—; lo nuevo arranca en T103. T072 se renumeró a T107 al mudarse a US4b.
 
 ---
 
@@ -254,55 +257,77 @@ Tres cosas que el plan dejaba a medias y que estas tareas cierran. **Revísalas 
 
 ---
 
-## Phase 6: US4 — Publicar puntuación, recomendación y comentario (Priority: P4)
+## Phase 6: US4a — Puntuar y recomendar (Priority: P4)
 
-**Goal**: el estudiante declara que llevó el curso, puntúa de 1 a 5, responde la recomendación y opcionalmente comenta. Cubre los escenarios 13–19, 37, FR-021..FR-033, FR-061, FR-062, SC-003 y SC-004.
+**Goal**: el estudiante declara que llevó el curso, puntúa de 1 a 5 y responde la recomendación. Sin comentario: es la contribución que no exige carrera, ciclo ni compromiso de respeto. Cubre los escenarios 13, 14, 17, 18 y 37, FR-021, FR-024, FR-027..FR-033, FR-061, FR-062, SC-003 y SC-004.
 
-**Independent Test**: publicar una puntuación con recomendación y sin comentario, sin que el formulario pida carrera, ciclo ni compromiso de respeto, y ver el promedio actualizado en la siguiente consulta. Después añadir un comentario y comprobar que ahora sí exige perfil y compromiso. Intentar una novena puntuación en 24 h y ver el bloqueo con la hora de liberación.
+**Por qué va antes que comentar**: el comentario es la contribución cara —exige perfil completo y compromiso de respeto— y [R4](plan.md#r4-arranque-en-frío) deja la feature con 757 pares en `Sin puntuaciones` y cero reseñas el día del despliegue. Puntuar y recomendar es lo único que llena esa base, y US3 ya construyó el lector para cuando haya algo que leer. Partir US4 en dos también achica el PR más grande de la feature.
 
-### Tests para US4
+**Independent Test**: publicar una puntuación con recomendación y sin comentario, sin que el formulario pida carrera, ciclo ni compromiso de respeto, y ver el promedio y el porcentaje actualizados en la siguiente consulta. Intentar publicar sin responder la recomendación y ver que no deja. Intentar una novena puntuación en 24 h y ver el bloqueo con la hora de liberación.
 
-- [ ] T065 [P] [US4] Crear `tests/review-submit.test.ts` sobre la validación compartida: sin declaración de experiencia no se publica (escenario 14); sin puntuación no se publica; sin recomendación no se publica (FR-061, escenario 37); un comentario sin puntuación no se publica (FR-024); un comentario con perfil incompleto o sin compromiso no se publica y el error enumera lo que falta (escenario 15); un comentario de más de 500 caracteres se rechaza (FR-022).
+### Tests para US4a
 
-- [ ] T066 [P] [US4] Ampliar `tests/review-format.test.ts` con el texto del límite de FR-031: dado un instante de liberación, el mensaje dice cuándo se puede volver a contribuir.
+- [x] T065 [P] [US4a] Crear `tests/review-submit.test.ts` sobre la validación compartida: sin declaración de experiencia no se publica (escenario 14); sin puntuación no se publica; sin recomendación no se publica (FR-061, escenario 37); una puntuación fuera de 1–5 o no entera se rechaza. Lo del comentario —FR-022, FR-024 y escenario 15— entra con US4b.
 
-### Implementación de US4
+- [x] T066 [P] [US4a] Ampliar `tests/review-format.test.ts` con el texto del límite de FR-031: dado un instante de liberación, el mensaje dice cuándo se puede volver a contribuir. **Ya venía de US1**: `formatRatingLimitMessage` y sus tests entraron con T030. Lo que sí faltaba y se añadió es `formatStarOptionLabel`, la etiqueta de cada opción del selector.
 
-- [ ] T067 [P] [US4] Crear `src/lib/review-submit.ts` con la validación de una reseña —declaración, puntuación, recomendación, comentario, perfil y compromiso—, compartida por el formulario y el handler. La del handler es la que cuenta.
+### Implementación de US4a
 
-- [ ] T068 [US4] Añadir `createReview` a `src/lib/reviews.ts` y traducir los errores de los triggers a mensajes en español: unicidad del par (FR-027 → conducir a editar, escenario 16), límite de 24 h (FR-030 con la hora de FR-031), par fuera de la oferta (FR-028), perfil incompleto (FR-017).
+- [x] T067 [P] [US4a] Crear `src/lib/review-submit.ts` con la validación de una reseña sin comentario —declaración, puntuación y recomendación—, compartida por el formulario y el handler. La del handler es la que cuenta. US4b le añade comentario, perfil y compromiso.
 
-- [ ] T069 [US4] Añadir el `POST` a `src/app/api/reviews/route.ts` con el guard de T047 y la validación de T067. Responde el error del trigger ya traducido, con el código que la UI necesita para distinguir *ya reseñaste este par* de *alcanzaste el límite*.
+- [x] T068 [US4a] Añadir `createReview` a `src/lib/reviews.ts` y traducir los errores de los triggers a códigos que la UI distinga, con mensaje en español: unicidad del par (FR-027, escenario 16), límite de 24 h (FR-030, con el instante de FR-031 extraído del mensaje del trigger) y par fuera de la oferta (FR-028). `getCourseTeacherId` ya existe desde US3. Los tests van en `tests/review-create.test.ts`, no en `reviews-queries.test.ts`: el camino de escritura necesita un doble de `insert().select().single()` y no el de lectura.
 
-- [ ] T070 [P] [US4] Crear `src/components/reviews/StarRating.tsx`: selector de 1 a 5 estrellas, accesible por teclado, sin valor preseleccionado. Tailwind con `dark:`.
+  **El instante de FR-031 hay que normalizarlo.** El trigger lo escribe con `to_char(..., 'OF')`, que en la base real sale como `2026-07-30T05:18:59+00` —desfase en horas, sin minutos—, y esa forma **no es una fecha válida en JavaScript**: `new Date()` la rechaza. `parseReleaseAt` la completa a `+00:00` antes de devolverla, y si el formato cambia devuelve `null` y manda el mensaje del trigger, que ya está en español y ya trae la hora.
 
-- [ ] T071 [P] [US4] Crear `src/components/reviews/ReviewForm.tsx`: casilla `Declaro que llevé este curso con este docente`, estrellas, recomendación `Sí`/`No` **sin valor preseleccionado** (FR-061), y el comentario opcional con el texto exacto `Cuenta algo que le serviría saber a otro estudiante. Este espacio no es para preguntas` (FR-023) y el contador de caracteres restantes sobre 500 (edge case *Comentario extenso*). El curso y el docente llegan preseleccionados y no se pueden cambiar (FR-028).
+- [x] T069 [US4a] Añadir el `POST` a `src/app/api/reviews/route.ts` con el guard de T047 y la validación de T067. Responde el error del trigger ya traducido, con el código que la UI necesita para distinguir *ya reseñaste este par* de *alcanzaste el límite*.
 
-- [ ] T072 [US4] Añadir al formulario el bloque de comentario condicional: carrera y ciclo cuando el perfil está incompleto (escenario 11, FR-017) y el control de compromiso de respeto, inicialmente desmarcado, con el texto exacto `Confirmo que esta reseña refleja mi experiencia y cumple las normas de respeto` (FR-025) y enlaces directos a `/normas` y `/privacidad` (FR-026).
+- [x] T070 [P] [US4a] Crear `src/components/reviews/StarRating.tsx`: selector de 1 a 5 estrellas, accesible por teclado, sin valor preseleccionado. Tailwind con `dark:`.
 
-- [ ] T073 [US4] Mensaje del escenario 14 cuando falta la declaración: el espacio recoge experiencias de alumnos que ya llevaron el curso con ese docente y no admite preguntas, solicitudes de información ni expresiones de interés (FR-041, edge case *Intento de hacer una pregunta*).
+- [x] T071 [P] [US4a] Crear `src/components/reviews/ReviewForm.tsx`: casilla `Declaro que llevé este curso con este docente`, estrellas y recomendación `Sí`/`No` **sin valor preseleccionado** (FR-061). El curso y el docente llegan preseleccionados y no se pueden cambiar (FR-028). Sin campo de comentario: lo añade US4b.
 
-- [ ] T074 [US4] Invalidar la caché del curso en `api-client.ts` tras publicar y volver a pedir el resumen, que es lo que sostiene SC-005 en la pestaña del autor.
+- [x] T073 [US4a] Mensaje del escenario 14 cuando falta la declaración: el espacio recoge experiencias de alumnos que ya llevaron el curso con ese docente y no admite preguntas, solicitudes de información ni expresiones de interés (FR-041, edge case *Intento de hacer una pregunta*).
 
-- [ ] T075 [US4] Confirmación visible tras publicar, con la reseña ya reflejada en el detalle (escenario 19).
+- [x] T074 [US4a] Invalidar la caché del curso en `api-client.ts` tras publicar y volver a pedir el resumen, que es lo que sostiene SC-005 en la pestaña del autor. `SectionSelector` necesita poder refrescar: hoy solo consulta al montar.
 
-- [ ] T076 [US4] Pérdida de sesión durante la publicación: la reseña no se publica y el texto escrito se conserva para reintentar después de iniciar sesión (edge case *Pérdida de sesión durante la publicación*). Guardar el borrador en memoria del componente basta; no persistirlo en `localStorage`, que lo dejaría en el dispositivo más tiempo del necesario.
+- [x] T075 [US4a] Confirmación visible tras publicar, con la reseña ya reflejada en el detalle (escenario 19).
 
-- [ ] T077 [US4] Comprobar SC-003 y SC-004 de punta a punta: una puntuación con recomendación y sin comentario no pide perfil ni compromiso, y ocho reseñas seguidas —una carga académica completa— pasan sin toparse con el límite.
+- [x] T076 [US4a] Pérdida de sesión durante la publicación: la reseña no se publica y lo elegido se conserva para reintentar después de iniciar sesión (edge case *Pérdida de sesión durante la publicación*). Guardar el borrador en memoria del componente basta; no persistirlo en `localStorage`, que lo dejaría en el dispositivo más tiempo del necesario.
 
-**Checkpoint**: se publica. PR 5 listo.
+- [x] T077 [US4a] Comprobar SC-003 y SC-004 de punta a punta: una puntuación con recomendación y sin comentario no pide perfil ni compromiso, y ocho reseñas seguidas —una carga académica completa— pasan sin toparse con el límite.
+
+- [x] T103 [US4a] Mostrar la reseña propia en **solo lectura** dentro del panel cuando ya existe, y responder el error de unicidad con ella en lugar de un fallo seco. Sin edición todavía (llega en US5), FR-027 dejaría al autor sin salida ni forma de saber qué publicó; esto es el mínimo que evita el callejón. El escenario 16 —*se le conduce a editar*— no queda cubierto hasta US5.
+
+**Checkpoint**: se puntúa y se recomienda. PR 5 listo.
+
+---
+
+## Phase 6b: US4b — Añadir el comentario (Priority: P4)
+
+**Goal**: el formulario de US4a admite además un comentario opcional, con lo que eso arrastra: perfil completo y compromiso de respeto. Cubre los escenarios 11, 15, 19 y 26, FR-017, FR-022..FR-026 y el resto de FR-024.
+
+**Va después de US5** (editar y eliminar): la maquinaria de `PATCH` que US5 construye es la que necesita añadir, cambiar y borrar el texto de una reseña ya publicada, que son los escenarios 21 y 22.
+
+- [ ] T104 [P] [US4b] Ampliar `tests/review-submit.test.ts`: un comentario sin puntuación no se publica (FR-024); un comentario con perfil incompleto o sin compromiso no se publica y el error enumera lo que falta (escenario 15); más de 500 caracteres se rechaza (FR-022); un comentario de solo espacios se trata como reseña sin comentario.
+
+- [ ] T105 [US4b] Ampliar `src/lib/review-submit.ts` con comentario, perfil y compromiso, y `createReview`/`updateReview` con el error de perfil incompleto del trigger `enforce_comment_profile` (FR-017).
+
+- [ ] T106 [US4b] Añadir a `ReviewForm` el comentario opcional con el texto exacto `Cuenta algo que le serviría saber a otro estudiante. Este espacio no es para preguntas` (FR-023) y el contador de caracteres restantes sobre 500 (edge case *Comentario extenso*).
+
+- [ ] T107 [US4b] Añadir el bloque condicional del comentario: carrera y ciclo cuando el perfil está incompleto (escenario 11, FR-017) y el control de compromiso de respeto, inicialmente desmarcado, con el texto exacto `Confirmo que esta reseña refleja mi experiencia y cumple las normas de respeto` (FR-025) y enlaces directos a `/normas` y `/privacidad` (FR-026). Era T072.
+
+- [ ] T108 [US4b] Comprobar los escenarios 21 y 22 de punta a punta: añadir texto a una puntuación existente sube solo el conteo de comentarios, y borrarlo no exige una nueva confirmación de respeto.
 
 ---
 
 ## Phase 7: US5 — Editar y eliminar la reseña propia (Priority: P5)
 
-**Goal**: el autor cambia su puntuación, recomendación o comentario, o elimina su reseña. Cubre los escenarios 20–24, FR-037..FR-040, FR-055, FR-064 y SC-005.
+**Goal**: el autor cambia su puntuación o su recomendación, o elimina su reseña. Cubre los escenarios 20, 23 y 24, FR-037..FR-040 y SC-005. Los escenarios 21 y 22 —añadir y borrar el texto— llegan con US4b, que es cuando existe un comentario que editar.
 
-**Independent Test**: editar la puntuación de una reseña sin comentario y ver el promedio recalculado sin que suba el conteo de puntuaciones. Añadir un comentario a esa reseña y ver subir solo el conteo de comentarios. Borrar el texto conservando la puntuación. Eliminar la reseña y comprobar que sale del promedio y que el cupo de 24 h **no** se libera.
+**Independent Test**: editar la puntuación de una reseña sin comentario y ver el promedio recalculado sin que suba el conteo de puntuaciones. Eliminar la reseña y comprobar que sale del promedio y que el cupo de 24 h **no** se libera.
 
 ### Tests para US5
 
-- [ ] T078 [P] [US5] Crear `tests/review-edit.test.ts`: editar puntuación o recomendación no exige perfil ni compromiso (escenario 20); añadir o editar texto sí los exige (FR-038, escenario 21); borrar el texto por completo no exige una nueva confirmación de respeto (FR-025, escenario 22); una edición no consume cupo del límite (escenario 24).
+- [ ] T078 [P] [US5] Crear `tests/review-edit.test.ts`: editar puntuación o recomendación no exige perfil ni compromiso (escenario 20); una edición no consume cupo del límite (escenario 24). Lo del texto —escenarios 21 y 22— entra con US4b.
 
 ### Implementación de US5
 
@@ -385,9 +410,10 @@ Tres cosas que el plan dejaba a medias y que estas tareas cierran. **Revísalas 
 - **US1 (Fase 3)**: depende de Fase 2. Sin dependencias con otras historias.
 - **US2 (Fase 4)**: depende de Fase 2. Independiente de US1.
 - **US3 (Fase 5)**: depende de Fase 2 y de **US2** — leer comentarios exige sesión (FR-013), y sin `SessionMenu` no hay forma de iniciarla. Reutiliza el `TeacherSummary` de US1 como punto de entrada.
-- **US4 (Fase 6)**: depende de US3 (comparte `ReviewsPanel`) y de US2 (perfil para comentar).
-- **US5 (Fase 7)**: depende de US4 (reutiliza `ReviewForm`).
-- **US6 (Fase 8)**: depende de US3 (la unidad reportable es un comentario listado).
+- **US4a (Fase 6)**: depende de US3 (comparte `ReviewsPanel`, `getCourseTeacherId` y `getOwnReview`) y de US2 (sesión). **No** depende del perfil: puntuar sin comentario no lo exige (SC-003).
+- **US5 (Fase 7)**: depende de US4a (reutiliza `ReviewForm`).
+- **US4b (Fase 6b)**: depende de US5 —añadir texto a una reseña ya publicada es un `PATCH`— y de US2 (perfil para comentar).
+- **US6 (Fase 8)**: depende de US3 (la unidad reportable es un comentario listado) y de US4b, que es lo que hace que existan comentarios propios que reportar.
 - **Polish (Fase 9)**: depende de todas.
 
 La única historia realmente independiente es US1, y es a propósito: es el MVP y no necesita sesión.
@@ -434,11 +460,16 @@ supabase db reset && supabase test db
 
 ### Entrega incremental
 
-Cada PR posterior añade una capacidad sin romper la anterior. El orden 2 → 3 → 4 → 5 → 6 → 7 sigue las dependencias de arriba y no admite reordenarse salvo que US2 y US1 intercambien lugar, que es la única permutación válida.
+Cada PR posterior añade una capacidad sin romper la anterior. El orden es
+**US1 → US2 → US3 → US4a → US5 → US4b → US6**, y sigue las dependencias de arriba.
+
+Las dos permutaciones válidas son intercambiar US1 con US2, y adelantar US4a a US3 —lo
+que haría falta si se quisiera empezar a recoger puntuaciones antes de tener con qué
+leerlas—. El resto del orden sí está fijado por dependencias reales.
 
 ### Arranque en frío
 
-Al desplegar hay 619 pares en `Sin puntuaciones` y ninguna reseña ([R4](plan.md#r4-arranque-en-frío)). Los Non-Goals descartan campañas e incentivos; SC-009 solo deja la consulta para medirlo. No es un problema a resolver en estas tareas, pero conviene saberlo antes de mirar el primer despliegue.
+Al desplegar hay 757 pares en `Sin puntuaciones` y ninguna reseña ([R4](plan.md#r4-arranque-en-frío)). Los Non-Goals descartan campañas e incentivos; SC-009 solo deja la consulta para medirlo. No es un problema a resolver en estas tareas, pero sí es el motivo por el que US4a se adelantó a US4b: mientras nadie pueda puntuar, la base se queda vacía y US3 no tiene qué mostrar.
 
 ---
 

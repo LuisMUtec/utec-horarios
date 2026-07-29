@@ -847,6 +847,12 @@ pipeline y la CLI como dependencia nueva del runner.
 Al deployar hay 757 pares en `Sin puntuaciones` y ninguna reseña. Los Non-Goals descartan
 campañas e incentivos; SC-009 solo deja la consulta para medirlo.
 
+**Lo que sí se hizo**: partir US4 en dos y adelantar la mitad barata. Puntuar y recomendar
+no exige carrera, ciclo ni compromiso de respeto (SC-003), así que es la contribución que
+puede llegar primero; comentar arrastra las tres cosas. US4a entra antes que US4b y el
+orden queda US3 → US4a → US5 → US4b → US6 ([tasks.md](tasks.md#reparto-en-prs)). No es un
+incentivo —no lo sería sin romper los Non-Goals—, es no pedir lo caro antes que lo barato.
+
 ### R5. Dependencias externas sin cerrar
 
 `privacidad@mail.luismaquera.dev` tiene que recibir correo antes de publicar la política.
@@ -897,5 +903,7 @@ parseado.
 - [ ] Las tres condiciones de publicación de la política, cumplidas. La segunda —la purga a los 30 días— ya está implementada; siguen abiertas el buzón `privacidad@mail.luismaquera.dev` y la revisión legal. Mientras tanto `/privacidad` existe y responde 404 (T099)
 - [x] R6 resuelto: qué pasa con las reseñas de un docente reemplazado (se apagan con el par y reaparecen si vuelve a la oferta)
 - [x] R1 medido, y **disparado en US3**. No se disparó con US1 (`33.22 / 33.28 / 29.12 / 25.86` → `39.29 / 39.12 / 35.74 / 33.93`) ni con US2 (→ `40.65 / 40.58 / 38.29 / 40.89`): lo sostuvo la regla de no dejar lógica testeable en el JSX. En US3 no alcanzó —`ReviewsPanel` y `CommentList` sumaron ~90 líneas de `.tsx` y el piso quedó corto por 0,37 puntos en líneas—, así que se montó jsdom + `@testing-library/react`, con el entorno pedido por archivo para no pagarlo en los tests de node. El piso pasó a `50.39 / 50.03 / 48.84 / 51.53` y de paso quedaron cubiertos los huecos de montaje que US1 (T039) y US2 (`SessionMenu`, `ProfileForm`) habían dejado abiertos
-- [x] Reparto en PRs (tabla en [tasks.md](tasks.md#reparto-en-prs))
+- [x] R1 volvió a medirse en US4a y **no se disparó**: con `StarRating` y `ReviewForm` dentro, el piso subió de `58 / 58.15 / 54.57 / 55.75` a `60.2 / 59.92 / 56.75 / 57.92`. Los `.tsx` de reseñas quedaron en 96 % porque jsdom ya estaba montado desde US3 y `review-submit.ts` entró con sus propios tests
+- [x] Camino de escritura comprobado contra la base local, no solo con dobles: con el perfil vacío la puntuación entra (SC-003), ocho seguidas pasan y la novena se bloquea (SC-004, FR-030), el duplicado sale con `23505` (FR-027), la reseña sin declaración con `23514` (FR-021), el par apagado con el mensaje de la oferta (FR-028) y `published_at` sigue fuera del alcance de `authenticated`. El resumen refleja la publicación en la consulta siguiente (SC-005). Lo que **no** se probó de punta a punta es el handler HTTP con una sesión real: su traducción de errores está cubierta por tests con dobles
+- [x] Reparto en PRs (tabla en [tasks.md](tasks.md#reparto-en-prs)). **Revisado después de US3**: US4 se partió en US4a (puntuar y recomendar) y US4b (comentar), y US5 se metió entre las dos. El motivo está en [R4](#r4-arranque-en-frío) — la contribución barata primero — y sube el total a nueve PRs
 - [x] Esquema en producción. Las diez migraciones están aplicadas en `rlsswhwrigdgsboqakyw` (`supabase db push --linked`, nunca con `--include-seed`). La última en entrar fue la oferta del export vigente: `course_teachers` pasó de 619 a **757 pares vigentes, 0 apagados** —los 619 eran subconjunto, así que ningún par salió de la oferta—. Comprobado también después del push: **0 reseñas huérfanas**, o sea filas de `reviews` colgadas de un par con `is_current = false`. Hoy ese cero es trivial porque `reviews` está vacía; el chequeo que vale es el del próximo cambio de oferta, ya con reseñas publicadas, y es el que R6 describe. Hasta ese push los ~138 pares nuevos no tenían resumen y habrían sido irreseñables por FR-028

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useState } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 import { Course } from '@/types';
 import { DAY_LABELS } from '@/lib/schedule-utils';
 import { analyzeSection } from '@/lib/subsession-utils';
@@ -30,26 +30,31 @@ interface Props {
  * Un pedido por curso al desplegarlo, no uno por docente (D1). El estado es
  * local al componente: nada de esto toca la selección ni localStorage (FR-012).
  */
-function useCourseSummaries(courseCode: string): CourseSummaryState {
+function useCourseSummaries(courseCode: string): [CourseSummaryState, () => void] {
   const [state, setState] = useState<CourseSummaryState>(() =>
     isSupabaseConfigured() ? { kind: 'loading' } : { kind: 'disabled' }
   );
+  // Publicar invalida la caché del curso; esto es lo que vuelve a pedirlo. Sin
+  // los dos, el autor ve su propio promedio viejo hasta recargar (SC-005).
+  const [version, setVersion] = useState(0);
+  const refresh = useCallback(() => setVersion(v => v + 1), []);
 
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
 
     // No hace falta volver a 'loading' al cambiar de curso: CourseSearch monta un
     // SectionSelector por curso desplegado, así que courseCode no cambia en vida
-    // de la instancia y el estado inicial ya es el correcto.
+    // de la instancia y el estado inicial ya es el correcto. Al refrescar tampoco:
+    // el resumen viejo se queda hasta que llegue el nuevo, sin parpadeo.
     let active = true;
     fetchCourseSummaries(courseCode).then(
       summaries => { if (active) setState({ kind: 'ready', byPairKey: indexSummaries(summaries) }); },
       () => { if (active) setState({ kind: 'error' }); }
     );
     return () => { active = false; };
-  }, [courseCode]);
+  }, [courseCode, version]);
 
-  return state;
+  return [state, refresh];
 }
 
 interface TeacherRowProps {
@@ -57,6 +62,7 @@ interface TeacherRowProps {
   teacher: SectionTeacher;
   summaries: CourseSummaryState;
   withNames: boolean;
+  onPublished: () => void;
 }
 
 /**
@@ -64,7 +70,7 @@ interface TeacherRowProps {
  * fila y no del curso: dos docentes de la misma sección se comparan mejor con
  * los dos detalles abiertos.
  */
-function TeacherRow({ courseCode, teacher, summaries, withNames }: TeacherRowProps) {
+function TeacherRow({ courseCode, teacher, summaries, withNames, onPublished }: TeacherRowProps) {
   const [expanded, setExpanded] = useState(false);
   const panelId = useId();
 
@@ -81,7 +87,12 @@ function TeacherRow({ courseCode, teacher, summaries, withNames }: TeacherRowPro
       {state && <TeacherSummary teacherName={teacher.name} state={state} detail={detail} />}
       {expanded && teacher.email && (
         <div id={panelId}>
-          <ReviewsPanel courseCode={courseCode} teacherEmail={teacher.email} />
+          <ReviewsPanel
+            courseCode={courseCode}
+            teacherEmail={teacher.email}
+            teacherName={teacher.name}
+            onPublished={onPublished}
+          />
         </div>
       )}
     </div>
@@ -94,9 +105,10 @@ interface TeacherRowsProps {
   summaries: CourseSummaryState;
   /** La tarjeta de subsección ya imprime su docente; la sección no. */
   withNames?: boolean;
+  onPublished: () => void;
 }
 
-function TeacherRows({ courseCode, teachers, summaries, withNames = false }: TeacherRowsProps) {
+function TeacherRows({ courseCode, teachers, summaries, withNames = false, onPublished }: TeacherRowsProps) {
   if (teachers.length === 0) return null;
 
   // Sin Supabase la sección se ve igual que antes de las reseñas (T037).
@@ -118,6 +130,7 @@ function TeacherRows({ courseCode, teachers, summaries, withNames = false }: Tea
           teacher={teacher}
           summaries={summaries}
           withNames={withNames}
+          onPublished={onPublished}
         />
       ))}
     </div>
@@ -125,7 +138,7 @@ function TeacherRows({ courseCode, teachers, summaries, withNames = false }: Tea
 }
 
 export default function SectionSelector({ course, selectedSection, selectedSubsessionId, onSelectSection, onRemoveCourse, onHoverSection }: Props) {
-  const summaries = useCourseSummaries(course.code);
+  const [summaries, refreshSummaries] = useCourseSummaries(course.code);
 
   return (
     <div className="px-4 pb-3 space-y-2 bg-gray-50 dark:bg-gray-800/50 transition-colors duration-300">
@@ -190,6 +203,7 @@ export default function SectionSelector({ course, selectedSection, selectedSubse
               teachers={teachers}
               summaries={summaries}
               withNames
+              onPublished={refreshSummaries}
             />
 
             {/* Mandatory sessions as fixed tags */}
@@ -243,6 +257,7 @@ export default function SectionSelector({ course, selectedSection, selectedSubse
                           courseCode={course.code}
                           teachers={sectionTeachers(course.code, group.sessions)}
                           summaries={summaries}
+                          onPublished={refreshSummaries}
                         />
                         <div className="mt-1.5">
                           <button

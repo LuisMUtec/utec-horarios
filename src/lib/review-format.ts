@@ -68,6 +68,11 @@ function pluralize(count: number, singular: string, plural: string): string {
   return `${count} ${count === 1 ? singular : plural}`;
 }
 
+/** Cada opción del selector de estrellas se anuncia sola: el glifo no se lee. */
+export function formatStarOptionLabel(value: number): string {
+  return pluralize(value, 'estrella', 'estrellas');
+}
+
 /** FR-005. */
 export function formatRatingCount(value: number | string | null | undefined): string {
   return pluralize(readNumber(value) ?? 0, 'puntuación', 'puntuaciones');

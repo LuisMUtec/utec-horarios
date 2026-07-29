@@ -13,6 +13,7 @@ import {
   formatEditedMark,
   formatRatingCount,
   formatRatingLimitMessage,
+  formatStarOptionLabel,
   formatRecommendPercentage,
   formatSummaryAriaLabel,
   ratingFillPercentage,
@@ -106,6 +107,16 @@ describe('ratingFillPercentage', () => {
     expect(ratingFillPercentage('no es número')).toBe(0);
     expect(ratingFillPercentage(-1)).toBe(0);
     expect(ratingFillPercentage(9)).toBe(100);
+  });
+});
+
+describe('formatStarOptionLabel', () => {
+  it('usa el singular en la primera estrella', () => {
+    expect(formatStarOptionLabel(1)).toBe('1 estrella');
+  });
+
+  it.each([2, 3, 4, 5])('usa el plural en %i', (value) => {
+    expect(formatStarOptionLabel(value)).toBe(`${value} estrellas`);
   });
 });
 
