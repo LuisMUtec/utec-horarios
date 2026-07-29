@@ -31,7 +31,7 @@ Cierra el punto abierto *Reparto en PRs* del Progress Tracking del plan.
 | 4 | US3 (P3) | Lectura de comentarios | T056–T064 |
 | 5 | US4a (P4) | Puntuar y recomendar, sin comentario | T065–T071, T073–T077, T103 |
 | 6 | US5 (P5) | Editar y eliminar la reseña propia | T078–T085 |
-| 7 | US4b (P4) | Añadir el comentario al formulario | T104–T108 |
+| 7 | US4b (P4) | Añadir el comentario al formulario y volver a mostrarlos | T104–T109 |
 | 8 | US6 (P6) | Reportar y sanción visible | T086–T095 |
 | 9 | Polish | SC-009, purga documentada, cierre de la política | T096–T102 |
 
@@ -295,7 +295,11 @@ Tres cosas que el plan dejaba a medias y que estas tareas cierran. **Revísalas 
 
 - [x] T077 [US4a] Comprobar SC-003 y SC-004 de punta a punta: una puntuación con recomendación y sin comentario no pide perfil ni compromiso, y ocho reseñas seguidas —una carga académica completa— pasan sin toparse con el límite.
 
-- [x] T103 [US4a] Mostrar la reseña propia en **solo lectura** dentro del panel cuando ya existe, y responder el error de unicidad con ella en lugar de un fallo seco. Sin edición todavía (llega en US5), FR-027 dejaría al autor sin salida ni forma de saber qué publicó; esto es el mínimo que evita el callejón. El escenario 16 —*se le conduce a editar*— no queda cubierto hasta US5.
+- [x] T103 [US4a] Mostrar la reseña propia en **solo lectura** dentro del diálogo cuando ya existe, y responder el error de unicidad con ella en lugar de un fallo seco. Sin edición todavía (llega en US5), FR-027 dejaría al autor sin salida ni forma de saber qué publicó; esto es el mínimo que evita el callejón. El escenario 16 —*se le conduce a editar*— no queda cubierto hasta US5.
+
+- [x] T110 [US4a] Llevar el formulario y la invitación a iniciar sesión a un **diálogo central** (`src/components/Modal.tsx`), en vez de desplegarlos bajo el resumen: el desplegable de búsqueda tiene `max-h-96` y recortaba el formulario. El modal queda genérico porque US5 y US6 lo necesitan. La confirmación de FR-019 pasa al `ToastAlert` existente, que se cierra solo, y vive en la fila del docente porque el diálogo se cierra al publicar.
+
+- [x] T111 [US4a] Apagar la interfaz de comentarios con `COMMENTS_ENABLED` mientras no se puedan escribir (T109 la reenciende).
 
 **Checkpoint**: se puntúa y se recomienda. PR 5 listo.
 
@@ -306,6 +310,8 @@ Tres cosas que el plan dejaba a medias y que estas tareas cierran. **Revísalas 
 **Goal**: el formulario de US4a admite además un comentario opcional, con lo que eso arrastra: perfil completo y compromiso de respeto. Cubre los escenarios 11, 15, 19 y 26, FR-017, FR-022..FR-026 y el resto de FR-024.
 
 **Va después de US5** (editar y eliminar): la maquinaria de `PATCH` que US5 construye es la que necesita añadir, cambiar y borrar el texto de una reseña ya publicada, que son los escenarios 21 y 22.
+
+- [ ] T109 [US4b] Poner `COMMENTS_ENABLED` en `true` en `src/lib/review-format.ts` y devolver lo que apaga: el conteo de comentarios en el resumen y en su texto equivalente, y la lista de `CommentList` dentro del diálogo. US4a lo apagó porque los comentarios se leían pero no se escribían, así que los 757 pares mostraban `Aún no hay comentarios` sin forma de arreglarlo. Los tests de US3 que se ajustaron al apagado —`teacher-summary.test.tsx`, `review-format.test.ts`, `review-dialog.test.tsx`— vuelven con él.
 
 - [ ] T104 [P] [US4b] Ampliar `tests/review-submit.test.ts`: un comentario sin puntuación no se publica (FR-024); un comentario con perfil incompleto o sin compromiso no se publica y el error enumera lo que falta (escenario 15); más de 500 caracteres se rechaza (FR-022); un comentario de solo espacios se trata como reseña sin comentario.
 
