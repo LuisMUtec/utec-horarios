@@ -94,7 +94,7 @@
             "email": "jaguilar@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 2.01",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Mar",
             "startTime": "15:00",
@@ -1408,7 +1408,7 @@
             "email": "kgranda@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "10:00",
@@ -1783,7 +1783,7 @@
         "number": 2,
         "sessions": [
           {
-            "type": "TEORÍA 4",
+            "type": "TEORÍA 2",
             "modality": "Presencial",
             "day": "Mie",
             "startTime": "14:00",
@@ -1827,7 +1827,7 @@
             "email": "mlunga@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 3.01",
+            "type": "LABORATORIO 31",
             "modality": "Presencial",
             "day": "Vie",
             "startTime": "09:00",
@@ -3229,7 +3229,7 @@
             "email": "kdelgado@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "09:00",
@@ -3242,7 +3242,7 @@
             "email": "mriverac@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 12",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "07:00",
@@ -4093,7 +4093,7 @@
             "email": "aratti@utec.edu.pe"
           },
           {
-            "type": "TEORÍA 1.01",
+            "type": "TEORÍA 11",
             "modality": "Presencial",
             "day": "Mar",
             "startTime": "08:00",
@@ -4365,7 +4365,7 @@
             "email": "pcardenas@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "17:00",
@@ -4378,7 +4378,7 @@
             "email": "aariasm@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 12",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "16:00",
@@ -4391,7 +4391,7 @@
             "email": "jlezama@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 13",
+            "type": "TEORÍA VIRTUAL 13",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "15:00",
@@ -6461,7 +6461,7 @@
             "email": "preynoso@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 8.01",
+            "type": "LABORATORIO 81",
             "modality": "Presencial",
             "day": "Mie",
             "startTime": "18:00",
@@ -6492,7 +6492,7 @@
             "email": "jmendozam@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 9.01",
+            "type": "LABORATORIO 91",
             "modality": "Presencial",
             "day": "Mie",
             "startTime": "18:00",
@@ -6958,7 +6958,7 @@
             "email": "rperezc@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 12.01",
+            "type": "TEORÍA 1",
             "modality": "Presencial",
             "day": "Sab",
             "startTime": "11:00",
@@ -9315,7 +9315,7 @@
             "email": "ejuarez@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Lun",
             "startTime": "14:00",
@@ -9328,7 +9328,7 @@
             "email": "cbenedetty@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 116",
+            "type": "TEORÍA VIRTUAL 116",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "09:00",
@@ -9341,7 +9341,7 @@
             "email": "rgutierrezl@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 117",
+            "type": "TEORÍA VIRTUAL 117",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "08:00",
@@ -9354,7 +9354,7 @@
             "email": "mjara@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 118",
+            "type": "TEORÍA VIRTUAL 118",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "19:00",
@@ -9367,7 +9367,7 @@
             "email": "mfernandezch@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 119",
+            "type": "TEORÍA VIRTUAL 119",
             "modality": "Sincronico",
             "day": "Lun",
             "startTime": "14:00",
@@ -9380,7 +9380,7 @@
             "email": "hsuarezt@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 120",
+            "type": "TEORÍA VIRTUAL 120",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "07:00",
@@ -9393,7 +9393,7 @@
             "email": "cdiaze@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 158",
+            "type": "TEORÍA VIRTUAL 158",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "13:00",
@@ -9406,7 +9406,7 @@
             "email": "aostolaza@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 159",
+            "type": "TEORÍA VIRTUAL 159",
             "modality": "Sincronico",
             "day": "Lun",
             "startTime": "18:00",
@@ -9419,7 +9419,7 @@
             "email": "hpineda@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 160",
+            "type": "TEORÍA VIRTUAL 160",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "10:00",
@@ -9432,7 +9432,7 @@
             "email": "asanchezn@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 161",
+            "type": "TEORÍA VIRTUAL 161",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "16:00",
@@ -9445,7 +9445,7 @@
             "email": "evereau@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 162",
+            "type": "TEORÍA VIRTUAL 162",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "15:00",
@@ -10708,7 +10708,7 @@
             "email": "gcolchado@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 272",
+            "type": "LABORATORIO 272",
             "modality": "Presencial",
             "day": "Mar",
             "startTime": "20:00",
@@ -10721,8 +10721,8 @@
             "email": "gcolchado@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 272",
-            "modality": "Sincronico",
+            "type": "LABORATORIO 272",
+            "modality": "Presencial",
             "day": "Jue",
             "startTime": "20:00",
             "endTime": "22:00",
@@ -10752,8 +10752,8 @@
             "email": "omejia@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 373",
-            "modality": "Sincronico",
+            "type": "LABORATORIO 373",
+            "modality": "Presencial",
             "day": "Mar",
             "startTime": "18:00",
             "endTime": "20:00",
@@ -10765,7 +10765,7 @@
             "email": "omejia@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 373",
+            "type": "LABORATORIO 373",
             "modality": "Presencial",
             "day": "Jue",
             "startTime": "18:00",
@@ -11044,8 +11044,8 @@
             "email": "plovon@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 31",
-            "modality": "Sincronico",
+            "type": "LABORATORIO 31",
+            "modality": "Presencial",
             "day": "Mie",
             "startTime": "16:00",
             "endTime": "18:00",
@@ -11057,7 +11057,7 @@
             "email": "plovon@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 31",
+            "type": "LABORATORIO 31",
             "modality": "Presencial",
             "day": "Jue",
             "startTime": "20:00",
@@ -12086,7 +12086,7 @@
           {
             "type": "LABORATORIO 11",
             "modality": "Presencial",
-            "day": "Jue",
+            "day": "Vie",
             "startTime": "18:00",
             "endTime": "20:00",
             "frequency": "Semana General",
@@ -12099,11 +12099,11 @@
           {
             "type": "LABORATORIO 11",
             "modality": "Presencial",
-            "day": "Vie",
-            "startTime": "18:00",
-            "endTime": "20:00",
+            "day": "Sab",
+            "startTime": "13:00",
+            "endTime": "15:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA M803",
+            "location": "UTEC-BA M801",
             "capacity": 45,
             "enrolled": 0,
             "professor": "Arias Obregon, Gabriel Andres",
@@ -12541,7 +12541,7 @@
             "email": "rmora@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 129",
+            "type": "TEORÍA VIRTUAL 129",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12554,7 +12554,7 @@
             "email": "ecayllahua@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 130",
+            "type": "TEORÍA VIRTUAL 130",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12567,7 +12567,7 @@
             "email": "vmartinez@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 131",
+            "type": "TEORÍA VIRTUAL 131",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12580,7 +12580,7 @@
             "email": "ctenorio@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 132",
+            "type": "TEORÍA VIRTUAL 132",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12593,7 +12593,7 @@
             "email": "vflores@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 133",
+            "type": "TEORÍA VIRTUAL 133",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12606,7 +12606,7 @@
             "email": "jfiestas@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 134",
+            "type": "TEORÍA VIRTUAL 134",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12619,7 +12619,7 @@
             "email": "ebiagioli@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 135",
+            "type": "TEORÍA VIRTUAL 135",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12632,7 +12632,7 @@
             "email": "bojeda@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 136",
+            "type": "TEORÍA VIRTUAL 136",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12645,7 +12645,7 @@
             "email": "clopezd@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 137",
+            "type": "TEORÍA VIRTUAL 137",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12658,7 +12658,7 @@
             "email": "ladanaque@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 138",
+            "type": "TEORÍA VIRTUAL 138",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12671,7 +12671,7 @@
             "email": "jgonzalez@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 139",
+            "type": "TEORÍA VIRTUAL 139",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12684,7 +12684,7 @@
             "email": "avillegass@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 140",
+            "type": "TEORÍA VIRTUAL 140",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12697,7 +12697,7 @@
             "email": "jchaveza@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 141",
+            "type": "TEORÍA VIRTUAL 141",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12710,7 +12710,7 @@
             "email": "lromeroc@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 141.01",
+            "type": "TEORÍA VIRTUAL 142",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12723,7 +12723,7 @@
             "email": "wnina@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 141.02",
+            "type": "TEORÍA VIRTUAL 143",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12736,7 +12736,7 @@
             "email": "tchambilla@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 141.03",
+            "type": "TEORÍA VIRTUAL 144",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "13:00",
@@ -12869,8 +12869,8 @@
             "location": "UTEC-BA L210",
             "capacity": 30,
             "enrolled": 0,
-            "professor": "Chavez Alvarez, Jose Armando",
-            "email": "jchaveza@utec.edu.pe"
+            "professor": "Mora Cloque, Rensso Victor Hugo",
+            "email": "rmora@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -13145,11 +13145,11 @@
           {
             "type": "LABORATORIO 11",
             "modality": "Presencial",
-            "day": "Mie",
+            "day": "Jue",
             "startTime": "18:00",
             "endTime": "20:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA M603",
+            "location": "UTEC-BA L418",
             "capacity": 24,
             "enrolled": 0,
             "professor": "Pazos Ortiz, Jose Carlos",
@@ -14836,10 +14836,10 @@
             "type": "TEORÍA 5",
             "modality": "Presencial",
             "day": "Mar",
-            "startTime": "07:00",
-            "endTime": "09:00",
+            "startTime": "15:00",
+            "endTime": "17:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA A501",
+            "location": "UTEC-BA A803",
             "capacity": 25,
             "enrolled": 0,
             "professor": "Mas Huaman, Ronald Jesus",
@@ -15027,27 +15027,27 @@
             "email": "jugarte@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 2.01",
+            "type": "LABORATORIO 11",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "07:00",
             "endTime": "09:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA Virtual 103",
-            "capacity": 15,
+            "location": "UTEC-BA Virtual 108",
+            "capacity": 14,
             "enrolled": 0,
             "professor": "Ugarte Chamorro, Jose Luis",
             "email": "jugarte@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 2.02",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Vie",
             "startTime": "18:00",
             "endTime": "20:00",
             "frequency": "Semana General",
             "location": "UTEC-BA M801",
-            "capacity": 15,
+            "capacity": 14,
             "enrolled": 0,
             "professor": "Ugarte Chamorro, Jose Luis",
             "email": "jugarte@utec.edu.pe"
@@ -15431,15 +15431,15 @@
           {
             "type": "TEORÍA VIRTUAL 1",
             "modality": "Sincronico",
-            "day": "Lun",
+            "day": "Mar",
             "startTime": "07:00",
             "endTime": "09:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA Virtual",
+            "location": "UTEC-BA Virtual 105",
             "capacity": 15,
             "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "professor": "Tupac Valdivia, Yvan Jesus",
+            "email": "ytupac@utec.edu.pe"
           },
           {
             "type": "LABORATORIO VIRTUAL 11",
@@ -15451,8 +15451,8 @@
             "location": "UTEC-BA Virtual",
             "capacity": 15,
             "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "professor": "Tupac Valdivia, Yvan Jesus",
+            "email": "ytupac@utec.edu.pe"
           },
           {
             "type": "LABORATORIO VIRTUAL 11",
@@ -15464,8 +15464,8 @@
             "location": "UTEC-BA Virtual",
             "capacity": 15,
             "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "professor": "Tupac Valdivia, Yvan Jesus",
+            "email": "ytupac@utec.edu.pe"
           }
         ]
       }
@@ -15542,7 +15542,7 @@
             "email": "rmora@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "14:00",
@@ -15555,7 +15555,7 @@
             "email": "rmora@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 12",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "14:00",
@@ -15568,7 +15568,7 @@
             "email": "rmora@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 13",
+            "type": "TEORÍA VIRTUAL 13",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "14:00",
@@ -15581,7 +15581,7 @@
             "email": "rmora@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 13.01",
+            "type": "TEORÍA VIRTUAL 14",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "14:00",
@@ -15594,7 +15594,7 @@
             "email": "jgalva@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 13.02",
+            "type": "TEORÍA VIRTUAL 15",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "14:00",
@@ -17021,7 +17021,7 @@
             "email": "gpatino@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 31.01",
+            "type": "LABORATORIO 32",
             "modality": "Presencial",
             "day": "Jue",
             "startTime": "07:00",
@@ -19217,7 +19217,7 @@
             "email": "paraujo@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "14:00",
@@ -19230,7 +19230,7 @@
             "email": "rvera@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 12",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "16:00",
@@ -19243,7 +19243,7 @@
             "email": "eramirez@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 13",
+            "type": "TEORÍA VIRTUAL 13",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "15:00",
@@ -19674,7 +19674,7 @@
             "email": "kneira@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO 1.01",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Jue",
             "startTime": "09:00",
@@ -19821,7 +19821,7 @@
           },
           {
             "type": "TEORÍA 21",
-            "modality": "Sincronico",
+            "modality": "Presencial",
             "day": "Mar",
             "startTime": "12:00",
             "endTime": "14:00",
@@ -24764,7 +24764,7 @@
             "email": "jdelapuente@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Lun",
             "startTime": "17:00",
@@ -24777,7 +24777,7 @@
             "email": "jdelapuente@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 121",
+            "type": "TEORÍA VIRTUAL 121",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "16:00",
@@ -24790,7 +24790,7 @@
             "email": ""
           },
           {
-            "type": "LABORATORIO VIRTUAL 122",
+            "type": "TEORÍA VIRTUAL 122",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "19:00",
@@ -24803,7 +24803,7 @@
             "email": "jinga@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 124",
+            "type": "TEORÍA VIRTUAL 124",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "08:00",
@@ -24816,7 +24816,7 @@
             "email": "gpella@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 125",
+            "type": "TEORÍA VIRTUAL 125",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "08:00",
@@ -24829,7 +24829,7 @@
             "email": ""
           },
           {
-            "type": "LABORATORIO VIRTUAL 126",
+            "type": "TEORÍA VIRTUAL 126",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "17:00",
@@ -24842,7 +24842,7 @@
             "email": "jugarte@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 127",
+            "type": "TEORÍA VIRTUAL 127",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "18:00",
@@ -24855,7 +24855,7 @@
             "email": "jinga@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 128",
+            "type": "TEORÍA VIRTUAL 128",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "16:00",
@@ -24868,7 +24868,7 @@
             "email": "lvolodina@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 142",
+            "type": "TEORÍA VIRTUAL 142",
             "modality": "Sincronico",
             "day": "Sab",
             "startTime": "08:00",
@@ -26381,7 +26381,7 @@
         "number": 1,
         "sessions": [
           {
-            "type": "TEORÍA VIRTUAL 1",
+            "type": "TEORÍA 1",
             "modality": "Presencial",
             "day": "Lun",
             "startTime": "17:00",
@@ -26431,7 +26431,7 @@
         "number": 1,
         "sessions": [
           {
-            "type": "TEORÍA VIRTUAL 1",
+            "type": "TEORÍA 1",
             "modality": "Presencial",
             "day": "Lun",
             "startTime": "19:00",
@@ -26440,21 +26440,21 @@
             "location": "UTEC-BA A906",
             "capacity": 20,
             "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "professor": "Celis Osores, Karla Soledad",
+            "email": "kcelis@utec.edu.pe"
           },
           {
             "type": "LABORATORIO VIRTUAL 155",
             "modality": "Sincronico",
-            "day": "Mar",
-            "startTime": "20:00",
-            "endTime": "21:00",
+            "day": "Mie",
+            "startTime": "19:00",
+            "endTime": "20:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA Virtual",
+            "location": "UTEC-BA Virtual 10",
             "capacity": 20,
             "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "professor": "Celis Osores, Karla Soledad",
+            "email": "kcelis@utec.edu.pe"
           }
         ]
       }
@@ -26471,10 +26471,10 @@
             "type": "TEORÍA VIRTUAL 1",
             "modality": "Sincronico",
             "day": "Mie",
-            "startTime": "07:00",
-            "endTime": "09:00",
+            "startTime": "09:00",
+            "endTime": "11:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA Virtual",
+            "location": "UTEC-BA Virtual 108",
             "capacity": 15,
             "enrolled": 0,
             "professor": "",
@@ -26584,10 +26584,10 @@
             "type": "LABORATORIO VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Vie",
-            "startTime": "19:00",
-            "endTime": "21:00",
+            "startTime": "20:00",
+            "endTime": "22:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA Virtual",
+            "location": "UTEC-BA Virtual 10",
             "capacity": 15,
             "enrolled": 0,
             "professor": "JULCA MEJIA, WILSON",
@@ -26614,8 +26614,8 @@
             "location": "UTEC-BA A602",
             "capacity": 15,
             "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "professor": "RUIZ KUAN, KAT LIM",
+            "email": "kruiz@utec.edu.pe"
           },
           {
             "type": "LABORATORIO VIRTUAL 154",
@@ -26627,8 +26627,8 @@
             "location": "UTEC-BA Virtual",
             "capacity": 15,
             "enrolled": 0,
-            "professor": "",
-            "email": ""
+            "professor": "RUIZ KUAN, KAT LIM",
+            "email": "kruiz@utec.edu.pe"
           }
         ]
       }
@@ -26705,11 +26705,11 @@
             "email": "ctenorio@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
-            "day": "Jue",
-            "startTime": "15:00",
-            "endTime": "17:00",
+            "day": "Vie",
+            "startTime": "09:00",
+            "endTime": "11:00",
             "frequency": "Semana General",
             "location": "UTEC-BA M601",
             "capacity": 15,
@@ -26742,7 +26742,7 @@
             "email": "acardenasm@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Mie",
             "startTime": "17:00",
@@ -26755,7 +26755,7 @@
             "email": "acardenasm@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "LABORATORIO 11",
             "modality": "Presencial",
             "day": "Jue",
             "startTime": "15:00",
@@ -26788,8 +26788,8 @@
             "location": "UTEC-BA A801",
             "capacity": 33,
             "enrolled": 29,
-            "professor": "",
-            "email": ""
+            "professor": "TENORIO GONZALES, CANDY VERONICA",
+            "email": "ctenorio@utec.edu.pe"
           },
           {
             "type": "LABORATORIO 11",
@@ -26801,8 +26801,8 @@
             "location": "UTEC-BA M803",
             "capacity": 33,
             "enrolled": 29,
-            "professor": "",
-            "email": ""
+            "professor": "TENORIO GONZALES, CANDY VERONICA",
+            "email": "ctenorio@utec.edu.pe"
           }
         ]
       }
@@ -27729,7 +27729,7 @@
             "email": "paraujo@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "16:00",
@@ -27742,7 +27742,7 @@
             "email": "vorihuela@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 12",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "16:00",
@@ -27755,7 +27755,7 @@
             "email": "halvarez@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 13",
+            "type": "TEORÍA VIRTUAL 13",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "07:00",
@@ -27768,7 +27768,7 @@
             "email": "obejarano@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 14",
+            "type": "TEORÍA VIRTUAL 14",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "16:00",
@@ -27781,7 +27781,7 @@
             "email": ""
           },
           {
-            "type": "LABORATORIO VIRTUAL 146",
+            "type": "TEORÍA VIRTUAL 146",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "16:00",
@@ -28651,9 +28651,9 @@
           {
             "type": "LABORATORIO 12",
             "modality": "Presencial",
-            "day": "Mie",
-            "startTime": "18:00",
-            "endTime": "22:00",
+            "day": "Sab",
+            "startTime": "08:00",
+            "endTime": "12:00",
             "frequency": "Semana B",
             "location": "UTEC-BA L201",
             "capacity": 20,
@@ -28840,10 +28840,10 @@
             "type": "TEORÍA 1",
             "modality": "Presencial",
             "day": "Vie",
-            "startTime": "07:00",
-            "endTime": "09:00",
+            "startTime": "11:00",
+            "endTime": "13:00",
             "frequency": "Semana General",
-            "location": "UTEC-BA M603",
+            "location": "UTEC-BA M601",
             "capacity": 30,
             "enrolled": 0,
             "professor": "Flores Alvarez, Pedro alonso",
@@ -29240,7 +29240,7 @@
             "email": "lvolodina@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "19:00",
@@ -29253,7 +29253,7 @@
             "email": "dinga@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "18:00",
@@ -29266,7 +29266,7 @@
             "email": "dinga@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 12",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "10:00",
@@ -29279,7 +29279,7 @@
             "email": "rcabrerad@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 13",
+            "type": "TEORÍA VIRTUAL 13",
             "modality": "Sincronico",
             "day": "Lun",
             "startTime": "10:00",
@@ -29292,7 +29292,7 @@
             "email": "wbarrutia@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 13",
+            "type": "TEORÍA VIRTUAL 13",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "10:00",
@@ -29305,7 +29305,7 @@
             "email": "wbarrutia@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 14",
+            "type": "TEORÍA VIRTUAL 14",
             "modality": "Sincronico",
             "day": "Mar",
             "startTime": "15:00",
@@ -29318,7 +29318,7 @@
             "email": "jtarrillo@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 14",
+            "type": "TEORÍA VIRTUAL 14",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "17:00",
@@ -29331,7 +29331,7 @@
             "email": "jtarrillo@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 15",
+            "type": "TEORÍA VIRTUAL 15",
             "modality": "Sincronico",
             "day": "Jue",
             "startTime": "08:00",
@@ -29355,7 +29355,7 @@
         "number": 1,
         "sessions": [
           {
-            "type": "TEORÍA VIRTUAL 1",
+            "type": "TEORÍA 1",
             "modality": "Presencial",
             "day": "Lun",
             "startTime": "15:00",
@@ -29368,7 +29368,7 @@
             "email": "oramos@utec.edu.pe"
           },
           {
-            "type": "TEORÍA VIRTUAL 1",
+            "type": "TEORÍA 1",
             "modality": "Presencial",
             "day": "Mie",
             "startTime": "15:00",
@@ -29787,7 +29787,7 @@
         "number": 1,
         "sessions": [
           {
-            "type": "TEORÍA VIRTUAL 1",
+            "type": "TEORÍA 1",
             "modality": "Presencial",
             "day": "Mar",
             "startTime": "14:00",
@@ -29805,7 +29805,7 @@
         "number": 2,
         "sessions": [
           {
-            "type": "TEORÍA VIRTUAL 2",
+            "type": "TEORÍA 2",
             "modality": "Presencial",
             "day": "Mar",
             "startTime": "14:00",
@@ -29913,7 +29913,7 @@
         "number": 8,
         "sessions": [
           {
-            "type": "TEORÍA VIRTUAL 8",
+            "type": "TEORÍA 8",
             "modality": "Presencial",
             "day": "Jue",
             "startTime": "09:00",
@@ -29931,7 +29931,7 @@
         "number": 9,
         "sessions": [
           {
-            "type": "TEORÍA VIRTUAL 9",
+            "type": "TEORÍA 9",
             "modality": "Presencial",
             "day": "Jue",
             "startTime": "15:00",
@@ -31394,7 +31394,7 @@
             "email": "etejada@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 11",
+            "type": "TEORÍA VIRTUAL 11",
             "modality": "Sincronico",
             "day": "Vie",
             "startTime": "08:00",
@@ -31407,7 +31407,7 @@
             "email": "mcarranza@utec.edu.pe"
           },
           {
-            "type": "LABORATORIO VIRTUAL 12",
+            "type": "TEORÍA VIRTUAL 12",
             "modality": "Sincronico",
             "day": "Mie",
             "startTime": "16:00",

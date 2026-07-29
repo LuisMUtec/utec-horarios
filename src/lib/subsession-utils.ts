@@ -94,6 +94,25 @@ function computeSectionAnalysis(section: Section): SectionAnalysis {
       for (const p of group.sessions) {
         mandatorySessions.push(p.session);
       }
+    } else if (new Set(group.sessions.map(p => p.session.modality)).size > 1) {
+      // Modalidad mixta en un mismo "Sesión Grupo": la oferta le puso la misma
+      // etiqueta a dos alternativas distintas (p. ej. un lab virtual y uno
+      // presencial), no a un mismo grupo que se reúne dos veces por semana.
+      // Cada sesión se ofrece como opción propia para no forzar ambas.
+      group.sessions.forEach((p, i) => {
+        const session = p.session;
+        subsessionGroups.push({
+          id: `${group.base}-${group.num}-${i}`,
+          label: `${group.base} ${group.num}`,
+          sessions: [session],
+          capacity: session.capacity,
+          enrolled: session.enrolled,
+          professor: session.professor,
+          day: session.day,
+          startTime: session.startTime,
+          endTime: session.endTime,
+        });
+      });
     } else {
       // Subsession: lower capacity groups are selectable
       const first = group.sessions[0].session;

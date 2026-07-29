@@ -87,8 +87,8 @@ describe('la oferta vigente, ya normalizada', () => {
     expect(sessions).toHaveLength(1904);
   });
 
-  it('deja 199 sesiones sin docente evaluable', () => {
-    expect(sessions.length - withTeacher.length).toBe(199);
+  it('deja 190 sesiones sin docente evaluable', () => {
+    expect(sessions.length - withTeacher.length).toBe(190);
   });
 
   it('no descarta ningún docente al descartar esas sesiones', () => {
@@ -101,15 +101,15 @@ describe('la oferta vigente, ya normalizada', () => {
     expect(lost).toHaveLength(0);
   });
 
-  it('identifica 372 docentes distintos', () => {
-    expect(new Set(withTeacher.map((entry) => entry.email)).size).toBe(372);
+  it('identifica 375 docentes distintos', () => {
+    expect(new Set(withTeacher.map((entry) => entry.email)).size).toBe(375);
   });
 
-  it('produce 757 pares docente–curso reseñables', () => {
+  it('produce 761 pares docente–curso reseñables', () => {
     const pairs = new Set(
       withTeacher.map((entry) => teacherPairKey(entry.course.code, entry.email!))
     );
-    expect(pairs.size).toBe(757);
+    expect(pairs.size).toBe(761);
   });
 
   it('no necesita rescatar ningún correo: la fuente ya viene limpia', () => {

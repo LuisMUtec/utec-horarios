@@ -78,6 +78,26 @@ describe('analyzeSection — clasificación', () => {
     expect(analysis.mandatorySessions).toHaveLength(2);
   });
 
+  it('separa un mismo "Sesión Grupo" en alternativas cuando la modalidad difiere', () => {
+    // Caso real: DS3012 sección 1, oferta 2026-2. La UTEC le puso "LABORATORIO
+    // 11" a un lab virtual (miércoles) y a uno presencial (viernes) que antes
+    // traían sufijos distintos (2.01/2.02). Sin este split, ambos se fusionan
+    // en un solo grupo y el alumno pierde la opción de elegir uno solo.
+    const section = {
+      number: 1,
+      sessions: [
+        session('TEORÍA VIRTUAL 1', 15),
+        session('LABORATORIO 11', 14, { day: 'Mie', modality: 'Sincronico' }),
+        session('LABORATORIO 11', 14, { day: 'Vie', modality: 'Presencial' }),
+      ],
+    } as Section;
+    const analysis = analyzeSection(section);
+    expect(analysis.subsessionGroups).toHaveLength(2);
+    expect(analysis.subsessionGroups.map(g => g.sessions.length)).toEqual([1, 1]);
+    expect(new Set(analysis.subsessionGroups.map(g => g.id)).size).toBe(2);
+    expect(analysis.subsessionGroups.every(g => g.label === 'LABORATORIO 11')).toBe(true);
+  });
+
   it('mantiene separadas las subsesiones con sufijo decimal', () => {
     // "TEORÍA 23.01" y "TEORÍA 23.02" son opciones distintas, no la misma.
     const section = {
