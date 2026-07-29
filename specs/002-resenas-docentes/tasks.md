@@ -186,37 +186,37 @@ Tres cosas que el plan dejaba a medias y que estas tareas cierran. **Revísalas 
 
 ### Tests para US2
 
-- [ ] T041 [P] [US2] Crear `tests/careers.test.ts`: el catálogo tiene 16 entradas, los slugs cumplen `^[a-z0-9-]+$` y coinciden uno a uno con la tabla de [carreras-utec.md](carreras-utec.md). Es el test que detecta que la migración T005 y el documento se separaron.
+- [x] T041 [P] [US2] Crear `tests/careers.test.ts`: el catálogo tiene 16 entradas, los slugs cumplen `^[a-z0-9-]+$` y coinciden uno a uno con la tabla de [carreras-utec.md](carreras-utec.md). Es el test que detecta que la migración T005 y el documento se separaron.
 
-- [ ] T042 [P] [US2] Crear `tests/profile-validation.test.ts`: el ciclo se acepta entre 1 y 10 y se rechaza fuera, con no-enteros y con vacío; la carrera se acepta solo si es un slug del catálogo.
+- [x] T042 [P] [US2] Crear `tests/profile-validation.test.ts`: el ciclo se acepta entre 1 y 10 y se rechaza fuera, con no-enteros y con vacío; la carrera se acepta solo si es un slug del catálogo.
 
 ### Implementación de US2
 
-- [ ] T043 [P] [US2] Crear `src/lib/careers.ts` con los tipos del catálogo y el agrupado por facultad para ordenar el selector. La facultad agrupa visualmente y **no** se guarda junto a una reseña.
+- [x] T043 [P] [US2] Crear `src/lib/careers.ts` con los tipos del catálogo y el agrupado por facultad para ordenar el selector. La facultad agrupa visualmente y **no** se guarda junto a una reseña.
 
-- [ ] T044 [P] [US2] Crear `src/lib/profile.ts` con la validación de carrera y ciclo, compartida por el formulario y el route handler. La del handler es la que cuenta; la del formulario es para no hacer viajar un error evitable.
+- [x] T044 [P] [US2] Crear `src/lib/profile.ts` con la validación de carrera y ciclo, compartida por el formulario y el route handler. La del handler es la que cuenta; la del formulario es para no hacer viajar un error evitable.
 
-- [ ] T045 [US2] Crear `src/app/api/careers/route.ts`: devuelve el catálogo desde `careers` filtrando `is_active`. Sin sesión requerida.
+- [x] T045 [US2] Crear `src/app/api/careers/route.ts`: devuelve el catálogo desde `careers` filtrando `is_active`. Sin sesión requerida.
 
-- [ ] T046 [US2] Crear `src/app/api/profile/route.ts` con `GET` y `PATCH`. El `GET` devuelve carrera, ciclo y **el estado de sanción**: si `banned_at` no es nulo, `{ banned: true, reason }`. Es lo que le permite a la UI mostrar el motivo de FR-057 sin tener que provocar un error. El `PATCH` valida contra `src/lib/profile.ts` y responde errores en español.
+- [x] T046 [US2] Crear `src/app/api/profile/route.ts` con `GET` y `PATCH`. El `GET` devuelve carrera, ciclo y **el estado de sanción**: si `banned_at` no es nulo, `{ banned: true, reason }`. Es lo que le permite a la UI mostrar el motivo de FR-057 sin tener que provocar un error. El `PATCH` valida contra `src/lib/profile.ts` y responde errores en español.
 
-- [ ] T047 [US2] Crear `src/lib/api-guards.ts` con el guard compartido de los handlers restringidos: resuelve la sesión con `getClaims()` —nunca `getSession()`—, consulta el perfil y corta con `403` y `{ banned: true, reason }` si hay sanción. Un rechazo de RLS es un fallo genérico y no alcanza para FR-057. Todos los handlers de las fases 5, 6 y 7 lo usan.
+- [x] T047 [US2] Crear `src/lib/api-guards.ts` con el guard compartido de los handlers restringidos: resuelve la sesión con `getClaims()` —nunca `getSession()`—, consulta el perfil y corta con `403` y `{ banned: true, reason }` si hay sanción. Un rechazo de RLS es un fallo genérico y no alcanza para FR-057. Todos los handlers de las fases 5, 6 y 7 lo usan.
 
-- [ ] T048 [P] [US2] Crear `tests/api-guards.test.ts`: sin sesión devuelve 401, con sesión y sin sanción deja pasar, con sanción devuelve 403 con el motivo en el cuerpo.
+- [x] T048 [P] [US2] Crear `tests/api-guards.test.ts`: sin sesión devuelve 401, con sesión y sin sanción deja pasar, con sanción devuelve 403 con el motivo en el cuerpo.
 
-- [ ] T049 [P] [US2] Crear `src/components/SessionMenu.tsx`: iniciar sesión con Google cuando no hay sesión, y la cuenta activa con acceso a `/perfil` y cerrar sesión cuando la hay. Cuando faltan las variables de entorno de Supabase no se renderiza (T037). Tailwind con `dark:`.
+- [x] T049 [P] [US2] Crear `src/components/SessionMenu.tsx`: iniciar sesión con Google cuando no hay sesión, y la cuenta activa con acceso a `/perfil` y cerrar sesión cuando la hay. Cuando faltan las variables de entorno de Supabase no se renderiza (T037). Tailwind con `dark:`.
 
-- [ ] T050 [US2] Montar `SessionMenu` en `src/app/layout.tsx` o en la cabecera existente, que es lo que hace alcanzable el login por primera vez.
+- [x] T050 [US2] Montar `SessionMenu` en `src/app/layout.tsx` o en la cabecera existente, que es lo que hace alcanzable el login por primera vez.
 
-- [ ] T051 [P] [US2] Crear `src/components/ProfileForm.tsx`: selector de carrera agrupado por facultad y selector de ciclo 1–10, ambos opcionales para leer y obligatorios solo antes de comentar (FR-016, edge case *Perfil incompleto*).
+- [x] T051 [P] [US2] Crear `src/components/ProfileForm.tsx`: selector de carrera agrupado por facultad y selector de ciclo 1–10, ambos opcionales para leer y obligatorios solo antes de comentar (FR-016, edge case *Perfil incompleto*).
 
-- [ ] T052 [US2] Crear `src/app/perfil/page.tsx` que monta `ProfileForm` y, si la cuenta está sancionada, muestra el mensaje de FR-057 con el motivo en lugar del formulario.
+- [x] T052 [US2] Crear `src/app/perfil/page.tsx` que monta `ProfileForm` y, si la cuenta está sancionada, muestra el mensaje de FR-057 con el motivo en lugar del formulario.
 
-- [ ] T053 [P] [US2] Crear `src/app/normas/page.tsx` con el contenido de [normas-comunidad.md](normas-comunidad.md).
+- [x] T053 [P] [US2] Crear `src/app/normas/page.tsx` con el contenido de [normas-comunidad.md](normas-comunidad.md).
 
-- [ ] T054 [P] [US2] Crear `src/app/privacidad/page.tsx` con el contenido de [politica-privacidad.md](politica-privacidad.md). **No publicar** hasta que se cumplan las tres condiciones del propio documento (T099).
+- [x] T054 [P] [US2] Crear `src/app/privacidad/page.tsx` con el contenido de [politica-privacidad.md](politica-privacidad.md). **No publicar** hasta que se cumplan las tres condiciones del propio documento (T099).
 
-- [ ] T055 [US2] Verificar el escenario 9 de punta a punta: una cuenta que no es `@utec.edu.pe` es rechazada por el hook y `/auth/error` explica que la funcionalidad está reservada para estudiantes UTEC. Solo hay que comprobarlo; el hook ya existe.
+- [x] T055 [US2] Verificar el escenario 9 de punta a punta: una cuenta que no es `@utec.edu.pe` es rechazada por el hook y `/auth/error` explica que la funcionalidad está reservada para estudiantes UTEC. Solo hay que comprobarlo; el hook ya existe.
 
 **Checkpoint**: hay sesión, perfil y documentos públicos. PR 3 listo.
 
@@ -364,7 +364,7 @@ Tres cosas que el plan dejaba a medias y que estas tareas cierran. **Revísalas 
 
 - [ ] T097 [P] Añadir a `docs/moderacion.md` la consulta de SC-009 ya verificada contra datos reales: pares con al menos una puntuación y estudiantes únicos que contribuyeron. Es lo que permite saber si la feature sigue en arranque en frío ([R4](plan.md#r4-arranque-en-frío)).
 
-- [ ] T098 [P] Comprobar en producción que `pg_cron` está habilitado en el proyecto `rlsswhwrigdgsboqakyw` y que el job de purga quedó programado. En local basta el reset; en producción es una dependencia externa ([R5](plan.md#r5-dependencias-externas-sin-cerrar)).
+- [x] T098 [P] Comprobar en producción que `pg_cron` está habilitado en el proyecto `rlsswhwrigdgsboqakyw` y que el job de purga quedó programado. **Hecho**: `cron.job` tiene `purgar-resenas-eliminadas`, `17 4 * * *`, `select private.purge_expired_reviews();`, `active = true`. En local basta el reset; en producción es una dependencia externa ([R5](plan.md#r5-dependencias-externas-sin-cerrar)).
 
 - [ ] T099 Cerrar las tres condiciones de publicación de [politica-privacidad.md](politica-privacidad.md) —incluida la casilla de que `privacidad@mail.luismaquera.dev` recibe correo— y quitarle el estado de borrador. Recién entonces enlazar `/privacidad` desde el formulario.
 
