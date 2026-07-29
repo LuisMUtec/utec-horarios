@@ -312,8 +312,11 @@ Tres cosas que esta vista resuelve de una vez:
   `anon` obtiene agregados sin que exista ninguna política de select sobre `reviews` para
   `anon`. No hay fila que filtrar porque no hay fila que devolver.
 - **SC-005 (sin ventana de datos viejos)**: es una vista normal, no materializada. Un
-  `insert` se ve en la consulta siguiente. Con 757 pares y miles de filas el agregado es
-  irrelevante en costo; materializarla solo agregaría el desfase que SC-005 prohíbe.
+  `insert` se ve en la consulta siguiente. El costo del agregado sobre 757 pares **no está
+  medido**: hoy `reviews` está vacía y no hay volumen que medir. La decisión de no
+  materializarla no se apoya en ese costo, sino en que el desfase que introduciría es
+  justo lo que SC-005 prohíbe. Queda pendiente un `EXPLAIN ANALYZE` cuando haya filas
+  reales; si ahí el agregado resultara caro, la salida es un índice, no materializar.
 - **FR-003, FR-005, FR-006, FR-058, FR-059, FR-060**: promedio con un decimal, conteo de
   puntuaciones sobre todas las activas, conteo de comentarios solo sobre las que tienen
   texto (`count(comment)` ignora nulos) y porcentaje entero de recomendación. Las seis
@@ -889,4 +892,4 @@ parseado.
 - [x] R6 resuelto: qué pasa con las reseñas de un docente reemplazado (se apagan con el par y reaparecen si vuelve a la oferta)
 - [x] R1 medido con el primer componente: **no se disparó**. Con los cuatro `.tsx` de US1 dentro, el piso subió de `33.22 / 33.28 / 29.12 / 25.86` a `39.29 / 39.12 / 35.74 / 33.93`. Lo que lo sostiene es la regla de no dejar lógica testeable en el JSX: `src/lib/` quedó en 70.64 % y los componentes en 0 %, así que cada `.tsx` nuevo llega acompañado de un módulo que compensa de sobra. jsdom sigue sin hacer falta. Con US2 el piso volvió a subir, a `40.65 / 40.58 / 38.29 / 40.89`, y eso que entraron cuatro páginas y dos componentes más: `src/lib/` está en 77.36 %
 - [x] Reparto en PRs (tabla en [tasks.md](tasks.md#reparto-en-prs))
-- [x] Esquema en producción. Las diez migraciones están aplicadas en `rlsswhwrigdgsboqakyw` (`supabase db push --linked`, nunca con `--include-seed`). La última en entrar fue la oferta del export vigente: `course_teachers` pasó de 619 a **757 pares vigentes, 0 apagados** —los 619 eran subconjunto, así que ningún par salió de la oferta—. Hasta ese push los ~138 pares nuevos no tenían resumen y habrían sido irreseñables por FR-028
+- [x] Esquema en producción. Las diez migraciones están aplicadas en `rlsswhwrigdgsboqakyw` (`supabase db push --linked`, nunca con `--include-seed`). La última en entrar fue la oferta del export vigente: `course_teachers` pasó de 619 a **757 pares vigentes, 0 apagados** —los 619 eran subconjunto, así que ningún par salió de la oferta—. Comprobado también después del push: **0 reseñas huérfanas**, o sea filas de `reviews` colgadas de un par con `is_current = false`. Hoy ese cero es trivial porque `reviews` está vacía; el chequeo que vale es el del próximo cambio de oferta, ya con reseñas publicadas, y es el que R6 describe. Hasta ese push los ~138 pares nuevos no tenían resumen y habrían sido irreseñables por FR-028
