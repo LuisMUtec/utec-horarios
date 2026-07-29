@@ -58,6 +58,18 @@ describe('identifyStudent', () => {
     expect(identify).toHaveBeenCalledTimes(1);
   });
 
+  // El correo es una propiedad de la persona, no la clave: si cambia hay que
+  // reenviarlo aunque la cuenta sea la misma.
+  it('reenvía el identify cuando cambia el correo de la misma cuenta', async () => {
+    const { identifyStudent } = await cargarIdentity();
+
+    identifyStudent('u1', 'viejo@utec.edu.pe');
+    identifyStudent('u1', 'nuevo@utec.edu.pe');
+
+    expect(identify).toHaveBeenCalledTimes(2);
+    expect(identify).toHaveBeenLastCalledWith('u1', { email: 'nuevo@utec.edu.pe' });
+  });
+
   it('sin las variables de entorno no toca PostHog', async () => {
     delete process.env[TOKEN];
     const { identifyStudent } = await cargarIdentity();
@@ -70,11 +82,23 @@ describe('identifyStudent', () => {
 
 describe('forgetStudent', () => {
   it('desata la identidad al cerrar sesión', async () => {
-    const { forgetStudent } = await cargarIdentity();
+    const { identifyStudent, forgetStudent } = await cargarIdentity();
+    identifyStudent('u1', 'alumno@utec.edu.pe');
 
     forgetStudent();
 
     expect(reset).toHaveBeenCalledTimes(1);
+  });
+
+  // `reset()` estrena el id anónimo. Llamarlo en cada carga sin sesión —que es
+  // lo que hace la cabecera al resolver anónimo— partiría en pedazos a la misma
+  // persona anónima.
+  it('no toca nada si no había nadie identificado', async () => {
+    const { forgetStudent } = await cargarIdentity();
+
+    forgetStudent();
+
+    expect(reset).not.toHaveBeenCalled();
   });
 
   // Sin esto, quien vuelve a entrar con la misma cuenta en el mismo navegador
@@ -91,7 +115,8 @@ describe('forgetStudent', () => {
 
   it('sin las variables de entorno no toca PostHog', async () => {
     delete process.env[HOST];
-    const { forgetStudent } = await cargarIdentity();
+    const { identifyStudent, forgetStudent } = await cargarIdentity();
+    identifyStudent('u1', 'alumno@utec.edu.pe');
 
     forgetStudent();
 

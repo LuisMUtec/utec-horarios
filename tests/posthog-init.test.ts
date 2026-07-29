@@ -60,7 +60,7 @@ describe('initPostHog', () => {
   });
 
   // «No llega ningún evento» se confunde con «todavía no lo probé».
-  it('en desarrollo avisa por consola qué variable falta', async () => {
+  it('en desarrollo nombra la variable que falta, no la otra', async () => {
     delete process.env[HOST];
     vi.stubEnv('NODE_ENV', 'development');
     const error = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -69,7 +69,21 @@ describe('initPostHog', () => {
     initPostHog();
 
     expect(error).toHaveBeenCalledOnce();
+    expect(error.mock.calls[0][0]).toContain(HOST);
+    expect(error.mock.calls[0][0]).not.toContain(TOKEN);
+  });
+
+  it('si faltan las dos las nombra a las dos', async () => {
+    delete process.env[TOKEN];
+    delete process.env[HOST];
+    vi.stubEnv('NODE_ENV', 'development');
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const { initPostHog } = await cargarInit();
+
+    initPostHog();
+
     expect(error.mock.calls[0][0]).toContain(TOKEN);
+    expect(error.mock.calls[0][0]).toContain(HOST);
   });
 
   // En producción la app funciona sin PostHog: quedarse callado es lo correcto.

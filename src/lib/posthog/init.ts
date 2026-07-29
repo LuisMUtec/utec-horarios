@@ -8,15 +8,30 @@
 import posthog from 'posthog-js';
 import { isPostHogConfigured } from './config';
 
-const FALTA_CONFIG =
-  'NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN is configured';
+/**
+ * Nombra la que falta, que puede ser cualquiera de las dos. Los accesos van
+ * literales por lo mismo que en `config.ts`: Next los reemplaza por texto.
+ */
+function faltantes(): string {
+  return [
+    !process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN && 'NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN',
+    !process.env.NEXT_PUBLIC_POSTHOG_HOST && 'NEXT_PUBLIC_POSTHOG_HOST',
+  ]
+    .filter(Boolean)
+    .join(' and ');
+}
 
 export function initPostHog(): void {
   if (!isPostHogConfigured()) {
     // En producción quedarse callado es lo correcto: la app funciona sin
     // PostHog. En desarrollo no, porque «no llega ningún evento» se confunde
     // con «todavía no lo probé».
-    if (process.env.NODE_ENV === 'development') console.error(FALTA_CONFIG);
+    if (process.env.NODE_ENV === 'development') {
+      const falta = faltantes();
+      console.error(
+        `${falta} variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once ${falta} is configured`
+      );
+    }
     return;
   }
 

@@ -63,7 +63,7 @@ La app mide vistas de pantalla e interacciones con [PostHog](https://posthog.com
 
 | Variable | Dónde sacarla |
 |----------|---------------|
-| `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` | PostHog → Settings → Project → Project ID |
+| `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` | PostHog → Settings → Project → Project API key (empieza con `phc_`) |
 | `NEXT_PUBLIC_POSTHOG_HOST` | `https://us.i.posthog.com` o `https://eu.i.posthog.com`, según la nube del proyecto |
 
 El token es público por diseño: viaja al navegador. Si hay sesión iniciada, los eventos se atan a la cuenta por su UUID de Supabase, con el correo como propiedad; al cerrar sesión el vínculo se corta. Lo que se mide está declarado en la [política de privacidad](src/app/privacidad/page.tsx).

@@ -25,12 +25,16 @@ export default function SessionMenu() {
       supabase.auth.getClaims().then(
         ({ data }) => {
           const next = sessionFromClaims(data?.claims);
-          // Fuera del guard de `active` a propósito: identificar es un efecto
+          // Fuera del guard de `active` a propósito: la identidad es un efecto
           // global de la pestaña, no depende de que la cabecera siga montada.
+          // Y desatarla al quedar anónimo cubre la sesión que se cae sola: sin
+          // eso, los eventos de después seguirían colgando del alumno anterior.
           if (next.kind === 'student') identifyStudent(next.id, next.email);
+          else forgetStudent();
           if (active) setSession(next);
         },
         () => {
+          forgetStudent();
           if (active) setSession({ kind: 'anonymous' });
         }
       );

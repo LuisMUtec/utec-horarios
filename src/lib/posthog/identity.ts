@@ -9,27 +9,43 @@ import posthog from 'posthog-js';
 import { isPostHogConfigured } from './config';
 
 /**
- * A quién se identificó ya en esta carga de página. `getClaims()` se vuelve a
- * resolver con cada evento de `onAuthStateChange`, y sin esto cada refresco de
- * token repetiría el `identify` sin aportar nada.
+ * Con qué datos se identificó ya en esta carga de página. `getClaims()` se
+ * vuelve a resolver con cada evento de `onAuthStateChange`, y sin esto cada
+ * refresco de token repetiría el `identify` sin aportar nada.
+ *
+ * La clave incluye el correo y no solo la cuenta: si cambia hay que reenviarlo,
+ * que para eso es una propiedad de la persona.
  */
 let identificado: string | null = null;
 
+/**
+ * El separador es un NUL, que no puede aparecer ni en un UUID ni en un correo:
+ * así no hay dos pares distintos que colapsen en la misma clave.
+ */
+const clave = (id: string, email: string) => `${id}\u0000${email}`;
+
 /** Ata los eventos siguientes —y los anónimos previos— a la cuenta. */
 export function identifyStudent(id: string, email: string): void {
-  if (!isPostHogConfigured() || identificado === id) return;
+  const actual = clave(id, email);
+  if (!isPostHogConfigured() || identificado === actual) return;
 
-  identificado = id;
+  identificado = actual;
   posthog.identify(id, email ? { email } : undefined);
 }
 
 /**
- * Corta el vínculo al cerrar sesión, para que quien use el navegador después no
- * herede la identidad del anterior. Hay que llamarlo antes de que el POST a
- * `/auth/signout` recargue la página.
+ * Corta el vínculo, para que quien use el navegador después no herede la
+ * identidad del anterior. Hay que llamarlo antes de que el POST a
+ * `/auth/signout` recargue la página, y también cuando la sesión se cae sola
+ * —otra pestaña que cierra, un token revocado—, que es lo que avisa
+ * `onAuthStateChange`.
+ *
+ * No hace nada si no había nadie identificado: `reset()` estrena el id anónimo,
+ * así que llamarlo en cada carga sin sesión partiría en pedazos a la misma
+ * persona anónima.
  */
 export function forgetStudent(): void {
-  if (!isPostHogConfigured()) return;
+  if (!isPostHogConfigured() || identificado === null) return;
 
   identificado = null;
   posthog.reset();
