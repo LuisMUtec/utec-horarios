@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import type { SelectedCourse } from '@/types';
+import type { SelectedCourse, Session } from '@/types';
 
 /**
  * Tests del store observable sobre localStorage.
@@ -422,5 +422,58 @@ describe('showFreeBlocks — sincronización con el <html>', () => {
   it('sin document (SSR) no revienta', async () => {
     const s = await freshStore();
     expect(() => s.setShowFreeBlocks(false)).not.toThrow();
+  });
+});
+
+/**
+ * FR-012 / SC-001: mirar las reseñas no puede costarle al estudiante los cursos
+ * y secciones que ya eligió.
+ *
+ * Esto cubre la ruta de reseñas completa salvo el árbol de React: pedir los
+ * resúmenes del curso, agrupar sus docentes y resolver el estado de cada uno.
+ * Montar y desmontar SectionSelector necesitaría jsdom, que el repo no tiene.
+ */
+describe('reseñas — no tocan la selección', () => {
+  const SESSION: Session = {
+    type: 'TEORÍA 1',
+    modality: 'Presencial',
+    day: 'Lun',
+    startTime: '09:00',
+    endTime: '11:00',
+    frequency: 'Semana General',
+    location: 'UTEC-BA A904',
+    capacity: 45,
+    enrolled: 10,
+    professor: 'Ojeda Rios, Brenner Humberto',
+    email: 'bojeda@utec.edu.pe',
+  };
+
+  it('cargar y proyectar los resúmenes deja localStorage y la selección intactos', async () => {
+    const store = await freshStore({
+      [STORAGE_KEY]: JSON.stringify([CURSO_A, CURSO_B]),
+      [ALLOW_CONFLICTS_KEY]: 'true',
+    });
+    const selectedBefore = store.getSelectedCoursesSnapshot();
+    const persistedBefore = [...mem];
+
+    const { clearSummaryCache, fetchCourseSummaries } = await import('@/lib/api-client');
+    const { indexSummaries, sectionTeachers, teacherSummaryState } = await import(
+      '@/lib/section-teachers'
+    );
+    clearSummaryCache();
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, json: async () => ({ summaries: [] }) }))
+    );
+
+    const byPairKey = indexSummaries(await fetchCourseSummaries(CURSO_A.courseCode));
+    const states = sectionTeachers(CURSO_A.courseCode, [SESSION]).map((teacher) =>
+      teacherSummaryState(teacher, { kind: 'ready', byPairKey })
+    );
+
+    expect(states).toEqual([{ kind: 'empty' }]);
+    expect([...mem]).toEqual(persistedBefore);
+    // La misma referencia: useSyncExternalStore no vuelve a renderizar el horario.
+    expect(store.getSelectedCoursesSnapshot()).toBe(selectedBefore);
   });
 });

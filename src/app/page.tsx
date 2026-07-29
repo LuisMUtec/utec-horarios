@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
+import Link from 'next/link';
 import { toBlob } from 'html-to-image';
 import coursesData from '@/data/courses.json';
 import { CalendarEvent, Course, SelectedCourse } from '@/types';
@@ -35,6 +36,7 @@ import WeeklyCalendar from '@/components/WeeklyCalendar';
 import ThemeToggle from '@/components/ThemeToggle';
 import ToastAlert from '@/components/ToastAlert';
 import FeedbackButton from '@/components/FeedbackButton';
+import SessionMenu from '@/components/SessionMenu';
 
 const courses = coursesData as Course[];
 
@@ -351,6 +353,9 @@ export default function Home() {
                 Sube tu PDF de Carga Hábil para filtrar y mostrar solo los cursos que debes llevar. Puedes remover el filtro con el botón <strong>&quot;Remover filtro Carga Hábil&quot;</strong> en la sección de búsqueda.
               </div>
             </div>
+            {/* Acá y no en el layout: la cabecera vive dentro de esta página, y
+                es donde el inicio de sesión se encuentra sin buscarlo. */}
+            <SessionMenu />
             <ThemeToggle />
           </div>
         </div>
@@ -512,8 +517,13 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <div className="text-[10px] text-gray-300 dark:text-gray-600">
-          Utec Horarios © 2026
+        <div className="flex items-center gap-3 text-[10px] text-gray-300 dark:text-gray-600">
+          {/* La política de privacidad no se enlaza todavía: sigue sin publicarse
+              hasta cerrar las condiciones de su propio documento (T099). */}
+          <Link href="/normas" className="hover:text-blue-500 transition-colors">
+            Normas de la comunidad
+          </Link>
+          <span>Utec Horarios © 2026</span>
         </div>
       </footer>
 

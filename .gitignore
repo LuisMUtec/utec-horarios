@@ -51,3 +51,6 @@ next-env.d.ts
 
 # Estado local de Spec Kit: apunta a la feature en curso de cada quien.
 .specify/feature.json
+
+# Exportaciones personales del horario: llevan el código del alumno en el nombre.
+Consulta_Horario-*.xlsx

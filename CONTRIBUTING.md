@@ -25,7 +25,7 @@ El spec no se queda en el issue: viaja en el PR como archivo. El issue es la con
 
 - Bugfixes.
 - Refactors sin cambio de comportamiento.
-- Actualización de datos del ciclo (`consulta_horario.pdf` → `courses.json` → migración de oferta).
+- Actualización de datos del ciclo (xlsx de horarios → `courses.json` → migración de oferta).
 - Typos, documentación, tooling y CI.
 
 Si dudas, abre el issue igual: es barato y evita implementar tres días sobre un supuesto equivocado.

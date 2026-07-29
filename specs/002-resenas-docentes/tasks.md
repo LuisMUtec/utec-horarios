@@ -144,33 +144,33 @@ Tres cosas que el plan dejaba a medias y que estas tareas cierran. **Revísalas 
 
 ### Tests para US1
 
-- [ ] T028 [P] [US1] Crear `tests/review-format.test.ts`: promedio con un decimal en escala 1–5, porcentaje entero sin decimales, `1 puntuación` en singular frente a `N puntuaciones`, `Aún no hay comentarios`, y la distinción entre `Sin puntuaciones` (hay docente, nadie lo evaluó) y `Docente por asignar` (no hay a quién evaluar).
+- [x] T028 [P] [US1] Crear `tests/review-format.test.ts`: promedio con un decimal en escala 1–5, porcentaje entero sin decimales, `1 puntuación` en singular frente a `N puntuaciones`, `Aún no hay comentarios`, y la distinción entre `Sin puntuaciones` (hay docente, nadie lo evaluó) y `Docente por asignar` (no hay a quién evaluar).
 
-- [ ] T029 [P] [US1] Crear `tests/reviews-queries.test.ts` sobre la capa de consulta: la proyección de `getCourseSummaries` no incluye `author_id` bajo ninguna forma, y agrupa por par docente–curso de modo que un docente repetido en dos sesiones de la misma sección devuelve una sola entrada (FR-009) y el mismo docente en dos secciones del curso comparte resumen (FR-011).
+- [x] T029 [P] [US1] Crear `tests/reviews-queries.test.ts` sobre la capa de consulta: la proyección de `getCourseSummaries` no incluye `author_id` bajo ninguna forma, y agrupa por par docente–curso de modo que un docente repetido en dos sesiones de la misma sección devuelve una sola entrada (FR-009) y el mismo docente en dos secciones del curso comparte resumen (FR-011).
 
 ### Implementación de US1
 
-- [ ] T030 [P] [US1] Crear `src/lib/review-format.ts` con el formateo puro: promedio, porcentaje, plurales de conteos, etiqueta `editado`, y el texto del límite de FR-031. Sin JSX ni acceso a red — es una de las tres piezas que compensan el coverage del JSX nuevo ([R1](plan.md#r1-el-trinquete-de-coverage-bloquea-el-ci)).
+- [x] T030 [P] [US1] Crear `src/lib/review-format.ts` con el formateo puro: promedio, porcentaje, plurales de conteos, etiqueta `editado`, y el texto del límite de FR-031. Sin JSX ni acceso a red — es una de las tres piezas que compensan el coverage del JSX nuevo ([R1](plan.md#r1-el-trinquete-de-coverage-bloquea-el-ci)).
 
-- [ ] T031 [P] [US1] Crear `src/lib/reviews.ts` con las consultas contra Supabase que usan los route handlers, empezando por `getCourseSummaries(courseCode)` sobre `teacher_course_summaries`. Recibe el cliente por parámetro para ser testeable en node. Devuelve tipos propios de la aplicación, no las filas de la vista.
+- [x] T031 [P] [US1] Crear `src/lib/reviews.ts` con las consultas contra Supabase que usan los route handlers, empezando por `getCourseSummaries(courseCode)` sobre `teacher_course_summaries`. Recibe el cliente por parámetro para ser testeable en node. Devuelve tipos propios de la aplicación, no las filas de la vista.
 
-- [ ] T032 [P] [US1] Crear `src/lib/api-client.ts` con el fetch tipado a `/api/*` desde los componentes, incluida la caché en memoria por curso que vive lo que dure la pestaña y su invalidación explícita. La invalidación es lo que sostiene SC-005 en la pestaña del propio autor, que es donde más se nota; las fases 5 y 6 la van a llamar.
+- [x] T032 [P] [US1] Crear `src/lib/api-client.ts` con el fetch tipado a `/api/*` desde los componentes, incluida la caché en memoria por curso que vive lo que dure la pestaña y su invalidación explícita. La invalidación es lo que sostiene SC-005 en la pestaña del propio autor, que es donde más se nota; las fases 5 y 6 la van a llamar.
 
-- [ ] T033 [US1] Crear `src/app/api/courses/[code]/summaries/route.ts`: valida el código de curso, llama a `getCourseSummaries` con el cliente de servidor de `src/lib/supabase/server.ts` —uno por request, nunca en scope de módulo— y responde la proyección sin `author_id`. Sin sesión requerida. Si faltan las variables de entorno de Supabase, responde un cuerpo vacío bien formado en lugar de reventar, que es lo que mantiene la garantía de `docs/auth.md`.
+- [x] T033 [US1] Crear `src/app/api/courses/[code]/summaries/route.ts`: valida el código de curso, llama a `getCourseSummaries` con el cliente de servidor de `src/lib/supabase/server.ts` —uno por request, nunca en scope de módulo— y responde la proyección sin `author_id`. Sin sesión requerida. Si faltan las variables de entorno de Supabase, responde un cuerpo vacío bien formado en lugar de reventar, que es lo que mantiene la garantía de `docs/auth.md`.
 
-- [ ] T034 [P] [US1] Crear `src/components/reviews/TeacherSummary.tsx`: estrellas con el promedio, porcentaje de recomendación, conteo de puntuaciones y de comentarios, y los estados `Sin puntuaciones` y `Docente por asignar`. Tailwind con variante `dark:` en todo (edge case *Modo claro y oscuro*). Componente fino: todo el texto sale de `review-format.ts`. La interfaz no presenta la puntuación como medida de facilidad (FR-004) ni la recomendación como medida de carga o dificultad (FR-062).
+- [x] T034 [P] [US1] Crear `src/components/reviews/TeacherSummary.tsx`: estrellas con el promedio, porcentaje de recomendación, conteo de puntuaciones y de comentarios, y los estados `Sin puntuaciones` y `Docente por asignar`. Tailwind con variante `dark:` en todo (edge case *Modo claro y oscuro*). Componente fino: todo el texto sale de `review-format.ts`. La interfaz no presenta la puntuación como medida de facilidad (FR-004) ni la recomendación como medida de carga o dificultad (FR-062).
 
-- [ ] T035 [US1] Integrar `TeacherSummary` en `src/components/SectionSelector.tsx`, agrupando por docente normalizado con `teacherPairKey` para que un docente repetido en varias sesiones aparezca una sola vez (FR-009) y cada docente de una sección tenga su propio resumen (FR-010). Una sesión cuyo correo normalizado es `null` renderiza `Docente por asignar` y no ofrece detalle (FR-054).
+- [x] T035 [US1] Integrar `TeacherSummary` en `src/components/SectionSelector.tsx`, agrupando por docente normalizado con `teacherPairKey` para que un docente repetido en varias sesiones aparezca una sola vez (FR-009) y cada docente de una sección tenga su propio resumen (FR-010). Una sesión cuyo correo normalizado es `null` renderiza `Docente por asignar` y no ofrece detalle (FR-054).
 
-- [ ] T036 [US1] Pedir los resúmenes **por curso al desplegarlo** desde `SectionSelector`, no par por par, y cachearlos con `api-client.ts`. Una llamada trae los docentes de todas las secciones del curso ([D1](plan.md#d1-teacher_course_summaries-se-consulta-desde-el-cliente)).
+- [x] T036 [US1] Pedir los resúmenes **por curso al desplegarlo** desde `SectionSelector`, no par por par, y cachearlos con `api-client.ts`. Una llamada trae los docentes de todas las secciones del curso ([D1](plan.md#d1-teacher_course_summaries-se-consulta-desde-el-cliente)).
 
-- [ ] T037 [US1] Degradación sin Supabase: cuando falten `NEXT_PUBLIC_SUPABASE_URL` o `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, la app renderiza el horario exactamente como hoy y no muestra ni resúmenes ni estados de error. Armar el horario tiene que sobrevivir a que Supabase esté caído.
+- [x] T037 [US1] Degradación sin Supabase: cuando falten `NEXT_PUBLIC_SUPABASE_URL` o `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, la app renderiza el horario exactamente como hoy y no muestra ni resúmenes ni estados de error. Armar el horario tiene que sobrevivir a que Supabase esté caído.
 
-- [ ] T038 [US1] Estado de carga y de fallo distinguibles del estado `Sin puntuaciones`, que es literalmente lo que pide SC-002. Un resumen que no cargó no puede parecerse a un docente sin reseñas.
+- [x] T038 [US1] Estado de carga y de fallo distinguibles del estado `Sin puntuaciones`, que es literalmente lo que pide SC-002. Un resumen que no cargó no puede parecerse a un docente sin reseñas.
 
-- [ ] T039 [US1] Comprobar que abrir y cerrar el resumen no toca `localStorage` ni la selección de cursos y secciones (FR-012, SC-001). Añadir el caso a `tests/storage.test.ts` si el flujo lo permite sin jsdom.
+- [x] T039 [US1] Comprobar que abrir y cerrar el resumen no toca `localStorage` ni la selección de cursos y secciones (FR-012, SC-001). Añadir el caso a `tests/storage.test.ts` si el flujo lo permite sin jsdom.
 
-- [ ] T040 [US1] **Medir R1**: correr `pnpm test --coverage` con los `.tsx` nuevos dentro y comparar contra el piso de `vitest.config.ts` (`32.57 / 32.63 / 28.33 / 25.06`). Si alguno de los cuatro baja, montar jsdom + `@testing-library/react` y añadir tests de componente antes de seguir. Anotar el resultado en el Progress Tracking de plan.md — es el pendiente *R1 medido con el primer componente*.
+- [x] T040 [US1] **Medir R1**: correr `pnpm test --coverage` con los `.tsx` nuevos dentro y comparar contra el piso de `vitest.config.ts` (`32.57 / 32.63 / 28.33 / 25.06`). Si alguno de los cuatro baja, montar jsdom + `@testing-library/react` y añadir tests de componente antes de seguir. Anotar el resultado en el Progress Tracking de plan.md — es el pendiente *R1 medido con el primer componente*.
 
 **Checkpoint**: US1 funciona sola. Un visitante sin sesión compara docentes. PR 2 listo.
 
@@ -186,37 +186,37 @@ Tres cosas que el plan dejaba a medias y que estas tareas cierran. **Revísalas 
 
 ### Tests para US2
 
-- [ ] T041 [P] [US2] Crear `tests/careers.test.ts`: el catálogo tiene 16 entradas, los slugs cumplen `^[a-z0-9-]+$` y coinciden uno a uno con la tabla de [carreras-utec.md](carreras-utec.md). Es el test que detecta que la migración T005 y el documento se separaron.
+- [x] T041 [P] [US2] Crear `tests/careers.test.ts`: el catálogo tiene 16 entradas, los slugs cumplen `^[a-z0-9-]+$` y coinciden uno a uno con la tabla de [carreras-utec.md](carreras-utec.md). Es el test que detecta que la migración T005 y el documento se separaron.
 
-- [ ] T042 [P] [US2] Crear `tests/profile-validation.test.ts`: el ciclo se acepta entre 1 y 10 y se rechaza fuera, con no-enteros y con vacío; la carrera se acepta solo si es un slug del catálogo.
+- [x] T042 [P] [US2] Crear `tests/profile-validation.test.ts`: el ciclo se acepta entre 1 y 10 y se rechaza fuera, con no-enteros y con vacío; la carrera se acepta solo si es un slug del catálogo.
 
 ### Implementación de US2
 
-- [ ] T043 [P] [US2] Crear `src/lib/careers.ts` con los tipos del catálogo y el agrupado por facultad para ordenar el selector. La facultad agrupa visualmente y **no** se guarda junto a una reseña.
+- [x] T043 [P] [US2] Crear `src/lib/careers.ts` con los tipos del catálogo y el agrupado por facultad para ordenar el selector. La facultad agrupa visualmente y **no** se guarda junto a una reseña.
 
-- [ ] T044 [P] [US2] Crear `src/lib/profile.ts` con la validación de carrera y ciclo, compartida por el formulario y el route handler. La del handler es la que cuenta; la del formulario es para no hacer viajar un error evitable.
+- [x] T044 [P] [US2] Crear `src/lib/profile.ts` con la validación de carrera y ciclo, compartida por el formulario y el route handler. La del handler es la que cuenta; la del formulario es para no hacer viajar un error evitable.
 
-- [ ] T045 [US2] Crear `src/app/api/careers/route.ts`: devuelve el catálogo desde `careers` filtrando `is_active`. Sin sesión requerida.
+- [x] T045 [US2] Crear `src/app/api/careers/route.ts`: devuelve el catálogo desde `careers` filtrando `is_active`. Sin sesión requerida.
 
-- [ ] T046 [US2] Crear `src/app/api/profile/route.ts` con `GET` y `PATCH`. El `GET` devuelve carrera, ciclo y **el estado de sanción**: si `banned_at` no es nulo, `{ banned: true, reason }`. Es lo que le permite a la UI mostrar el motivo de FR-057 sin tener que provocar un error. El `PATCH` valida contra `src/lib/profile.ts` y responde errores en español.
+- [x] T046 [US2] Crear `src/app/api/profile/route.ts` con `GET` y `PATCH`. El `GET` devuelve carrera, ciclo y **el estado de sanción**: si `banned_at` no es nulo, `{ banned: true, reason }`. Es lo que le permite a la UI mostrar el motivo de FR-057 sin tener que provocar un error. El `PATCH` valida contra `src/lib/profile.ts` y responde errores en español.
 
-- [ ] T047 [US2] Crear `src/lib/api-guards.ts` con el guard compartido de los handlers restringidos: resuelve la sesión con `getClaims()` —nunca `getSession()`—, consulta el perfil y corta con `403` y `{ banned: true, reason }` si hay sanción. Un rechazo de RLS es un fallo genérico y no alcanza para FR-057. Todos los handlers de las fases 5, 6 y 7 lo usan.
+- [x] T047 [US2] Crear `src/lib/api-guards.ts` con el guard compartido de los handlers restringidos: resuelve la sesión con `getClaims()` —nunca `getSession()`—, consulta el perfil y corta con `403` y `{ banned: true, reason }` si hay sanción. Un rechazo de RLS es un fallo genérico y no alcanza para FR-057. Todos los handlers de las fases 5, 6 y 7 lo usan.
 
-- [ ] T048 [P] [US2] Crear `tests/api-guards.test.ts`: sin sesión devuelve 401, con sesión y sin sanción deja pasar, con sanción devuelve 403 con el motivo en el cuerpo.
+- [x] T048 [P] [US2] Crear `tests/api-guards.test.ts`: sin sesión devuelve 401, con sesión y sin sanción deja pasar, con sanción devuelve 403 con el motivo en el cuerpo.
 
-- [ ] T049 [P] [US2] Crear `src/components/SessionMenu.tsx`: iniciar sesión con Google cuando no hay sesión, y la cuenta activa con acceso a `/perfil` y cerrar sesión cuando la hay. Cuando faltan las variables de entorno de Supabase no se renderiza (T037). Tailwind con `dark:`.
+- [x] T049 [P] [US2] Crear `src/components/SessionMenu.tsx`: iniciar sesión con Google cuando no hay sesión, y la cuenta activa con acceso a `/perfil` y cerrar sesión cuando la hay. Cuando faltan las variables de entorno de Supabase no se renderiza (T037). Tailwind con `dark:`.
 
-- [ ] T050 [US2] Montar `SessionMenu` en `src/app/layout.tsx` o en la cabecera existente, que es lo que hace alcanzable el login por primera vez.
+- [x] T050 [US2] Montar `SessionMenu` en `src/app/layout.tsx` o en la cabecera existente, que es lo que hace alcanzable el login por primera vez.
 
-- [ ] T051 [P] [US2] Crear `src/components/ProfileForm.tsx`: selector de carrera agrupado por facultad y selector de ciclo 1–10, ambos opcionales para leer y obligatorios solo antes de comentar (FR-016, edge case *Perfil incompleto*).
+- [x] T051 [P] [US2] Crear `src/components/ProfileForm.tsx`: selector de carrera agrupado por facultad y selector de ciclo 1–10, ambos opcionales para leer y obligatorios solo antes de comentar (FR-016, edge case *Perfil incompleto*).
 
-- [ ] T052 [US2] Crear `src/app/perfil/page.tsx` que monta `ProfileForm` y, si la cuenta está sancionada, muestra el mensaje de FR-057 con el motivo en lugar del formulario.
+- [x] T052 [US2] Crear `src/app/perfil/page.tsx` que monta `ProfileForm` y, si la cuenta está sancionada, muestra el mensaje de FR-057 con el motivo en lugar del formulario.
 
-- [ ] T053 [P] [US2] Crear `src/app/normas/page.tsx` con el contenido de [normas-comunidad.md](normas-comunidad.md).
+- [x] T053 [P] [US2] Crear `src/app/normas/page.tsx` con el contenido de [normas-comunidad.md](normas-comunidad.md).
 
-- [ ] T054 [P] [US2] Crear `src/app/privacidad/page.tsx` con el contenido de [politica-privacidad.md](politica-privacidad.md). **No publicar** hasta que se cumplan las tres condiciones del propio documento (T099).
+- [x] T054 [P] [US2] Crear `src/app/privacidad/page.tsx` con el contenido de [politica-privacidad.md](politica-privacidad.md). **No publicar** hasta que se cumplan las tres condiciones del propio documento (T099).
 
-- [ ] T055 [US2] Verificar el escenario 9 de punta a punta: una cuenta que no es `@utec.edu.pe` es rechazada por el hook y `/auth/error` explica que la funcionalidad está reservada para estudiantes UTEC. Solo hay que comprobarlo; el hook ya existe.
+- [x] T055 [US2] Verificar el escenario 9 de punta a punta: una cuenta que no es `@utec.edu.pe` es rechazada por el hook y `/auth/error` explica que la funcionalidad está reservada para estudiantes UTEC. Solo hay que comprobarlo; el hook ya existe.
 
 **Checkpoint**: hay sesión, perfil y documentos públicos. PR 3 listo.
 
@@ -364,7 +364,7 @@ Tres cosas que el plan dejaba a medias y que estas tareas cierran. **Revísalas 
 
 - [ ] T097 [P] Añadir a `docs/moderacion.md` la consulta de SC-009 ya verificada contra datos reales: pares con al menos una puntuación y estudiantes únicos que contribuyeron. Es lo que permite saber si la feature sigue en arranque en frío ([R4](plan.md#r4-arranque-en-frío)).
 
-- [ ] T098 [P] Comprobar en producción que `pg_cron` está habilitado en el proyecto `rlsswhwrigdgsboqakyw` y que el job de purga quedó programado. En local basta el reset; en producción es una dependencia externa ([R5](plan.md#r5-dependencias-externas-sin-cerrar)).
+- [x] T098 [P] Comprobar en producción que `pg_cron` está habilitado en el proyecto `rlsswhwrigdgsboqakyw` y que el job de purga quedó programado. **Hecho**: `cron.job` tiene `purgar-resenas-eliminadas`, `17 4 * * *`, `select private.purge_expired_reviews();`, `active = true`. En local basta el reset; en producción es una dependencia externa ([R5](plan.md#r5-dependencias-externas-sin-cerrar)).
 
 - [ ] T099 Cerrar las tres condiciones de publicación de [politica-privacidad.md](politica-privacidad.md) —incluida la casilla de que `privacidad@mail.luismaquera.dev` recibe correo— y quitarle el estado de borrador. Recién entonces enlazar `/privacidad` desde el formulario.
 
