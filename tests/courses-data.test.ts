@@ -111,7 +111,17 @@ describe('courses.json — sesiones', () => {
     expect(malos).toEqual([]);
   });
 
-  it('enrolled nunca supera capacity', () => {
+  it('solo los sobrecupos conocidos tienen enrolled > capacity', () => {
+    // El portal admite sobrecupo: no es una invariante, es la excepción. En la
+    // oferta 2026-2 la trae EL5006 secc.1 (7 matriculados sobre 6 vacantes),
+    // verificado contra el xlsx crudo — las otras tres secciones del curso
+    // traen las mismas 6 vacantes con menos matriculados, así que no es un
+    // cruce de columnas al parsear.
+    //
+    // Se listan uno por uno en vez de tolerar el caso en general: si un export
+    // nuevo trae un sobrecupo distinto, este test lo saca a la luz. Un cruce de
+    // capacity/enrolled al parsear reventaría de golpe en cientos de sesiones,
+    // que es justo lo que sigue atrapando.
     const malos = allSessions
       .filter(({ session }) =>
         typeof session.capacity === 'number' &&
@@ -121,7 +131,10 @@ describe('courses.json — sesiones', () => {
       .map(({ course, section, session }) =>
         `${label(course, section.number, session.type)}: ${session.enrolled}/${session.capacity}`
       );
-    expect(malos).toEqual([]);
+    expect(malos).toEqual([
+      'EL5006 secc.1 "TEORÍA VIRTUAL 1": 7/6',
+      'EL5006 secc.1 "TEORÍA VIRTUAL 1": 7/6',
+    ]);
   });
 
   it('capacity y enrolled no son negativos', () => {
