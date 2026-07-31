@@ -118,6 +118,12 @@ describe('courses.json — sesiones', () => {
     // traen las mismas 6 vacantes con menos matriculados, así que no es un
     // cruce de columnas al parsear.
     //
+    // Son dos filas porque las vacantes van por sección, no por sesión: la
+    // secc.1 se reúne dos veces por semana (lunes y jueves) y cada reunión
+    // repite el mismo 7/6. Por eso el día y la hora entran en la clave — sin
+    // ellos las dos entradas salen idénticas y un sobrecupo que se mude a otra
+    // sesión de la misma sección y tipo pasaría desapercibido.
+    //
     // Se listan uno por uno en vez de tolerar el caso en general: si un export
     // nuevo trae un sobrecupo distinto, este test lo saca a la luz. Un cruce de
     // capacity/enrolled al parsear reventaría de golpe en cientos de sesiones,
@@ -129,11 +135,11 @@ describe('courses.json — sesiones', () => {
         session.enrolled > session.capacity
       )
       .map(({ course, section, session }) =>
-        `${label(course, section.number, session.type)}: ${session.enrolled}/${session.capacity}`
+        `${label(course, section.number, session.type)} ${session.day} ${session.startTime}-${session.endTime}: ${session.enrolled}/${session.capacity}`
       );
     expect(malos).toEqual([
-      'EL5006 secc.1 "TEORÍA VIRTUAL 1": 7/6',
-      'EL5006 secc.1 "TEORÍA VIRTUAL 1": 7/6',
+      'EL5006 secc.1 "TEORÍA VIRTUAL 1" Lun 15:00-17:00: 7/6',
+      'EL5006 secc.1 "TEORÍA VIRTUAL 1" Jue 11:00-13:00: 7/6',
     ]);
   });
 
